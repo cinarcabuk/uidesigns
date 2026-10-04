@@ -417,6 +417,92 @@ footer{padding-block:32px;color:var(--muted);font-size:13px}
 .ed-e .seg button{border-radius:0;border:0;border-bottom:1px solid #2c2d30}
 .ed-e .seg button.on{background:none;color:#fff;border-bottom-color:#fff}
 
+
+/* ===================== ROUND 2 · FRAMED (shared) ===================== */
+.rules{padding-block:32px;border-bottom:1px solid var(--line);display:grid;gap:18px}
+.rules ol{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;counter-reset:r}
+.rules li{counter-increment:r;display:grid;gap:6px;font-size:14px;color:#b9bcc2;border-top:1px solid #3a3b3e;padding-top:12px}
+.rules li::before{content:'Rule ' counter(r);font:500 10.5px var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--silver)}
+.round-div{padding-block:56px 0;display:grid;gap:8px}
+.round-div h2{font-family:var(--f-display);font-weight:400;font-size:22px;margin:0;color:var(--silver-dim)}
+.round-div p{margin:0;color:var(--muted);max-width:60ch}
+.dir-tag b.r2{-webkit-text-stroke:0;color:var(--silver);font-size:40px}
+.dir-tag b.r2 sup{font-family:var(--f-mono);font-size:13px;color:var(--muted);vertical-align:top;margin-left:2px}
+
+.fx{background:#000}
+.fx-row{flex:none;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:0 13px}
+.fx-top{height:30px}
+.fx-bot{height:42px}
+.fx-vf{margin:0 16px;width:calc(100% - 32px);aspect-ratio:3/4;border-radius:2px}
+.fx-group{display:flex;align-items:center;gap:6px}
+.ro{background:none;border:0;padding:4px 3px;cursor:pointer;font:500 10.5px var(--f-mono);font-variant-numeric:tabular-nums;color:#d6d8db;letter-spacing:.03em;
+  display:inline-flex;align-items:baseline;gap:4px;border-bottom:1px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s}
+.ro small{font-size:8px;color:#6c6f74;letter-spacing:.1em}
+.ro.is-auto b{color:#8d9096}
+.ro.is-auto::after{content:'A';font-size:7px;color:#6c6f74;align-self:flex-start;margin-left:-2px}
+.ro.active{border-bottom-color:currentColor}
+.ro.active b{color:#fff}
+.ro.static{cursor:default}
+.ro .dot{align-self:center}
+.ro.ico{padding:3px;display:inline-grid}
+.ro.ico svg{width:15px;height:15px}
+.slot{flex:none;position:relative;height:40px;margin:4px 16px 0}
+.lens{position:absolute;inset:0;display:flex;justify-content:center;align-items:center;gap:6px;transition:opacity .2s}
+.lens button{cursor:pointer}
+.tray{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .2s}
+.slot.adjusting .lens{opacity:0;pointer-events:none}
+.slot.adjusting .tray{opacity:1;pointer-events:auto}
+.tray-p{position:absolute;inset:0;display:flex;align-items:center;gap:8px}
+.tray-p[hidden]{display:none}
+.tray-lab{font:500 8px var(--f-mono);letter-spacing:.14em;color:#7d8087;width:46px;flex:none;line-height:1.3}
+.tray-p.is-auto .tray-lab::after{content:'AUTO · DRAG TO SET';display:block;font-size:6.5px;color:#55585d}
+.tray .drum{flex:1;height:34px;-webkit-mask:linear-gradient(90deg,transparent,#000 28%,#000 72%,transparent);mask:linear-gradient(90deg,transparent,#000 28%,#000 72%,transparent)}
+.tray .drum-item{font-size:12px;color:#55575c}
+.tray .drum-item.on{font-size:14px}
+.fx-deck{flex:1;display:flex;align-items:center;justify-content:space-between;padding:0 34px 20px}
+.fx-thumb{width:42px;height:54px;border-radius:3px;border:1px solid #6f7277;background:#111 center/cover;cursor:pointer;padding:0;position:relative;overflow:hidden}
+.fx-thumb>span{position:absolute;left:0;right:0;bottom:0;font:500 8px var(--f-mono);color:#d6d8db;background:linear-gradient(transparent,rgba(0,0,0,.85));padding:6px 0 2px}
+.fx-flip{width:42px;height:42px;border-radius:50%;border:1px solid #4a4c50;background:none;color:#e8e9eb;cursor:pointer}
+.fx-flip svg{width:17px;height:17px}
+
+/* A2 · Rangefinder, framed */
+.a2{background:#0b0b0c}
+.a2 .fx-vf{outline:1px solid #1f2023;outline-offset:3px}
+.a2-meter{position:relative;width:94px;height:38px;border-radius:5px;overflow:hidden;background:linear-gradient(180deg,#151309,#060604);box-shadow:inset 0 0 0 1px rgba(255,236,190,.16)}
+.a2-meter::after{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(255,255,255,.12),transparent 45%);pointer-events:none}
+.a2 .lens{gap:4px}
+.a2 .lens button{height:28px;min-width:44px;padding:0 12px;border-radius:14px;border:1px solid #2e3034;background:#141517;color:#8d9096;font:500 10.5px var(--f-mono)}
+.a2 .lens button.on{background:#c3c6cb;border-color:#c3c6cb;color:#0b0b0c}
+.a2 .lens small{font:500 8px var(--f-mono);color:#6c6f74;letter-spacing:.12em;margin-left:4px}
+.a2-shutter{width:70px;height:70px;background:radial-gradient(circle at 50% 40%,#f3f4f5,#babdc2 70%,#8e9196);box-shadow:0 0 0 3px #0b0b0c,0 0 0 4.5px #8e9196,inset 0 -3px 6px rgba(0,0,0,.25)}
+
+/* B2 · Meter Bridge, framed */
+.b2 .ro.active b,.b2 .ro.active{color:#f6d38c}
+.b2 .ro.active{border-bottom-color:#f2c46a}
+.b2-meter{position:relative;width:132px;height:40px}
+.b2-meter canvas{position:absolute;inset:0;width:100%;height:100%}
+.b2 .fx-vf{border:1px solid #2c2d30}
+.b2 .fx-vf .gridov{--gl:rgba(255,255,255,.2)}
+.b2 .lens{gap:0}
+.b2 .lens .b-focal{width:190px;position:relative}
+.b2 .lens .b-focal::before,.b2 .lens .b-focal::after{content:'';position:absolute;top:50%;transform:translateY(-50%);border:4px solid transparent}
+.b2 .lens .b-focal::before{left:-12px;border-right:5px solid var(--amber);border-left:0}
+.b2 .lens .b-focal::after{right:-12px;border-left:5px solid var(--amber);border-right:0}
+.b2 .tray .drum-item.on{color:#f6d38c}
+.b2 .dot{box-shadow:0 0 8px var(--fc)}
+.b2-shutter{width:66px;height:66px;background:#dcdddf;box-shadow:0 0 0 4px #000,0 0 0 5.5px #4a4b4e}
+
+/* E2 · Hairline, framed */
+.e2 .fx-vf{border-radius:1px}
+.e2-meter{flex:none;position:relative;width:112px;height:26px;margin:0}
+.e2-meter .lin .ndl{bottom:12px}
+.e2 .lens{gap:2px}
+.e2 .lens button{background:none;border:0;border-bottom:1px solid transparent;font:400 12px var(--f-mono);color:#6f7277;padding:6px 10px}
+.e2 .lens button.on{color:#fff;border-bottom-color:#fff}
+.e2 .lens small{font:500 8px var(--f-mono);color:#55585d;letter-spacing:.12em;margin-left:2px}
+.e2 .fx-thumb{border-radius:2px}
+.e2 .fx-flip{border-color:#3a3b3e}
+
 @media (prefers-reduced-motion:reduce){
   *{transition-duration:.01ms!important;animation-duration:.01ms!important}
 }
@@ -424,17 +510,158 @@ footer{padding-block:32px;color:var(--muted);font-size:13px}
 
 <div class="wrap">
   <header class="hero">
-    <span class="eyebrow">Working title pending · UI exploration · Round 1</span>
-    <h1>Five directions for a film camera that feels machined</h1>
-    <p class="lede">Each direction pairs a shooting screen with an editing screen, following your sketch. The look stays black and silver throughout. Every phone is live, so the meters, dials and sliders all respond.</p>
+    <span class="eyebrow">Working title pending · UI exploration · Round 2</span>
+    <h1>A, B and E, with small settings and a black frame</h1>
+    <p class="lede">This round reworks the three directions you picked. Settings are now small and placed around the image, the meter is compact, and the image always sits inside a black margin. The phones are still live. Round 1 is further down for comparison.</p>
     <div class="howto">
-      <span>Drag shutter / ISO / ± values</span>
+      <span>Tap a small readout, then drag its dial</span>
       <span>Tap the viewfinder to spot-meter</span>
       <span>Tap the mode dial</span>
       <span>Fire the shutter</span>
       <span>Edit, undo, redo</span>
     </div>
   </header>
+
+
+
+  <section class="rules" aria-labelledby="rules-h">
+    <h2 id="rules-h" class="eyebrow" style="margin:0">Round 2 rules, from your feedback</h2>
+    <ol>
+      <li>The image never touches the screen edge. A black margin surrounds it on every side, as in Dazz.</li>
+      <li>Settings are small readouts in that margin. Tap one to adjust it: a dial slides in where the lens selector sits, then hides itself after a few seconds.</li>
+      <li>The meter is small and sits between shutter speed and ISO under the frame. It never spans the full width.</li>
+      <li>The lens selector (26 / 35 / 50 mm) is the only control that always stays on screen.</li>
+    </ol>
+  </section>
+
+  <section class="dir" id="a2">
+    <div class="dir-head">
+      <div class="dir-tag"><b class="r2">A<sup>2</sup></b><h2>Rangefinder, framed</h2></div>
+      <p>The sketch layout with everything pulled in tight. The glass needle meter shrinks to a small dial between shutter speed and ISO, and the grid toggle moves into the top margin as a small icon.</p>
+      <ul><li>Readouts sit in the margin: mode and ƒ top left, film top center, EV and grid top right.</li><li>Lens selection uses silver pills. When you tap a readout, its dial replaces the pills.</li><li>The thumbnail, the shutter and the flip button make up the whole deck.</li></ul>
+      <p class="trade">Closest to round 1 A. The most legible of the three in daylight.</p>
+    </div>
+    <div class="phones">
+      <div class="phone-col"><div class="phone"><div class="screen cam fx a2" data-cam>
+        <div class="island"></div>
+        <div class="sb"><span>9:41</span><i class="bat"></i></div>
+        <div class="fx-row fx-top">
+          <div class="fx-group"><button class="ro" data-mw-toggle aria-label="Exposure mode"><b data-read="mode">A</b><small>MODE</small></button><span class="ro static"><small>ƒ</small>1.8</span></div>
+          <button class="ro" data-film-open aria-label="Choose film"><i class="dot"></i><span data-read="film">AURUM 200</span></button>
+          <div class="fx-group"><button class="ro" data-adjust="comp" data-comp aria-label="Exposure compensation"><small>EV</small><b data-read="comp">±0</b></button><button class="ro ico" data-grid-toggle data-icon="grid" aria-label="Toggle grid"></button></div>
+        </div>
+        <div class="vf fx-vf" data-vf>
+          <div class="scene" data-scene></div><div class="grainov"></div><div class="gridov"></div>
+          <div class="corners"><i></i><i></i><i></i><i></i></div>
+          <div class="ret ret-plus" data-ret style="width:28px;height:28px"></div>
+          <div class="curtain" data-curtain></div><div class="mw" data-mw></div>
+        </div>
+        <div class="fx-row fx-bot">
+          <button class="ro" data-adjust="shutter" data-auto="shutter" aria-label="Shutter speed"><b data-read="shutter">1/250</b><small>S</small></button>
+          <div class="a2-meter" data-arc="glass"></div>
+          <button class="ro" data-adjust="iso" data-auto="iso" aria-label="ISO"><small>ISO</small><b data-read="iso">200</b></button>
+        </div><div class="slot" data-slot>
+          <div class="lens" data-focal><button data-f="0">26</button><button data-f="1" class="on">35</button><button data-f="2">50</button><small>MM</small></div>
+          <div class="tray">
+            <div class="tray-p" data-tray-p="shutter" data-auto="shutter" hidden><span class="tray-lab">SHUTTER</span><div class="drum" data-drum="shutter" data-axis="x" data-size="50" tabindex="0" aria-label="Shutter speed"></div></div>
+            <div class="tray-p" data-tray-p="iso" data-auto="iso" hidden><span class="tray-lab">ISO</span><div class="drum" data-drum="iso" data-axis="x" data-size="44" tabindex="0" aria-label="ISO"></div></div>
+            <div class="tray-p" data-tray-p="comp" hidden><span class="tray-lab">EXP. COMP</span><div class="drum" data-drum="comp" data-axis="x" data-size="40" tabindex="0" aria-label="Exposure compensation"></div></div>
+          </div>
+        </div><div class="fx-deck">
+          <button class="fx-thumb" data-thumb aria-label="Last photo"><span><span data-read="frames">36</span> LEFT</span></button>
+          <button class="shutter a2-shutter" data-shutter aria-label="Take photo"></button>
+          <button class="fx-flip ico" data-flip data-icon="flip" aria-label="Switch camera"></button>
+        </div>
+        <div class="drawer" data-filmdrawer></div>
+      </div></div><span class="phone-cap">Shoot · tap a readout</span></div>
+      <div class="phone-col"><div class="phone"><div class="screen ed ed-a" data-editor data-preset="0"></div></div><span class="phone-cap">Edit</span></div>
+    </div>
+  </section>
+  <section class="dir" id="b2">
+    <div class="dir-head">
+      <div class="dir-tag"><b class="r2">B<sup>2</sup></b><h2>Meter Bridge, framed</h2></div>
+      <p>The amber meter is now a small arc in the bottom margin, but it still leaves its glowing trail. It reads like a dial on a camera body, not a full-width bridge.</p>
+      <ul><li>The ISO gauge and shutter strip are gone. Both are now small readouts that light up amber when active.</li><li>The 26 / 35 / 50 mm pill keeps its amber arrows. It is the only control on screen.</li><li>The grid is on by default and the eye icon top right hides it.</li></ul>
+      <p class="trade">Keeps the most character from your reference at a much lower density.</p>
+    </div>
+    <div class="phones">
+      <div class="phone-col"><div class="phone"><div class="screen cam fx b2" data-cam>
+        <div class="island"></div>
+        <div class="sb"><span>9:41</span><i class="bat"></i></div>
+        <div class="fx-row fx-top">
+          <div class="fx-group"><button class="ro ico" data-mw-toggle data-icon="rings" aria-label="Exposure mode"></button><b class="ro static" data-read="mode" style="padding-left:0">A</b><span class="ro static"><small>ƒ</small>1.8</span></div>
+          <button class="ro" data-film-open aria-label="Choose film"><i class="dot"></i><span data-read="film">AURUM 200</span></button>
+          <div class="fx-group"><button class="ro" data-adjust="comp" data-comp aria-label="Exposure compensation"><small>EV</small><b data-read="comp">±0</b></button><button class="ro ico" data-grid-toggle data-icon="eye" aria-label="Toggle grid"></button></div>
+        </div>
+        <div class="vf fx-vf grid-on" data-vf>
+          <div class="scene" data-scene></div><div class="grainov"></div><div class="gridov"></div>
+          <div class="b-scale"></div>
+          <div class="ret ret-brk" data-ret></div>
+          <div class="curtain" data-curtain></div><div class="mw" data-mw></div>
+        </div>
+        <div class="fx-row fx-bot">
+          <button class="ro" data-adjust="shutter" data-auto="shutter" aria-label="Shutter speed"><b data-read="shutter">1/250</b><small>S</small></button>
+          <div class="b2-meter" data-fan><canvas data-fan-scale></canvas><canvas data-fan-needle></canvas></div>
+          <button class="ro" data-adjust="iso" data-auto="iso" aria-label="ISO"><small>ISO</small><b data-read="iso">200</b></button>
+        </div><div class="slot" data-slot>
+          <div class="lens" data-focal><div class="b-focal"><button data-f="0">26MM</button><button data-f="1" class="on">35MM</button><button data-f="2">50MM</button></div></div>
+          <div class="tray">
+            <div class="tray-p" data-tray-p="shutter" data-auto="shutter" hidden><span class="tray-lab">SHUTTER</span><div class="drum" data-drum="shutter" data-axis="x" data-size="50" tabindex="0" aria-label="Shutter speed"></div></div>
+            <div class="tray-p" data-tray-p="iso" data-auto="iso" hidden><span class="tray-lab">ISO</span><div class="drum" data-drum="iso" data-axis="x" data-size="44" tabindex="0" aria-label="ISO"></div></div>
+            <div class="tray-p" data-tray-p="comp" hidden><span class="tray-lab">EXP. COMP</span><div class="drum" data-drum="comp" data-axis="x" data-size="40" tabindex="0" aria-label="Exposure compensation"></div></div>
+          </div>
+        </div><div class="fx-deck">
+          <button class="fx-thumb" data-thumb aria-label="Last photo"><span><span data-read="frames">36</span> LEFT</span></button>
+          <button class="shutter b2-shutter" data-shutter aria-label="Take photo"></button>
+          <button class="fx-flip ico" data-flip data-icon="flip" aria-label="Switch camera"></button>
+        </div>
+        <div class="drawer" data-filmdrawer></div>
+      </div></div><span class="phone-cap">Shoot · tap a readout</span></div>
+      <div class="phone-col"><div class="phone"><div class="screen ed ed-b" data-editor data-preset="1"></div></div><span class="phone-cap">Edit</span></div>
+    </div>
+  </section>
+  <section class="dir" id="e2">
+    <div class="dir-head">
+      <div class="dir-tag"><b class="r2">E<sup>2</sup></b><h2>Hairline, framed</h2></div>
+      <p>The simple look you liked, now inside a black margin. Every number is the same small mono size, and the meter is a short hairline scale marked from −3 to +3.</p>
+      <ul><li>Nothing is bigger than 12px apart from the shutter ring.</li><li>Lens focal lengths are plain numbers with an underline. Readouts get the same underline when you are adjusting them.</li><li>Mode opens the same wheel over the frame from the small "A" top left.</li></ul>
+      <p class="trade">The quietest option. Its analog feel comes only from the needle and the film colors.</p>
+    </div>
+    <div class="phones">
+      <div class="phone-col"><div class="phone"><div class="screen cam fx e2" data-cam>
+        <div class="island"></div>
+        <div class="sb"><span>9:41</span><i class="bat"></i></div>
+        <div class="fx-row fx-top">
+          <div class="fx-group"><button class="ro" data-mw-toggle aria-label="Exposure mode"><b data-read="mode">A</b><small>MODE</small></button><span class="ro static"><small>ƒ</small>1.8</span></div>
+          <button class="ro" data-film-open aria-label="Choose film"><i class="dot"></i><span data-read="film">AURUM 200</span></button>
+          <div class="fx-group"><button class="ro" data-adjust="comp" data-comp aria-label="Exposure compensation"><small>EV</small><b data-read="comp">±0</b></button></div>
+        </div>
+        <div class="vf fx-vf" data-vf>
+          <div class="scene" data-scene></div><div class="grainov"></div><div class="gridov"></div>
+          <div class="ret ret-plus" data-ret style="width:22px;height:22px"></div>
+          <div class="curtain" data-curtain></div><div class="mw" data-mw></div>
+        </div>
+        <div class="fx-row fx-bot">
+          <button class="ro" data-adjust="shutter" data-auto="shutter" aria-label="Shutter speed"><b data-read="shutter">1/250</b><small>S</small></button>
+          <div class="e-meter e2-meter" data-lin="e" data-sparse="1"></div>
+          <button class="ro" data-adjust="iso" data-auto="iso" aria-label="ISO"><small>ISO</small><b data-read="iso">200</b></button>
+        </div><div class="slot" data-slot>
+          <div class="lens" data-focal><button data-f="0">26</button><button data-f="1" class="on">35</button><button data-f="2">50</button><small>MM</small></div>
+          <div class="tray">
+            <div class="tray-p" data-tray-p="shutter" data-auto="shutter" hidden><span class="tray-lab">SHUTTER</span><div class="drum" data-drum="shutter" data-axis="x" data-size="50" tabindex="0" aria-label="Shutter speed"></div></div>
+            <div class="tray-p" data-tray-p="iso" data-auto="iso" hidden><span class="tray-lab">ISO</span><div class="drum" data-drum="iso" data-axis="x" data-size="44" tabindex="0" aria-label="ISO"></div></div>
+            <div class="tray-p" data-tray-p="comp" hidden><span class="tray-lab">EXP. COMP</span><div class="drum" data-drum="comp" data-axis="x" data-size="40" tabindex="0" aria-label="Exposure compensation"></div></div>
+          </div>
+        </div><div class="fx-deck">
+          <button class="fx-thumb" data-thumb aria-label="Last photo"><span><span data-read="frames">36</span> LEFT</span></button>
+          <button class="shutter e-shutter" data-shutter aria-label="Take photo"></button>
+          <button class="fx-flip ico" data-flip data-icon="flip" aria-label="Switch camera"></button>
+        </div>
+        <div class="drawer" data-filmdrawer></div>
+      </div></div><span class="phone-cap">Shoot · tap a readout</span></div>
+      <div class="phone-col"><div class="phone"><div class="screen ed ed-e" data-editor data-preset="4"></div></div><span class="phone-cap">Edit</span></div>
+    </div>
+  </section>
 
   <section class="system" aria-labelledby="sys-h">
     <h2 id="sys-h">Shared across all five</h2>
@@ -457,6 +684,12 @@ footer{padding-block:32px;color:var(--muted);font-size:13px}
       <div class="filmshelf" data-shelf></div>
     </div>
   </section>
+
+  <div class="round-div">
+    <span class="eyebrow">For reference</span>
+    <h2>Round 1</h2>
+    <p>The original five directions, unchanged, so you can compare.</p>
+  </div>
 
   <!-- ===================== A ===================== -->
   <section class="dir" id="a">
@@ -682,7 +915,7 @@ footer{padding-block:32px;color:var(--muted);font-size:13px}
     </div>
   </section>
 
-  <footer>Round 1. The film names and colors are placeholders until the brand marks are designed. The sample scene is drawn in code, so you are not looking at a real photo.</footer>
+  <footer>Round 2. The film names and colors are placeholders until the brand marks are designed. The sample scene is drawn in code, so you are not looking at a real photo.</footer>
 </div>
 
 <script>
@@ -809,12 +1042,12 @@ function arcSVG(kind){
   return s + '</svg>';
 }
 function linScale(el){
-  const w = el.clientWidth, pad = el.dataset.lin==='e' ? 6 : 12, span = w/2 - pad;
+  const w = el.clientWidth, pad = el.dataset.lin==='c' ? 12 : 6, span = w/2 - pad;
   let h = '<div class="lin">';
   for (let v=-3; v<=3.001; v+=1/3){
     const maj = Math.abs(v-Math.round(v))<.01, x = w/2 + v/3*span;
     h += `<span class="tk${maj?' maj':''}" style="left:${x}px"></span>`;
-    if (maj) h += `<span class="lb" style="left:${x}px">${Math.round(v)===0?'0':(v>0?'+':'−')+Math.abs(Math.round(v))}</span>`;
+    if (maj && (!el.dataset.sparse || Math.abs(v) < .01 || Math.abs(Math.abs(v)-3) < .01)) h += `<span class="lb" style="left:${x}px">${Math.round(v)===0?'0':(v>0?'+':'−')+Math.abs(Math.round(v))}</span>`;
   }
   return h + `<span class="ndl" data-needle data-kind="x" data-span="${span}"></span></div>`;
 }
@@ -849,7 +1082,7 @@ function Cam(root, idx){
     if (kind==='comp'){ if (s.mode==='M') return; s.comp = clamp(s.comp + st, 0, COMP.length-1); }
     if (kind==='shutter'){ s.sh = clamp(s.sh + st, 0, SH.length-1); if (s.mode==='A') s.mode='S'; else if (s.mode==='I') s.mode='M'; }
     if (kind==='iso'){ s.iso = clamp(s.iso + st, 0, ISO.length-1); if (s.mode==='A') s.mode='I'; else if (s.mode==='S') s.mode='M'; }
-    solve(); render();
+    solve(); render(); bumpTray();
   }
   function evSet(){ return Math.log2(N2/SH[s.sh]) - Math.log2(ISO[s.iso]/100); }
   function solve(){
@@ -962,6 +1195,22 @@ function Cam(root, idx){
   });
   if (row) requestAnimationFrame(() => { const c = row.querySelector('.can.on'); if (c) row.scrollLeft = c.offsetLeft - row.clientWidth/2 + c.offsetWidth/2; });
 
+  const slot = root.querySelector('[data-slot]');
+  let trayTimer;
+  function bumpTray(){ if (!slot || !slot.classList.contains('adjusting')) return; clearTimeout(trayTimer); trayTimer = setTimeout(closeTray, 4000); }
+  function closeTray(){ if (!slot) return; slot.classList.remove('adjusting'); slot.dataset.adj = ''; $('[data-adjust]').forEach(b => b.classList.remove('active')); }
+  function openTray(p){
+    if (slot.dataset.adj === p){ closeTray(); return; }
+    slot.dataset.adj = p; slot.classList.add('adjusting');
+    slot.querySelectorAll('[data-tray-p]').forEach(w => w.hidden = w.dataset.trayP !== p);
+    $('[data-adjust]').forEach(b => b.classList.toggle('active', b.dataset.adjust === p));
+    render(); bumpTray();
+  }
+  $('[data-adjust]').forEach(b => {
+    b.addEventListener('click', e => { e.stopPropagation(); openTray(b.dataset.adjust); });
+    b.addEventListener('wheel', e => { e.preventDefault(); const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY; if (Math.abs(d) > 2) change(b.dataset.adjust, Math.sign(d)); }, {passive:false});
+  });
+  if (slot) root.addEventListener('click', e => { if (!e.target.closest('[data-slot],[data-adjust]')) closeTray(); });
   $('[data-grid-toggle]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); vf.classList.toggle('grid-on'); }));
   $('[data-flip]').forEach(b => b.addEventListener('click', () => { vf.classList.remove('flipping'); void vf.offsetWidth; vf.classList.add('flipping'); }));
   $('[data-focal] button').forEach(b => b.addEventListener('click', () => { s.focal = +b.dataset.f; render(); }));
@@ -998,18 +1247,19 @@ function setupFan(cam, wrap){
   const sc = wrap.querySelector('[data-fan-scale]'), nc = wrap.querySelector('[data-fan-needle]');
   const dpr = Math.min(2, devicePixelRatio || 1), W = wrap.clientWidth, H = wrap.clientHeight;
   [sc,nc].forEach(c => { c.width = W*dpr; c.height = H*dpr; c.getContext('2d').scale(dpr,dpr); });
-  const cx = W/2, cy = H + 120, R = 164, SPAN = 32;
+  const mini = W < 180, SPAN = mini ? 38 : 32, k = mini ? .62 : 1;
+  const R = mini ? (W-14)/(2*Math.sin(SPAN*Math.PI/180)) : 164, cx = W/2, cy = mini ? R + 14 : H + 120;
   const g = sc.getContext('2d');
   g.shadowColor = 'rgba(242,196,106,.9)'; g.shadowBlur = 5; g.strokeStyle = '#f6d38c'; g.fillStyle = '#f6d38c';
-  g.font = '500 8.5px "IBM Plex Mono", monospace'; g.textAlign = 'center';
+  g.font = `500 ${mini?6:8.5}px "IBM Plex Mono", monospace`; g.textAlign = 'center';
   for (let v=-3; v<=3.001; v+=1/6){
     const a = (v/3*SPAN - 90)*Math.PI/180, maj = Math.abs(v-Math.round(v))<.01, third = Math.abs(v*3-Math.round(v*3))<.01;
-    const r1 = maj ? R-24 : third ? R-15 : R-9;
+    const r1 = R - (maj ? 24 : third ? 15 : 9)*k;
     g.lineWidth = maj ? 1.6 : 1; g.globalAlpha = maj ? 1 : third ? .8 : .45;
     g.beginPath(); g.moveTo(cx+Math.cos(a)*r1, cy+Math.sin(a)*r1); g.lineTo(cx+Math.cos(a)*R, cy+Math.sin(a)*R); g.stroke();
-    if (maj){ g.globalAlpha = 1; g.fillText(Math.round(v)===0?'0':(v>0?'+':'−')+Math.abs(Math.round(v)), cx+Math.cos(a)*(R+8), cy+Math.sin(a)*(R+8)+3); }
+    if (maj){ g.globalAlpha = 1; g.fillText(Math.round(v)===0?'0':(v>0?'+':'−')+Math.abs(Math.round(v)), cx+Math.cos(a)*(R+8), cy+Math.sin(a)*(R+8*k)+3*k); }
   }
-  g.globalAlpha = .7; g.font = '500 7.5px "IBM Plex Mono", monospace'; g.textAlign='left'; g.fillText('UNDER', 4, H-6); g.textAlign='right'; g.fillText('OVER', W-4, H-6); g.textAlign='center'; g.fillText('EV', cx, H-4);
+  if (!mini){ g.globalAlpha = .7; g.font = '500 7.5px "IBM Plex Mono", monospace'; g.textAlign='left'; g.fillText('UNDER', 4, H-6); g.textAlign='right'; g.fillText('OVER', W-4, H-6); g.textAlign='center'; g.fillText('EV', cx, H-4); }
   const m = {cam, kind:'fan', ctx:nc.getContext('2d'), W, H, cx, cy, R, span:SPAN, pos:0, vel:0};
   meters.push(m);
 }
@@ -1030,8 +1280,8 @@ function loop(now){
       g.globalCompositeOperation = 'destination-out'; g.fillStyle = `rgba(0,0,0,${reduce?1:.2})`; g.fillRect(0,0,m.W,m.H);
       g.globalCompositeOperation = 'source-over';
       const a = (m.pos*m.span - 90)*Math.PI/180;
-      g.strokeStyle = '#fff1cf'; g.lineWidth = 1.6; g.shadowColor = 'rgba(255,190,90,1)'; g.shadowBlur = 8;
-      g.beginPath(); g.moveTo(m.cx+Math.cos(a)*(m.R-90), m.cy+Math.sin(a)*(m.R-90)); g.lineTo(m.cx+Math.cos(a)*(m.R+2), m.cy+Math.sin(a)*(m.R+2)); g.stroke();
+      g.strokeStyle = '#fff1cf'; g.lineWidth = m.W < 180 ? 1.2 : 1.6; g.shadowColor = 'rgba(255,190,90,1)'; g.shadowBlur = 8;
+      g.beginPath(); g.moveTo(m.cx+Math.cos(a)*(m.R*.45), m.cy+Math.sin(a)*(m.R*.45)); g.lineTo(m.cx+Math.cos(a)*(m.R+2), m.cy+Math.sin(a)*(m.R+2)); g.stroke();
     }
   });
   requestAnimationFrame(loop);
@@ -1045,7 +1295,8 @@ const TABS = [
   {id:'print', label:'Print', ctl:[['border','Border',['None','Thin','Instant','Strip']],['vignette','Vignette',0,100,1],['date','Date stamp',['Off','On']]]}
 ];
 const fmt = v => (v>0?'+':v<0?'−':'')+Math.abs(v);
-function Editor(root, idx){
+function Editor(root, n){
+  const idx = root.dataset.preset !== undefined ? +root.dataset.preset : n % 5;
   const st = {exposure:0, contrast:8, fade:12, film:[0,3,5,7,8][idx], strength:85, warmth:6, grain:35, halation:[10,30,0,15,0][idx], leak:0, border:[2,3,1,2,0][idx], vignette:30, date:idx===3?1:0};
   let tab = [0,1,2,1,3][idx]; let hist = [JSON.stringify(st)], hi = 0;
   root.innerHTML = `<div class="island"></div><div class="sb"><span>9:41</span><i class="bat"></i></div>
@@ -1069,7 +1320,7 @@ function Editor(root, idx){
       if (c==='films') return `<div class="filmrow">${FILMS.map(canHTML).join('')}</div>`;
       const [k, label] = c;
       if (Array.isArray(c[2])) return `<div class="ctl"><div class="ctl-top"><span>${label}</span></div><div class="seg">${c[2].map((o,i)=>`<button data-seg="${k}" data-v="${i}">${o}</button>`).join('')}</div></div>`;
-      return `<div class="ctl"><div class="ctl-top"><span>${label}</span><b data-val="${k}"></b></div><input type="range" id="ed${idx}-${k}" data-k="${k}" min="${c[2]}" max="${c[3]}" step="${c[4]}" aria-label="${label}"></div>`;
+      return `<div class="ctl"><div class="ctl-top"><span>${label}</span><b data-val="${k}"></b></div><input type="range" id="ed${n}-${k}" data-k="${k}" data-n="${n}" min="${c[2]}" max="${c[3]}" step="${c[4]}" aria-label="${label}"></div>`;
     }).join('');
     sync();
     const row = panel.querySelector('.filmrow');
