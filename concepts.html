@@ -1,0 +1,1148 @@
+<title>Film Camera UI Directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=IBM+Plex+Mono:wght@400;500&family=Michroma&display=swap">
+<style>
+/* Layout: a dark contact-sheet board. Each direction is a row: notes on the left, two live phones (shoot + edit) on the right. Single black & silver look by design. */
+:root{
+  --bg:#0a0a0b;
+  --bg-2:#121214;
+  --ink:#e9eaec;
+  --silver:#c3c6cb;
+  --silver-dim:#8b8e94;
+  --line:#26272a;
+  --muted:#7d8087;
+  --amber:#f2c46a;
+  --f-display:'Michroma','Eurostile','Arial Black',sans-serif;
+  --f-body:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--f-body);font-size:15px;line-height:1.55;padding-inline:clamp(16px,4vw,48px);padding-block:0 64px;
+  background:radial-gradient(1200px 600px at 70% -10%,#1b1c1f 0%,transparent 60%),var(--bg)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:1.5px solid var(--silver);outline-offset:2px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+/* ---------- page ---------- */
+.wrap{max-width:1240px;margin:0 auto}
+.hero{padding-block:56px 32px;display:grid;gap:18px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--silver-dim)}
+h1{font-family:var(--f-display);font-weight:400;font-size:clamp(26px,4.4vw,48px);line-height:1.12;margin:0;letter-spacing:.02em;text-wrap:balance;
+  background:linear-gradient(180deg,#f4f5f6 0%,#b7bac0 55%,#e2e4e7 70%,#8d9096 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{max-width:66ch;color:#b9bcc2;margin:0}
+.howto{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.howto span{font-family:var(--f-mono);font-size:11.5px;color:var(--silver);border:1px solid var(--line);border-radius:999px;padding:5px 11px;background:var(--bg-2)}
+
+.system{padding-block:36px;display:grid;gap:22px;border-bottom:1px solid var(--line)}
+.system h2,.dir-head h2{font-family:var(--f-display);font-weight:400;font-size:17px;letter-spacing:.06em;margin:0;text-transform:uppercase}
+.sys-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:28px}
+.sys-grid h3{font-size:12px;font-family:var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);font-weight:500;margin:0 0 8px}
+.sys-grid p{margin:0;color:#b9bcc2;font-size:14px}
+.filmshelf{display:flex;flex-wrap:wrap;gap:14px 10px;padding-top:6px}
+.filmshelf .can{width:auto;min-width:64px}
+
+.dir{padding-block:48px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:40px;align-items:start}
+.dir-head{display:grid;gap:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 24px)}
+.dir-tag{display:flex;align-items:center;gap:12px}
+.dir-tag b{font-family:var(--f-display);font-weight:400;font-size:44px;line-height:1;color:transparent;-webkit-text-stroke:1px var(--silver-dim)}
+.dir-head p{margin:0;color:#b9bcc2;max-width:52ch}
+.dir-head ul{margin:0;padding:0;list-style:none;display:grid;gap:8px;font-size:14px;color:#a9acb2}
+.dir-head li{padding-left:18px;position:relative}
+.dir-head li::before{content:'';position:absolute;left:0;top:.72em;width:9px;height:1px;background:var(--silver-dim)}
+.dir-head .trade{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+.phones{display:flex;flex-wrap:wrap;gap:28px;justify-content:flex-start}
+.phone-col{display:grid;gap:10px;justify-items:center}
+.phone-cap{font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:1060px){.dir{grid-template-columns:1fr}.dir-head{position:static}}
+@media (max-width:700px){.phones{justify-content:center}}
+footer{padding-block:32px;color:var(--muted);font-size:13px}
+
+/* ---------- phone shell ---------- */
+.phone{width:300px;height:640px;border-radius:50px;padding:7px;flex:none;position:relative;
+  background:linear-gradient(140deg,#e6e8eb 0%,#7c7f85 22%,#cfd2d6 48%,#5d6065 72%,#b9bcc1 100%);
+  box-shadow:0 0 0 1px #000,0 30px 60px -20px rgba(0,0,0,.8),inset 0 0 2px rgba(255,255,255,.6)}
+.screen{position:relative;width:100%;height:100%;border-radius:43px;overflow:hidden;background:#000;display:flex;flex-direction:column;
+  font-family:var(--f-body);color:#e8e9eb;user-select:none;-webkit-user-select:none}
+.island{position:absolute;top:10px;left:50%;width:84px;height:24px;border-radius:14px;background:#000;transform:translateX(-50%);z-index:60}
+.sb{flex:none;height:42px;display:flex;align-items:center;justify-content:space-between;padding:6px 26px 0;font-size:12px;font-weight:600;position:relative;z-index:55}
+.bat{display:inline-block;width:22px;height:10px;border:1px solid currentColor;border-radius:3px;position:relative;opacity:.9}
+.bat::before{content:'';position:absolute;inset:1.5px 6px 1.5px 1.5px;background:currentColor;border-radius:1px}
+.bat::after{content:'';position:absolute;right:-3px;top:3px;width:1.5px;height:3px;background:currentColor;border-radius:0 1px 1px 0}
+.ico{display:inline-grid;place-items:center}
+.ico svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- viewfinder shared ---------- */
+.vf{position:relative;overflow:hidden;background:#0d0d0f;flex:none;touch-action:manipulation;cursor:crosshair}
+.scene{position:absolute;inset:0;background:var(--scene) center/cover no-repeat;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.vf .grainov{position:absolute;inset:0;background-image:var(--noise);background-size:160px;mix-blend-mode:overlay;opacity:.35;pointer-events:none}
+.gridov{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .25s;
+  --gl:rgba(255,255,255,.28);
+  background:
+   linear-gradient(90deg,transparent calc(33.33% - .5px),var(--gl) calc(33.33% - .5px) calc(33.33% + .5px),transparent calc(33.33% + .5px) calc(66.66% - .5px),var(--gl) calc(66.66% - .5px) calc(66.66% + .5px),transparent calc(66.66% + .5px)),
+   linear-gradient(180deg,transparent calc(33.33% - .5px),var(--gl) calc(33.33% - .5px) calc(33.33% + .5px),transparent calc(33.33% + .5px) calc(66.66% - .5px),var(--gl) calc(66.66% - .5px) calc(66.66% + .5px),transparent calc(66.66% + .5px))}
+.vf.grid-on .gridov{opacity:1}
+.corners{position:absolute;inset:12px;pointer-events:none}
+.corners i{position:absolute;width:18px;height:18px;border:0 solid rgba(255,255,255,.85)}
+.corners i:nth-child(1){left:0;top:0;border-left-width:2px;border-top-width:2px}
+.corners i:nth-child(2){right:0;top:0;border-right-width:2px;border-top-width:2px}
+.corners i:nth-child(3){left:0;bottom:0;border-left-width:2px;border-bottom-width:2px}
+.corners i:nth-child(4){right:0;bottom:0;border-right-width:2px;border-bottom-width:2px}
+.ret{position:absolute;left:var(--rx,50%);top:var(--ry,50%);transform:translate(-50%,-50%);pointer-events:none;transition:left .25s,top .25s}
+.ret-plus{width:34px;height:34px}
+.ret-plus::before,.ret-plus::after{content:'';position:absolute;background:rgba(255,255,255,.9)}
+.ret-plus::before{left:50%;top:0;bottom:0;width:1.5px;transform:translateX(-50%)}
+.ret-plus::after{top:50%;left:0;right:0;height:1.5px;transform:translateY(-50%)}
+.ret-brk{width:46px;height:46px;border:1px solid rgba(255,255,255,.75);border-radius:3px;
+  -webkit-mask:linear-gradient(#000 0 0) top/100% 8px no-repeat,linear-gradient(#000 0 0) bottom/100% 8px no-repeat,linear-gradient(#000 0 0) left/8px 100% no-repeat,linear-gradient(#000 0 0) right/8px 100% no-repeat;
+  mask:linear-gradient(#000 0 0) top/100% 8px no-repeat,linear-gradient(#000 0 0) bottom/100% 8px no-repeat,linear-gradient(#000 0 0) left/8px 100% no-repeat,linear-gradient(#000 0 0) right/8px 100% no-repeat}
+.ret-brk::after{content:'';position:absolute;left:50%;top:50%;width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.8);transform:translate(-50%,-50%)}
+.ret.pulse{animation:retp .5s ease-out}
+@keyframes retp{0%{scale:1.5;opacity:.3}60%{scale:.92}100%{scale:1;opacity:1}}
+.curtain{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none}
+.curtain.fire{animation:curt .22s steps(1,end)}
+@keyframes curt{0%{opacity:1}100%{opacity:0}}
+.vf.flipping{animation:flip .5s ease-in-out}
+@keyframes flip{50%{transform:rotateY(90deg) scale(.96)}}
+
+/* ---------- mode wheel ---------- */
+.mw{position:absolute;inset:0;pointer-events:none;z-index:20}
+.mw-scrim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.78) 0%,rgba(0,0,0,.55) 55%,rgba(0,0,0,.2));opacity:0;transition:opacity .3s}
+.mw-wheel{position:absolute;left:-104px;top:50%;width:0;height:0;transition:transform .45s cubic-bezier(.3,1.4,.4,1),opacity .3s;transform:translateX(-80px);opacity:0}
+.mw-disc{position:absolute;left:-150px;top:-150px;width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(circle at 50% 50%,transparent 58%,rgba(255,255,255,.08) 58.5%,rgba(255,255,255,.02) 100%);border:1px solid rgba(255,255,255,.22)}
+.mw-item{position:absolute;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;border:0;background:none;cursor:pointer;
+  font-family:var(--f-body);font-weight:400;font-size:24px;color:rgba(255,255,255,.55);transition:transform .45s cubic-bezier(.3,1.3,.4,1),color .2s,font-size .2s}
+.mw-item.on{color:#fff;font-size:32px}
+.mw-item.on::before{content:'';position:absolute;left:-10px;top:50%;border:6px solid transparent;border-left:8px solid #fff;transform:translateY(-50%)}
+.mw-info{position:absolute;left:96px;right:16px;top:50%;transform:translateY(-50%);opacity:0;transition:opacity .3s .05s;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.mw-info h4{margin:0 0 6px;font-weight:500;font-size:17px}
+.mw-info p{margin:0;font-size:12px;line-height:1.45;color:#d8d9dc}
+.mw.open{pointer-events:auto}
+.mw.open .mw-scrim{opacity:1}
+.mw.open .mw-wheel{transform:none;opacity:1}
+.mw.open .mw-info{opacity:1}
+.mw.peek .mw-wheel{opacity:1;transform:translateX(-28px)}
+.mw.peek .mw-item:not(.on){opacity:.0}
+.mw.peek{pointer-events:none}
+.mw.peek .mw-wheel{pointer-events:auto}
+.mw.open.peek .mw-wheel{transform:none}
+.mw.open.peek .mw-item{opacity:1}
+
+/* ---------- drums (rotating value strips) ---------- */
+.drum{position:relative;overflow:hidden;cursor:ew-resize;touch-action:none;outline-offset:1px}
+.drum[data-axis="y"]{cursor:ns-resize}
+.drum-strip{position:absolute;display:flex;transition:transform .35s cubic-bezier(.25,1.35,.45,1);will-change:transform}
+.drum[data-axis="x"] .drum-strip{top:0;bottom:0;left:0;flex-direction:row}
+.drum[data-axis="y"] .drum-strip{left:0;right:0;top:0;flex-direction:column}
+.drum-item{flex:none;display:grid;place-items:center;font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap;transition:opacity .3s,color .3s}
+.drum-item.on{color:var(--drum-on,#fff)}
+.is-auto .drum-item.on{color:var(--drum-auto,#9da0a6)}
+.off{opacity:.35;pointer-events:none}
+
+/* ---------- shutter ---------- */
+.shutter{border:0;border-radius:50%;cursor:pointer;flex:none;transition:transform .08s}
+.shutter:active,.shutter.pressed{transform:scale(.93)}
+
+/* ---------- film canisters ---------- */
+.can{--c:#c9a24a;--band:#1a1a1a;display:grid;justify-items:center;gap:7px;background:none;border:0;cursor:pointer;padding:8px 2px 2px;width:58px;flex:none;transition:transform .25s}
+.can-body{width:30px;height:42px;border-radius:3px;position:relative;
+  background:linear-gradient(90deg,rgba(0,0,0,.55),rgba(255,255,255,.28) 28%,rgba(255,255,255,0) 50%,rgba(0,0,0,.45)),var(--c)}
+.can-body::before,.can-body::after{content:'';position:absolute;left:-2px;right:-2px;height:5px;border-radius:2px;
+  background:linear-gradient(90deg,#555,#e3e5e8 30%,#9a9da2 60%,#444)}
+.can-body::before{top:-4px}.can-body::after{bottom:-4px}
+.can-body i{position:absolute;left:0;right:0;top:13px;height:13px;background:var(--band);display:grid;place-items:center;
+  font:600 6.5px/1 var(--f-mono);letter-spacing:.04em;color:var(--c);font-style:normal}
+.can-body b{position:absolute;right:-6px;top:10px;width:6px;height:9px;background:linear-gradient(90deg,#333,#777);border-radius:0 1px 1px 0}
+.can-name{font:500 9px/1.15 var(--f-mono);letter-spacing:.06em;color:#bfc2c7;text-align:center}
+.can.on{transform:translateY(-5px)}
+.can.on .can-name{color:#fff}
+.can.on .can-body{box-shadow:0 8px 14px -6px rgba(255,255,255,.35)}
+
+.drawer{position:absolute;left:0;right:0;bottom:0;z-index:40;padding:14px 0 26px;transform:translateY(105%);transition:transform .4s cubic-bezier(.2,.9,.25,1);
+  background:linear-gradient(180deg,rgba(24,25,27,.97),rgba(10,10,11,.99));border-top:1px solid rgba(255,255,255,.14);border-radius:22px 22px 0 0}
+.drawer.open{transform:none}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;padding:0 20px 6px;font:500 10px var(--f-mono);letter-spacing:.16em;color:#9da0a6}
+.drawer-head button{background:none;border:0;cursor:pointer;color:#e8e9eb;font-size:11px;letter-spacing:.1em}
+.filmrow{display:flex;gap:4px;overflow-x:auto;padding:4px 14px 2px;scrollbar-width:none;scroll-behavior:smooth}
+.filmrow::-webkit-scrollbar{display:none}
+.drawer-desc{padding:8px 20px 0;font-size:11.5px;color:#a7aab0;min-height:2.6em}
+
+/* ===================== A · RANGEFINDER ===================== */
+.cam-a{background:#0b0b0c}
+.a-top{flex:none;height:34px;display:flex;align-items:center;gap:10px;padding:0 14px}
+.a-mode{width:30px;height:30px;border-radius:50%;border:1px solid #4a4c50;background:radial-gradient(circle at 35% 30%,#3a3c40,#121315);cursor:pointer;font-weight:600;font-size:13px}
+.a-film{display:flex;align-items:center;gap:7px;height:26px;padding:0 11px;border-radius:13px;border:1px solid #2e3034;background:#141517;cursor:pointer;font:500 10.5px var(--f-mono);letter-spacing:.08em}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--fc,#c9a24a);box-shadow:0 0 0 2px rgba(255,255,255,.08)}
+.a-frames{margin-left:auto;font-size:10.5px;color:#a3a6ab;letter-spacing:.08em}
+.a-vf{width:100%;aspect-ratio:3/4}
+.a-grid{position:absolute;left:12px;bottom:12px;width:36px;height:36px;border-radius:9px;border:1.5px solid rgba(255,255,255,.85);background:rgba(0,0,0,.25);cursor:pointer;z-index:5;color:#fff;backdrop-filter:blur(4px)}
+.vf.grid-on .a-grid{background:rgba(255,255,255,.9);color:#000}
+.a-meter{position:absolute;right:12px;bottom:12px;width:132px;height:54px;border-radius:6px;overflow:hidden;z-index:5;
+  background:linear-gradient(180deg,#151309,#060604);box-shadow:inset 0 0 0 1px rgba(255,236,190,.18),0 4px 14px rgba(0,0,0,.6)}
+.a-meter::after{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(255,255,255,.14),transparent 40%);pointer-events:none}
+.a-read{flex:none;display:grid;grid-template-columns:1.15fr 1fr 1fr;border-bottom:1px solid #1d1e20;border-top:1px solid #1d1e20}
+.a-cell{display:flex;align-items:center;gap:4px;padding-left:10px;height:34px;border-right:1px solid #1d1e20}
+.a-cell:last-child{border-right:0}
+.a-cell .lab{font:600 9px var(--f-mono);color:#7d8087;letter-spacing:.08em}
+.a-cell .drum{flex:1;height:100%;-webkit-mask:linear-gradient(90deg,transparent,#000 30%,#000 70%,transparent);mask:linear-gradient(90deg,transparent,#000 30%,#000 70%,transparent)}
+.a-cell .drum-item{font-size:12px;color:#45474b}
+.a-deck{flex:1;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:4px 22px 22px;gap:14px}
+.a-shutter{justify-self:start;width:82px;height:82px;background:radial-gradient(circle at 50% 40%,#f3f4f5,#babdc2 70%,#8e9196);box-shadow:0 0 0 3px #0b0b0c,0 0 0 5px #8e9196,inset 0 -3px 6px rgba(0,0,0,.25)}
+.a-mid{display:grid;gap:16px;justify-items:center}
+.a-star,.a-flip{border-radius:50%;border:1.5px solid #c3c6cb;background:none;cursor:pointer;color:#e8e9eb}
+.a-star{width:44px;height:44px}
+.a-flip{width:52px;height:52px}
+.a-thumb{justify-self:end;width:78px;height:104px;border-radius:7px;border:1.5px solid #c3c6cb;cursor:pointer;background:#141517 center/cover;position:relative;padding:0;overflow:hidden}
+.a-thumb span{position:absolute;left:0;right:0;bottom:0;padding:3px 6px;font-size:9px;text-align:left;background:linear-gradient(transparent,rgba(0,0,0,.8));color:#d7d9dc}
+
+/* ===================== B · METER BRIDGE ===================== */
+.cam-b{background:#000}
+.b-vf{margin:0 auto;width:236px;aspect-ratio:3/4;border:1px solid #3a3b3e}
+.b-vf .gridov{--gl:rgba(255,255,255,.22)}
+.b-pill{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);display:flex;align-items:center;gap:12px;padding:5px 12px;border-radius:14px;
+  background:rgba(40,40,42,.72);backdrop-filter:blur(8px);font:500 10px var(--f-mono);color:#d9dadc;white-space:nowrap;z-index:5}
+.b-pill button{background:none;border:0;padding:0;cursor:pointer;display:grid}
+.b-pill .ico svg{width:14px;height:14px}
+.b-scale{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:96px;height:9px;opacity:.75;
+  background:repeating-linear-gradient(90deg,#fff 0 1px,transparent 1px 8px);-webkit-mask:linear-gradient(#000 0 0) top/100% 4px no-repeat,linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask:linear-gradient(#000 0 0) top/100% 4px no-repeat,linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);border-top:1px solid #fff}
+.b-meter{flex:none;position:relative;height:62px;margin:2px 14px 0}
+.b-meter canvas{position:absolute;inset:0;width:100%;height:100%}
+.b-deck{flex:1;background:#232325;margin-top:4px;border-radius:0;display:grid;grid-template-columns:62px 1fr 62px;grid-template-rows:36px 1fr 58px;gap:2px 8px;padding:8px 14px 16px;align-items:center;justify-items:center}
+.b-btn{width:36px;height:36px;border-radius:50%;border:1px solid #3c3d40;background:radial-gradient(circle at 40% 30%,#3a3b3e,#18181a);cursor:pointer;color:#e3e4e6;display:grid;place-items:center}
+.b-btn .ico svg{width:16px;height:16px}
+.b-shut-strip{width:100%;height:28px;border-radius:14px;background:#141416;border:1px solid #36373a;
+  -webkit-mask:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent);mask:linear-gradient(90deg,transparent,#000 22%,#000 78%,transparent)}
+.b-shut-strip .drum-item{font-size:11px;color:#6c6e73}
+.b-shut-strip .drum-item.on{color:#fff;font-size:13px}
+.b-shut-wrap{position:relative;width:100%}
+.b-shut-wrap::before,.b-shut-wrap::after{content:'';position:absolute;top:50%;transform:translateY(-50%);border:5px solid transparent;z-index:2}
+.b-shut-wrap::before{left:6px;border-right:6px solid var(--amber);border-left:0}
+.b-shut-wrap::after{right:6px;border-left:6px solid var(--amber);border-right:0}
+.b-shutter{width:64px;height:64px;background:#dcdddf;box-shadow:0 0 0 4px #232325,0 0 0 6px #4a4b4e}
+.b-iso{width:58px;height:58px;border-radius:50%;position:relative;cursor:ew-resize;touch-action:none;background:radial-gradient(circle,#1b1b1d 52%,#0d0d0e 53%);box-shadow:inset 0 0 0 1px #3e3f42}
+.b-iso-ring{position:absolute;inset:3px;border-radius:50%;transition:transform .45s cubic-bezier(.25,1.4,.45,1);
+  background:repeating-conic-gradient(from -1deg,#bfc1c5 0 2deg,transparent 2deg 15deg);-webkit-mask:radial-gradient(circle,transparent 67%,#000 68%);mask:radial-gradient(circle,transparent 67%,#000 68%)}
+.b-iso::after{content:'';position:absolute;top:1px;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top:7px solid var(--amber);border-bottom:0}
+.b-iso-val{position:absolute;inset:0;display:grid;place-content:center;text-align:center;line-height:1}
+.b-iso-val b{font:600 15px var(--f-mono)}
+.b-iso-val small{font:500 8px var(--f-mono);color:#9a9ca1;letter-spacing:.1em;margin-top:2px}
+.b-iso.is-auto .b-iso-val b{color:#a5a7ab}
+.b-film{width:38px;height:38px;border-radius:50%;border:1px solid #3c3d40;background:#18181a;cursor:pointer;display:grid;place-items:center}
+.b-film i{width:12px;height:12px;border-radius:50%;background:var(--fc);box-shadow:0 0 8px var(--fc)}
+.b-focal{display:flex;gap:2px;background:#141416;border:1px solid #36373a;border-radius:14px;padding:2px;height:28px;width:100%;justify-content:space-between}
+.b-focal button{flex:1;border:0;border-radius:11px;background:none;font:500 10px var(--f-mono);color:#7b7d82;cursor:pointer}
+.b-focal button.on{color:#fff;background:#2d2e31}
+.b-bottom{display:flex;gap:6px;align-items:center}
+.b-bottom .seg{display:flex;gap:2px;padding:2px;border-radius:12px;background:#141416;border:1px solid #36373a}
+.b-bottom .seg button{border:0;background:none;padding:3px 9px;border-radius:9px;font:500 10px var(--f-mono);color:#7b7d82;cursor:pointer}
+.b-bottom .seg button.on{background:#2d2e31;color:#fff}
+
+/* ===================== C · TOP PLATE ===================== */
+.cam-c{background:#050505}
+.c-vf{width:100%;aspect-ratio:3/4}
+.c-vf::after{content:'';position:absolute;inset:16px;border:1px solid rgba(255,255,255,.35);pointer-events:none}
+.c-info{position:absolute;left:24px;right:24px;top:22px;display:flex;justify-content:space-between;font:500 10px var(--f-mono);letter-spacing:.08em;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6);pointer-events:none;z-index:4}
+.c-plate{flex:1;position:relative;color:#1d1e20;padding:12px 16px 20px;display:grid;grid-template-columns:58px 1fr 58px;grid-template-rows:1fr auto;gap:8px 12px;
+  background:
+   repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 1px,rgba(0,0,0,.035) 1px 2px,transparent 2px 3px),
+   linear-gradient(180deg,#e2e4e7 0%,#b9bcc1 38%,#d0d2d6 64%,#a4a7ac 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8),inset 0 -1px 0 rgba(0,0,0,.25)}
+.engr{font:400 7.5px var(--f-display);letter-spacing:.12em;color:#2a2b2e;text-shadow:0 1px 0 rgba(255,255,255,.65);text-transform:uppercase}
+.c-dial{display:grid;justify-items:center;gap:4px;align-self:center}
+.c-drum{width:52px;height:96px;border-radius:7px;background:linear-gradient(90deg,#0d0d0e,#3b3c40 30%,#1b1c1e 55%,#0a0a0b);box-shadow:0 0 0 1px #000,0 3px 6px rgba(0,0,0,.4);
+  --drum-on:#fff;--drum-auto:#a8aaaf}
+.c-drum::before,.c-drum::after{content:'';position:absolute;top:0;bottom:0;width:6px;z-index:2;background:repeating-linear-gradient(180deg,#5a5c60 0 1.5px,#141516 1.5px 3.5px)}
+.c-drum::before{left:0}.c-drum::after{right:0}
+.c-drum .drum-strip{-webkit-mask:linear-gradient(180deg,transparent,#000 28%,#000 72%,transparent);mask:linear-gradient(180deg,transparent,#000 28%,#000 72%,transparent)}
+.c-drum .drum-item{font-size:12px;color:#77797e}
+.c-drum .drum-item.on{font-size:13px;font-weight:500}
+.c-idx{width:0;height:0;border:5px solid transparent;border-top:6px solid #b8261e;border-bottom:0}
+.c-center{display:grid;justify-items:center;align-content:center;gap:10px}
+.c-window{width:124px;height:34px;border-radius:5px;background:#0a0a0a;position:relative;box-shadow:inset 0 2px 4px rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.7)}
+.lin{position:absolute;inset:0}
+.lin .tk{position:absolute;bottom:6px;width:1px;background:#c9cbcf;height:5px}
+.lin .tk.maj{height:9px}
+.lin .lb{position:absolute;top:3px;transform:translateX(-50%);font:500 7.5px var(--f-mono);color:#c9cbcf}
+.lin .ndl{position:absolute;top:2px;bottom:2px;left:50%;width:2px;margin-left:-1px;background:#f2f2f2;box-shadow:0 0 4px rgba(255,255,255,.6)}
+.c-window .lin .ndl{background:#ff6b4a;box-shadow:0 0 6px rgba(255,107,74,.8)}
+.c-shutter{width:58px;height:58px;background:radial-gradient(circle at 50% 50%,#1b1b1c 0 36%,#9b9ea3 37%,#eef0f2 52%,#8d9095 75%,#c6c8cc);box-shadow:0 3px 6px rgba(0,0,0,.45),inset 0 -2px 3px rgba(0,0,0,.35)}
+.c-row{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.c-mode{width:46px;height:46px;border-radius:50%;cursor:pointer;border:0;position:relative;
+  background:repeating-conic-gradient(#2b2c2f 0 4deg,#5a5c60 4deg 8deg);box-shadow:0 2px 4px rgba(0,0,0,.45)}
+.c-mode span{position:absolute;inset:6px;border-radius:50%;background:radial-gradient(circle at 40% 30%,#3d3e42,#121214);display:grid;place-items:center;color:#fff;font:600 14px var(--f-body)}
+.c-memo{flex:1;height:40px;border-radius:4px;cursor:pointer;border:0;padding:4px;background:linear-gradient(180deg,#8f9297,#c9cbcf);box-shadow:inset 0 1px 2px rgba(0,0,0,.4)}
+.c-memo span{display:flex;align-items:center;justify-content:space-between;height:100%;border-radius:2px;padding:0 9px;background:var(--fc);color:var(--fband,#111);font:600 10px var(--f-mono);letter-spacing:.08em;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
+.c-count{width:40px;height:40px;border-radius:50%;background:#0a0a0a;display:grid;place-items:center;color:#fff;font:500 12px var(--f-mono);box-shadow:inset 0 2px 4px #000,0 1px 0 rgba(255,255,255,.7);cursor:pointer;border:0;background-size:cover}
+
+/* ===================== D · POCKET ===================== */
+.cam-d{background:#141414;
+  background-image:radial-gradient(rgba(255,255,255,.035) 1px,transparent 1.2px),radial-gradient(rgba(0,0,0,.5) 1px,transparent 1.2px);background-size:5px 5px,7px 7px;background-position:0 0,2px 3px}
+.d-top{flex:none;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+.d-knob{width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;position:relative;background:repeating-conic-gradient(#d5d7da 0 5deg,#8c8f94 5deg 10deg);box-shadow:0 3px 6px rgba(0,0,0,.6)}
+.d-knob span{position:absolute;inset:5px;border-radius:50%;background:radial-gradient(circle at 40% 30%,#f2f3f4,#a9acb1);display:grid;place-items:center;color:#151515;font:700 14px var(--f-body)}
+.d-mark{font:400 10px var(--f-display);letter-spacing:.3em;color:#c3c6cb;display:grid;justify-items:center;gap:3px}
+.d-mark small{font:500 8px var(--f-mono);letter-spacing:.14em;color:#77797e}
+.d-gauge{width:56px;height:56px;border-radius:50%;padding:3px;background:linear-gradient(145deg,#eceef0,#7d8086);box-shadow:0 3px 6px rgba(0,0,0,.6)}
+.d-gauge>div{width:100%;height:100%;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 50% 30%,#fbfaf6,#dcd9d1);position:relative}
+.d-bezel{flex:none;margin:0 auto;padding:10px;border-radius:24px;background:linear-gradient(145deg,#f0f1f3,#8d9095 40%,#d6d8db 60%,#6d7075);box-shadow:0 6px 16px rgba(0,0,0,.6)}
+.d-vf{width:228px;aspect-ratio:3/4;border-radius:15px;box-shadow:inset 0 0 0 2px #000,inset 0 0 30px rgba(0,0,0,.7)}
+.d-vf .vign{position:absolute;inset:0;border-radius:15px;box-shadow:inset 0 0 40px 6px rgba(0,0,0,.75);pointer-events:none;z-index:3}
+.d-vf .d-frame{position:absolute;inset:14px;border:1px solid rgba(255,255,255,.55);border-radius:3px;pointer-events:none;z-index:3}
+.d-vf .d-par{position:absolute;left:22px;right:22px;bottom:20px;display:flex;justify-content:space-between;font:500 9.5px var(--f-mono);color:#ffe7ad;text-shadow:0 0 6px rgba(255,190,90,.7);z-index:4;pointer-events:none}
+.d-film{flex:none;height:86px;margin-top:10px;position:relative}
+.d-film .filmrow{padding:6px 110px 0}
+.d-film::before{content:'';position:absolute;left:50%;top:0;transform:translateX(-50%);border:5px solid transparent;border-top:6px solid #e8e9eb;border-bottom:0;z-index:2}
+.d-film .can{width:54px}
+.d-film .can:not(.on){opacity:.55}
+.d-ctrl{flex:1;display:flex;align-items:center;justify-content:space-between;padding:0 30px 20px}
+.d-thumb{width:46px;height:46px;border-radius:10px;border:2px solid #d5d7da;background:#222 center/cover;cursor:pointer;padding:0}
+.d-shutter{width:74px;height:74px;background:radial-gradient(circle at 45% 35%,#ffffff,#c7c9cd 55%,#86898e);box-shadow:0 0 0 5px #0f0f10,0 0 0 7px #c3c6cb,0 6px 14px rgba(0,0,0,.6)}
+.d-small{width:46px;height:46px;border-radius:50%;border:2px solid #d5d7da;background:none;cursor:pointer;color:#e8e9eb}
+
+/* ===================== E · HAIRLINE ===================== */
+.cam-e{background:#000}
+.cam-e .sb{position:absolute;left:0;right:0;top:0;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+.e-vf{width:100%;height:402px}
+.e-vf .mw-info{left:112px}
+.e-film{position:absolute;right:8px;top:50%;transform:translateY(-50%) rotate(180deg);writing-mode:vertical-rl;background:none;border:0;cursor:pointer;
+  font:500 10px var(--f-mono);letter-spacing:.24em;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.7);z-index:6;display:flex;align-items:center;gap:8px;padding:6px 2px}
+.e-film .dot{width:6px;height:6px}
+.e-fr{position:absolute;right:10px;top:48px;font:500 10px var(--f-mono);color:#fff;letter-spacing:.1em;text-shadow:0 1px 4px rgba(0,0,0,.6);z-index:6}
+.e-meter{flex:none;height:36px;margin:8px 20px 0;position:relative}
+.e-meter .lin .tk{background:#8b8e94;bottom:auto;top:0}
+.e-meter .lin .tk.maj{background:#e8e9eb}
+.e-meter .lin .lb{top:auto;bottom:2px;font-size:8.5px;color:#8b8e94}
+.e-meter .lin .ndl{top:-4px;bottom:14px;width:1px;margin:0;background:#fff;box-shadow:none}
+.e-meter .lin .ndl::after{content:'';position:absolute;left:50%;top:-1px;transform:translateX(-50%);border:4px solid transparent;border-top:5px solid #fff;border-bottom:0}
+.e-nums{flex:none;display:flex;justify-content:space-between;align-items:baseline;padding:4px 22px 0}
+.e-num{display:grid;gap:1px;cursor:ew-resize;touch-action:none;background:none;border:0;padding:4px 0;text-align:left}
+.e-num small{font:500 8px var(--f-mono);letter-spacing:.16em;color:#6f7277}
+.e-num b{font:300 25px/1.05 var(--f-body);font-stretch:85%;font-variant-numeric:tabular-nums;color:#f2f3f4}
+.e-num.is-auto b{color:#8b8e94}
+.e-num.is-auto small::after{content:' · AUTO';color:#8b8e94}
+.e-num.static{cursor:default}
+.e-ctrl{flex:1;display:flex;align-items:center;justify-content:space-between;padding:0 30px 22px}
+.e-thumb{width:40px;height:52px;border-radius:2px;border:1px solid #6f7277;background:#111 center/cover;cursor:pointer;padding:0}
+.e-shutter{width:68px;height:68px;background:transparent;box-shadow:inset 0 0 0 1.5px #e8e9eb;position:relative}
+.e-shutter::after{content:'';position:absolute;inset:6px;border-radius:50%;background:#e8e9eb;transition:inset .1s}
+.e-shutter:active::after{inset:9px}
+.e-flip{width:40px;height:40px;border-radius:50%;border:1px solid #6f7277;background:none;color:#e8e9eb;cursor:pointer}
+
+/* ===================== EDITOR (shared) ===================== */
+.ed{--ed-bg:#0b0b0c;--ed-panel:#121214;--ed-ink:#e8e9eb;--ed-muted:#7d8087;--ed-line:#232427;--ed-acc:#e8e9eb;--ed-track:#3a3b3e;--ed-fill:#c3c6cb;--ed-thumb:#e8e9eb;
+  background:var(--ed-bg);color:var(--ed-ink)}
+.ed-head{flex:none;height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font:500 10px var(--f-mono);letter-spacing:.1em;color:var(--ed-muted)}
+.ed-head button{background:none;border:0;cursor:pointer;color:var(--ed-ink);font:500 11px var(--f-mono);letter-spacing:.08em;padding:4px 0}
+.ed-view{flex:none;height:282px;position:relative;display:grid;place-items:center;background:var(--ed-view,#060607);overflow:hidden}
+.ed-frame{height:256px;display:inline-flex;position:relative;transition:padding .3s,background .3s;background:transparent;box-shadow:0 10px 24px rgba(0,0,0,.5)}
+.ed-frame[data-border="1"]{padding:7px;background:#f1efe9}
+.ed-frame[data-border="2"]{padding:9px 9px 34px;background:#f2f0ea}
+.ed-frame[data-border="3"]{padding:18px 7px;background:#0b0b0b}
+.ed-frame[data-border="3"]::before,.ed-frame[data-border="3"]::after{content:'';position:absolute;left:4px;right:4px;height:7px;
+  background:repeating-linear-gradient(90deg,transparent 0 3px,#d9d6cf 3px 9px,transparent 9px 12px);border-radius:1px;opacity:.85}
+.ed-frame[data-border="3"]::before{top:5px}.ed-frame[data-border="3"]::after{bottom:5px}
+.ed-edge{position:absolute;bottom:-1px;left:10px;font:600 6.5px var(--f-mono);color:#f0a64a;letter-spacing:.12em;opacity:0;white-space:nowrap}
+.ed-frame[data-border="3"] .ed-edge{opacity:.9}
+.ed-photo{height:100%;aspect-ratio:3/4;position:relative;overflow:hidden;background:#000}
+.ed-photo>div{position:absolute;inset:0}
+.l-img{transition:filter .15s}
+.l-img>div{position:absolute;inset:0;background:var(--scene) center/cover}
+.l-fade{background:#4a4540;mix-blend-mode:lighten}
+.l-warm{mix-blend-mode:soft-light}
+.l-hal{background:var(--scene) center/cover;filter:blur(7px) brightness(1.7) sepia(1) saturate(4) hue-rotate(-25deg) contrast(1.4);mix-blend-mode:screen}
+.l-leak{background:radial-gradient(120% 70% at 105% 20%,rgba(255,120,40,.95),rgba(255,60,30,.5) 35%,transparent 65%),radial-gradient(60% 40% at -5% 95%,rgba(255,190,90,.6),transparent 70%);mix-blend-mode:screen}
+.l-grain{background-image:var(--noise);background-size:120px;mix-blend-mode:overlay}
+.l-vig{background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.95) 100%)}
+.ed-date{position:absolute;right:10px;bottom:9px;font:500 10px var(--f-mono);color:#ff9a3c;letter-spacing:.08em;text-shadow:0 0 4px rgba(255,120,40,.9);opacity:0;transition:opacity .2s}
+.ed-date.on{opacity:1}
+.ed-hist{position:absolute;right:10px;top:10px;width:92px;height:40px;border-radius:5px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(6px)}
+.ed-ur{position:absolute;right:10px;bottom:10px;display:flex;border-radius:9px;border:1px solid rgba(255,255,255,.22);background:rgba(0,0,0,.5);backdrop-filter:blur(6px);overflow:hidden}
+.ed-ur button{width:38px;height:30px;border:0;background:none;cursor:pointer;color:#fff;display:grid;place-items:center}
+.ed-ur button+button{border-left:1px solid rgba(255,255,255,.22)}
+.ed-ur button:disabled{opacity:.3;cursor:default}
+.ed-ur .ico svg{width:16px;height:16px}
+.ed-tabs{flex:none;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ed-line);border-bottom:1px solid var(--ed-line);background:var(--ed-panel)}
+.ed-tab{border:0;background:none;cursor:pointer;display:grid;justify-items:center;gap:3px;padding:9px 0 8px;color:var(--ed-muted);font:500 9.5px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;position:relative}
+.ed-tab+.ed-tab{border-left:1px solid var(--ed-line)}
+.ed-tab.on{color:var(--ed-ink)}
+.ed-tab.on::after{content:'';position:absolute;left:30%;right:30%;bottom:-1px;height:2px;background:var(--ed-acc)}
+.ed-panel{flex:1;background:var(--ed-panel);padding:12px 20px 26px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.ctl{display:grid;gap:4px}
+.ctl-top{display:flex;justify-content:space-between;font-size:11px;color:var(--ed-muted)}
+.ctl-top b{font:500 10.5px var(--f-mono);color:var(--ed-ink);font-variant-numeric:tabular-nums}
+.ctl input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:22px;background:transparent;cursor:pointer;margin:0;
+  --p:50%}
+.ctl input[type=range]::-webkit-slider-runnable-track{height:2px;border-radius:2px;background:linear-gradient(90deg,var(--ed-fill) var(--p),var(--ed-track) var(--p))}
+.ctl input[type=range]::-moz-range-track{height:2px;border-radius:2px;background:linear-gradient(90deg,var(--ed-fill) var(--p),var(--ed-track) var(--p))}
+.ctl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;margin-top:-8px;border-radius:50%;background:var(--ed-bg);border:1.5px solid var(--ed-thumb)}
+.ctl input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--ed-bg);border:1.5px solid var(--ed-thumb)}
+.seg{display:flex;gap:4px}
+.seg button{flex:1;height:28px;border-radius:7px;border:1px solid var(--ed-line);background:none;cursor:pointer;color:var(--ed-muted);font:500 10px var(--f-mono);letter-spacing:.06em}
+.seg button.on{color:var(--ed-bg);background:var(--ed-acc);border-color:var(--ed-acc)}
+.ed .filmrow{margin:-4px -20px 0;padding:2px 16px 0}
+.ed .can{width:52px}
+.ed .can-name{color:var(--ed-muted)}
+.ed .can.on .can-name{color:var(--ed-ink)}
+
+/* editor variants */
+.ed-a{--ed-acc:#e8e9eb}
+.ed-b{--ed-bg:#000;--ed-panel:#1c1c1e;--ed-line:#2c2d30;--ed-acc:#f2c46a;--ed-fill:#f2c46a;--ed-thumb:#f2c46a}
+.ed-b .ctl input[type=range]::-webkit-slider-thumb{width:4px;height:18px;border-radius:2px;margin-top:-8px;background:#f2c46a;border:0;box-shadow:0 0 8px rgba(242,196,106,.7)}
+.ed-b .ctl input[type=range]::-moz-range-thumb{width:4px;height:18px;border-radius:2px;background:#f2c46a;border:0}
+.ed-b .seg button.on{color:#111}
+.ed-c{--ed-bg:#0a0a0a;--ed-ink:#1d1e20;--ed-muted:#4a4c50;--ed-line:rgba(0,0,0,.18);--ed-acc:#1d1e20;--ed-track:rgba(0,0,0,.25);--ed-fill:#1d1e20;--ed-thumb:#1d1e20}
+.ed-c .ed-head{color:#9da0a6}.ed-c .ed-head button{color:#e8e9eb}
+.ed-c .ed-tabs,.ed-c .ed-panel{background:repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 1px,rgba(0,0,0,.035) 1px 2px,transparent 2px 3px),linear-gradient(180deg,#d9dbde,#b6b9be)}
+.ed-c .ed-panel{background:repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 1px,rgba(0,0,0,.035) 1px 2px,transparent 2px 3px),linear-gradient(180deg,#c9cbcf,#a9acb1)}
+.ed-c .ctl input[type=range]::-webkit-slider-thumb{width:14px;height:20px;border-radius:3px;margin-top:-9px;border:0;background:repeating-linear-gradient(90deg,#2b2c2f 0 1.5px,#6a6c70 1.5px 3px);box-shadow:0 2px 3px rgba(0,0,0,.4)}
+.ed-c .ctl input[type=range]::-moz-range-thumb{width:14px;height:20px;border-radius:3px;border:0;background:repeating-linear-gradient(90deg,#2b2c2f 0 1.5px,#6a6c70 1.5px 3px)}
+.ed-c .seg button.on{color:#e8e9eb}
+.ed-c .ed-tab{text-shadow:0 1px 0 rgba(255,255,255,.5)}
+.ed-d{--ed-bg:#141414;--ed-panel:#1a1a1a;--ed-line:#2c2c2c;--ed-view:#0d0d0d}
+.ed-d .ed-tabs{margin:8px 14px 0;border:1px solid #3a3a3a;border-radius:12px;overflow:hidden}
+.ed-d .ed-tab.on{background:#e8e9eb;color:#111}
+.ed-d .ed-tab.on::after{display:none}
+.ed-d .ctl input[type=range]::-webkit-slider-thumb{width:22px;height:22px;margin-top:-10px;background:#1a1a1a;border:2px solid #e8e9eb}
+.ed-e{--ed-bg:#000;--ed-panel:#000;--ed-line:#1c1c1e;--ed-track:#2c2d30;--ed-fill:#e8e9eb;--ed-view:#000}
+.ed-e .ed-tab{font-size:9px;letter-spacing:.2em}
+.ed-e .ed-tab+.ed-tab{border-left:0}
+.ed-e .ed-tab.on::after{left:0;right:0;height:1px;bottom:-1px}
+.ed-e .ctl input[type=range]::-webkit-slider-runnable-track{height:1px}
+.ed-e .ctl input[type=range]::-webkit-slider-thumb{width:1.5px;height:16px;border-radius:0;margin-top:-8px;background:#fff;border:0}
+.ed-e .ctl input[type=range]::-moz-range-thumb{width:1.5px;height:16px;border-radius:0;background:#fff;border:0}
+.ed-e .seg button{border-radius:0;border:0;border-bottom:1px solid #2c2d30}
+.ed-e .seg button.on{background:none;color:#fff;border-bottom-color:#fff}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">Working title pending · UI exploration · Round 1</span>
+    <h1>Five directions for a film camera that feels machined</h1>
+    <p class="lede">Each direction pairs a shooting screen with an editing screen, following your sketch. The look stays black and silver throughout. Every phone is live, so the meters, dials and sliders all respond.</p>
+    <div class="howto">
+      <span>Drag shutter / ISO / ± values</span>
+      <span>Tap the viewfinder to spot-meter</span>
+      <span>Tap the mode dial</span>
+      <span>Fire the shutter</span>
+      <span>Edit, undo, redo</span>
+    </div>
+  </header>
+
+  <section class="system" aria-labelledby="sys-h">
+    <h2 id="sys-h">Shared across all five</h2>
+    <div class="sys-grid">
+      <div>
+        <h3>Exposure modes</h3>
+        <p>Auto, shutter priority, ISO priority and manual. Phones have a fixed aperture (shown as ƒ1.8), so ISO takes the role aperture plays on a real camera. Dragging an auto value switches modes for you: drag the shutter in Auto and you are in S.</p>
+      </div>
+      <div>
+        <h3>The meter</h3>
+        <p>The needle runs on a spring with real overshoot and a small amount of drift as the light changes. In Auto it settles near zero. In Manual it shows how many stops you are off. Spot-metering a dark part of the scene makes it swing.</p>
+      </div>
+      <div>
+        <h3>Editing, four sections</h3>
+        <p>Exp. (exposure, contrast, fade) · Film (stock, strength, warmth) · Texture (grain, halation, light leak) · Print (border, vignette, date stamp). Histogram top right, undo and redo bottom right, as in your sketch.</p>
+      </div>
+    </div>
+    <div>
+      <h3 class="eyebrow" style="margin:0 0 6px">The launch roll, 10 stocks (placeholder brands and colors)</h3>
+      <div class="filmshelf" data-shelf></div>
+    </div>
+  </section>
+
+  <!-- ===================== A ===================== -->
+  <section class="dir" id="a">
+    <div class="dir-head">
+      <div class="dir-tag"><b>A</b><h2>Rangefinder</h2></div>
+      <p>The closest to your sketch. A full-width 3:4 finder with corner frame lines and a crosshair. The grid toggle sits bottom left and a glass needle meter bottom right. Below that, a calm graphite deck.</p>
+      <ul>
+        <li>Shutter, ISO and ± sit in one ruled strip under the finder. Each is a small drum you flick sideways.</li>
+        <li>The star opens the film drawer. The tall rectangle is the last frame, numbered like a contact sheet.</li>
+        <li>The mode dial is a small knob top left. It opens the wheel over the viewfinder.</li>
+      </ul>
+      <p class="trade">Strength: the most familiar layout, quick to build. Risk: the least distinctive of the five.</p>
+    </div>
+    <div class="phones">
+      <div class="phone-col"><div class="phone"><div class="screen cam cam-a" data-cam>
+        <div class="island"></div>
+        <div class="sb"><span>9:41</span><i class="bat"></i></div>
+        <div class="a-top">
+          <button class="a-mode" data-mw-toggle aria-label="Exposure mode"><span data-read="mode">A</span></button>
+          <button class="a-film" data-film-open aria-label="Choose film"><i class="dot"></i><span data-read="film">AURUM 200</span></button>
+          <span class="a-frames mono"><span data-read="frames">36</span> EXP LEFT</span>
+        </div>
+        <div class="vf a-vf" data-vf>
+          <div class="scene" data-scene></div><div class="grainov"></div>
+          <div class="gridov"></div>
+          <div class="corners"><i></i><i></i><i></i><i></i></div>
+          <div class="ret ret-plus" data-ret></div>
+          <div class="curtain" data-curtain></div>
+          <div class="mw" data-mw></div>
+          <button class="a-grid ico" data-grid-toggle data-icon="grid" aria-label="Toggle grid"></button>
+          <div class="a-meter" data-arc="glass"></div>
+        </div>
+        <div class="a-read">
+          <div class="a-cell" data-auto="shutter"><span class="lab">S</span><div class="drum" data-drum="shutter" data-axis="x" data-size="46" tabindex="0" aria-label="Shutter speed"></div></div>
+          <div class="a-cell" data-auto="iso"><span class="lab">ISO</span><div class="drum" data-drum="iso" data-axis="x" data-size="38" tabindex="0" aria-label="ISO"></div></div>
+          <div class="a-cell" data-comp><span class="lab">±</span><div class="drum" data-drum="comp" data-axis="x" data-size="36" tabindex="0" aria-label="Exposure compensation"></div></div>
+        </div>
+        <div class="a-deck">
+          <button class="shutter a-shutter" data-shutter aria-label="Take photo"></button>
+          <div class="a-mid">
+            <button class="a-star ico" data-film-open data-icon="star" aria-label="Films"></button>
+            <button class="a-flip ico" data-flip data-icon="flip" aria-label="Switch camera"></button>
+          </div>
+          <button class="a-thumb" data-thumb aria-label="Last photo"><span class="mono">№ <b data-read="shot">00</b></span></button>
+        </div>
+        <div class="drawer" data-filmdrawer></div>
+      </div></div><span class="phone-cap">Shoot</span></div>
+      <div class="phone-col"><div class="phone"><div class="screen ed ed-a" data-editor></div></div><span class="phone-cap">Edit</span></div>
+    </div>
+  </section>
+
+  <!-- ===================== B ===================== -->
+  <section class="dir" id="b">
+    <div class="dir-head">
+      <div class="dir-tag"><b>B</b><h2>Meter Bridge</h2></div>
+      <p>Built around your favorite reference. A full-width amber needle meter bridges the finder and the deck. Its needle leaves a short phosphor trail, which makes every settings change visible.</p>
+      <ul>
+        <li>ISO lives on a rotating gauge. Drag it sideways and the ring turns with a little overshoot.</li>
+        <li>The focal lengths 26 / 35 / 50 mm crop the finder, which suits a film camera better than a zoom slider.</li>
+        <li>The concentric-circle button opens the mode wheel. The glowing dot is the loaded film's color.</li>
+      </ul>
+      <p class="trade">Strength: the meter is the brand moment. Risk: the most controls on screen, so it needs careful density.</p>
+    </div>
+    <div class="phones">
+      <div class="phone-col"><div class="phone"><div class="screen cam cam-b" data-cam>
+        <div class="island"></div>
+        <div class="sb"><span>9:41</span><i class="bat"></i></div>
+        <div class="vf b-vf grid-on" data-vf>
+          <div class="scene" data-scene></div><div class="grainov"></div>
+          <div class="gridov"></div>
+          <div class="b-scale"></div>
+          <div class="ret ret-brk" data-ret></div>
+          <div class="curtain" data-curtain></div>
+          <div class="mw" data-mw></div>
+          <div class="b-pill"><i class="bat" style="width:16px;height:8px"></i><span>ƒ1.8</span><span data-read="shutter">1/250</span><span data-read="film">AURUM 200</span><button class="ico" data-grid-toggle data-icon="eye" aria-label="Toggle grid"></button></div>
+        </div>
+        <div class="b-meter" data-fan><canvas data-fan-scale></canvas><canvas data-fan-needle></canvas></div>
+        <div class="b-deck">
+          <button class="b-btn ico" data-mw-toggle data-icon="rings" aria-label="Exposure mode"></button>
+          <div class="b-focal" data-focal><button data-f="0">26MM</button><button data-f="1" class="on">35MM</button><button data-f="2">50MM</button></div>
+          <button class="b-film" data-film-open aria-label="Choose film"><i></i></button>
+          <button class="b-btn ico" data-icon="timer" aria-label="Self timer"></button>
+          <button class="shutter b-shutter" data-shutter aria-label="Take photo"></button>
+          <button class="b-btn ico" data-flip data-icon="flip" aria-label="Switch camera"></button>
+          <div class="b-iso" data-isodial data-auto="iso" tabindex="0" aria-label="ISO dial"><div class="b-iso-ring"></div><div class="b-iso-val"><b data-read="iso">200</b><small>ISO</small></div></div>
+          <div class="b-shut-wrap" data-auto="shutter"><div class="drum b-shut-strip" data-drum="shutter" data-axis="x" data-size="50" tabindex="0" aria-label="Shutter speed"></div></div>
+          <button class="b-btn" data-thumb aria-label="Last photo" style="background-size:cover;background-position:center"></button>
+        </div>
+        <div class="drawer" data-filmdrawer></div>
+      </div></div><span class="phone-cap">Shoot</span></div>
+      <div class="phone-col"><div class="phone"><div class="screen ed ed-b" data-editor></div></div><span class="phone-cap">Edit</span></div>
+    </div>
+  </section>
+
+  <!-- ===================== C ===================== -->
+  <section class="dir" id="c">
+    <div class="dir-head">
+      <div class="dir-tag"><b>C</b><h2>Top Plate</h2></div>
+      <p>The deck is the silver top plate of an SLR, with engraved labels and knurled drums for shutter and ISO. This is the most literal take on black and silver: a black finder above, brushed aluminum below.</p>
+      <ul>
+        <li>A match-needle window sits above a chrome shutter release, as on a 1970s body.</li>
+        <li>The memo holder on the back door shows the loaded film's end tab. Tap it to change rolls.</li>
+        <li>A round exposure counter counts down from 36. The knurled mode dial opens the wheel.</li>
+      </ul>
+      <p class="trade">Strength: tactile and ownable, and it matches the film concept best. Risk: skeuomorphism needs restraint so it does not look dated.</p>
+    </div>
+    <div class="phones">
+      <div class="phone-col"><div class="phone"><div class="screen cam cam-c" data-cam>
+        <div class="island"></div>
+        <div class="sb"><span>9:41</span><i class="bat"></i></div>
+        <div class="vf c-vf" data-vf>
+          <div class="scene" data-scene></div><div class="grainov"></div>
+          <div class="gridov"></div>
+          <div class="c-info"><span data-read="modeName">AUTO</span><span>ƒ1.8 · 3:4</span></div>
+          <div class="ret ret-brk" data-ret></div>
+          <div class="curtain" data-curtain></div>
+          <div class="mw" data-mw></div>
+        </div>
+        <div class="c-plate">
+          <div class="c-dial" data-auto="shutter"><span class="engr">Shutter</span><span class="c-idx"></span><div class="drum c-drum" data-drum="shutter" data-axis="y" data-size="24" tabindex="0" aria-label="Shutter speed"></div></div>
+          <div class="c-center">
+            <span class="engr">− &nbsp; Meter &nbsp; +</span>
+            <div class="c-window" data-lin="c"></div>
+            <button class="shutter c-shutter" data-shutter aria-label="Take photo"></button>
+          </div>
+          <div class="c-dial" data-auto="iso"><span class="engr">ISO</span><span class="c-idx"></span><div class="drum c-drum" data-drum="iso" data-axis="y" data-size="24" tabindex="0" aria-label="ISO"></div></div>
+          <div class="c-row">
+            <button class="c-mode" data-mw-toggle aria-label="Exposure mode"><span data-read="mode">A</span></button>
+            <button class="c-memo" data-film-open aria-label="Choose film"><span><b data-read="film">AURUM 200</b><small>36 EXP</small></span></button>
+            <button class="c-count" data-thumb aria-label="Frames left"><span data-read="frames">36</span></button>
+          </div>
+        </div>
+        <div class="drawer" data-filmdrawer></div>
+      </div></div><span class="phone-cap">Shoot</span></div>
+      <div class="phone-col"><div class="phone"><div class="screen ed ed-c" data-editor></div></div><span class="phone-cap">Edit</span></div>
+    </div>
+  </section>
+
+  <!-- ===================== D ===================== -->
+  <section class="dir" id="d">
+    <div class="dir-head">
+      <div class="dir-tag"><b>D</b><h2>Pocket</h2></div>
+      <p>The whole screen is the camera body, in the spirit of Dazz. You look through a chrome-bezeled optical finder. The ten films sit in a carousel under it, so changing film feels like loading a new roll.</p>
+      <ul>
+        <li>A round selenium-style light meter sits top right. A silver mode knob sits top left.</li>
+        <li>The settings are printed in amber inside the finder, like an LED readout in a compact camera.</li>
+        <li>Film choice is always one swipe away and never behind a menu.</li>
+      </ul>
+      <p class="trade">Strength: the most fun, and the film brands get the spotlight. Risk: a smaller finder, and manual control has to go behind a tap.</p>
+    </div>
+    <div class="phones">
+      <div class="phone-col"><div class="phone"><div class="screen cam cam-d" data-cam>
+        <div class="island"></div>
+        <div class="sb"><span>9:41</span><i class="bat"></i></div>
+        <div class="d-top">
+          <button class="d-knob" data-mw-toggle aria-label="Exposure mode"><span data-read="mode">A</span></button>
+          <span class="d-mark">— — — —<small><span data-read="frames">36</span> / 36</small></span>
+          <div class="d-gauge"><div data-arc="face"></div></div>
+        </div>
+        <div class="d-bezel">
+          <div class="vf d-vf" data-vf>
+            <div class="scene" data-scene></div><div class="grainov"></div>
+            <div class="gridov"></div>
+            <div class="d-frame"></div>
+            <div class="ret ret-brk" data-ret style="width:38px;height:38px"></div>
+            <div class="d-par"><span data-read="shutter">1/250</span><span>ISO <span data-read="iso">200</span></span><span data-read="comp">±0</span></div>
+            <div class="vign"></div>
+            <div class="curtain" data-curtain></div>
+            <div class="mw" data-mw></div>
+          </div>
+        </div>
+        <div class="d-film"><div class="filmrow" data-filmrow></div></div>
+        <div class="d-ctrl">
+          <button class="d-thumb" data-thumb aria-label="Last photo"></button>
+          <button class="shutter d-shutter" data-shutter aria-label="Take photo"></button>
+          <button class="d-small ico" data-flip data-icon="flip" aria-label="Switch camera"></button>
+        </div>
+      </div></div><span class="phone-cap">Shoot</span></div>
+      <div class="phone-col"><div class="phone"><div class="screen ed ed-d" data-editor></div></div><span class="phone-cap">Edit</span></div>
+    </div>
+  </section>
+
+  <!-- ===================== E ===================== -->
+  <section class="dir" id="e">
+    <div class="dir-head">
+      <div class="dir-tag"><b>E</b><h2>Hairline</h2></div>
+      <p>The quietest direction. The image runs full bleed and every control is a one-pixel line or a large light numeral. The mode wheel always peeks from the left edge, as in your last reference, and expands when tapped.</p>
+      <ul>
+        <li>A linear match-needle runs the width of the screen, marked in thirds of a stop from −3 to +3.</li>
+        <li>Shutter, ISO and ± are large numerals you drag. Auto values turn grey and say so.</li>
+        <li>The film name runs up the right edge of the image. Tap it to change film.</li>
+      </ul>
+      <p class="trade">Strength: the most sleek and premium, and the biggest image. Risk: the analog character relies almost entirely on the needle and the type.</p>
+    </div>
+    <div class="phones">
+      <div class="phone-col"><div class="phone"><div class="screen cam cam-e" data-cam>
+        <div class="island"></div>
+        <div class="vf e-vf" data-vf>
+          <div class="scene" data-scene></div><div class="grainov"></div>
+          <div class="gridov"></div>
+          <div class="ret ret-plus" data-ret style="width:24px;height:24px"></div>
+          <div class="curtain" data-curtain></div>
+          <span class="e-fr"><span data-read="frames">36</span>/36</span>
+          <button class="e-film" data-film-open aria-label="Choose film"><i class="dot"></i><span data-read="film">AURUM 200</span></button>
+          <div class="mw peek" data-mw></div>
+        </div>
+        <div class="sb"><span>9:41</span><i class="bat"></i></div>
+        <div class="e-meter" data-lin="e"></div>
+        <div class="e-nums">
+          <button class="e-num" data-dragparam="shutter" data-auto="shutter"><small>SHUTTER</small><b data-read="shutter">1/250</b></button>
+          <div class="e-num static"><small>ƒ</small><b>1.8</b></div>
+          <button class="e-num" data-dragparam="iso" data-auto="iso"><small>ISO</small><b data-read="iso">200</b></button>
+          <button class="e-num" data-dragparam="comp" data-comp><small>EV</small><b data-read="comp">±0</b></button>
+        </div>
+        <div class="e-ctrl">
+          <button class="e-thumb" data-thumb aria-label="Last photo"></button>
+          <button class="shutter e-shutter" data-shutter aria-label="Take photo"></button>
+          <button class="e-flip ico" data-flip data-icon="flip" aria-label="Switch camera"></button>
+        </div>
+        <div class="drawer" data-filmdrawer></div>
+      </div></div><span class="phone-cap">Shoot</span></div>
+      <div class="phone-col"><div class="phone"><div class="screen ed ed-e" data-editor></div></div><span class="phone-cap">Edit</span></div>
+    </div>
+  </section>
+
+  <footer>Round 1. The film names and colors are placeholders until the brand marks are designed. The sample scene is drawn in code, so you are not looking at a real photo.</footer>
+</div>
+
+<script>
+(() => {
+'use strict';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- data ---------- */
+const FILMS = [
+  {id:'aurum', name:'AURUM 200',  short:'AU', c:'#c9a24a', band:'#1b1a17', note:'Warm consumer color. Golden skin, honest greens.', filter:'sepia(.25) saturate(1.25) contrast(1.05) hue-rotate(-8deg) brightness(1.03)'},
+  {id:'verano',name:'VERANO 400', short:'VE', c:'#d9846b', band:'#1e1716', note:'Portrait color. Soft contrast, forgiving highlights.', filter:'sepia(.12) saturate(.9) contrast(.94) brightness(1.06)'},
+  {id:'lumen', name:'LUMEN 100',  short:'LU', c:'#3f66b8', band:'#e8e9eb', note:'Slide film. Deep blues, saturated, unforgiving.', filter:'saturate(1.6) contrast(1.22) hue-rotate(-4deg) brightness(.97)'},
+  {id:'nocta', name:'NOCTA 800T', short:'NO', c:'#2c7d8c', band:'#0d1416', note:'Tungsten cinema stock. Cool shadows, red halation.', filter:'hue-rotate(-20deg) saturate(1.1) contrast(1.06) brightness(.96)'},
+  {id:'kino',  name:'KINO 250D',  short:'KI', c:'#b8352c', band:'#f1ece4', note:'Daylight cinema. Muted, wide latitude.', filter:'saturate(.85) contrast(1.1) sepia(.08) hue-rotate(6deg)'},
+  {id:'argent',name:'ARGENT 400', short:'AR', c:'#c6c8cc', band:'#111111', note:'Classic black and white. Mid grain, full tones.', filter:'grayscale(1) contrast(1.15)'},
+  {id:'grafit',name:'GRAFIT 3200',short:'GR', c:'#45474c', band:'#e8e9eb', note:'Pushed black and white. Heavy grain, crushed blacks.', filter:'grayscale(1) contrast(1.45) brightness(.92)'},
+  {id:'pastel',name:'PASTEL 160', short:'PA', c:'#8fc1a9', band:'#16201b', note:'Overexposed look. Lifted, airy, low saturation.', filter:'saturate(.65) contrast(.85) brightness(1.12) sepia(.15)'},
+  {id:'insta', name:'INSTA 600',  short:'IN', c:'#e9e1cf', band:'#1a1915', note:'Instant film. Creamy whites, soft and cyan-shifted.', filter:'sepia(.3) saturate(.8) contrast(.9) brightness(1.08) hue-rotate(-10deg)'},
+  {id:'merid', name:'MERIDIAN XP',short:'XP', c:'#7b4fa0', band:'#efe7f6', note:'Cross-processed slide. Wild hues, hard contrast.', filter:'saturate(1.5) hue-rotate(25deg) contrast(1.25) sepia(.1)'}
+];
+const SH = [1/4000,1/3200,1/2500,1/2000,1/1600,1/1250,1/1000,1/800,1/640,1/500,1/400,1/320,1/250,1/200,1/160,1/125,1/100,1/80,1/60,1/50,1/40,1/30,1/25,1/20,1/15,1/13,1/10,1/8,1/6,1/5,1/4,0.3,0.4,0.5,0.6,0.8,1];
+const shLabel = t => t < 0.3 ? '1/' + Math.round(1/t) : (t === 1 ? '1"' : t + '"');
+const ISO = [25,32,40,50,64,80,100,125,160,200,250,320,400,500,640,800,1000,1250,1600,2000,2500,3200];
+const COMP = Array.from({length:19}, (_,i) => (i-9)/3);
+const compLabel = v => Math.abs(v) < .01 ? '±0' : (v > 0 ? '+' : '−') + Math.abs(v).toFixed(1);
+const N2 = 1.8*1.8;
+const MODES = [
+  {k:'A', name:'Auto', t:'AUTO', d:'The camera sets shutter and ISO. You frame, it meters.'},
+  {k:'S', name:'Shutter priority', t:'SHUTTER PRI.', d:'You set the shutter speed and ISO follows the meter. Go slow for motion blur, fast to freeze.'},
+  {k:'I', name:'ISO priority', t:'ISO PRI.', d:'You pick the ISO, and with it the grain. The shutter speed follows the meter.'},
+  {k:'M', name:'Manual', t:'MANUAL', d:'You set both. The needle shows how many stops you are from a correct exposure.'}
+];
+const ICONS = {
+  grid:'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 9.3h16M4 14.6h16M9.3 4v16M14.6 4v16"/></svg>',
+  star:'<svg viewBox="0 0 24 24"><path d="m12 4 2.4 5 5.4.6-4 3.7 1.1 5.3L12 15.9l-4.9 2.7 1.1-5.3-4-3.7 5.4-.6z"/></svg>',
+  flip:'<svg viewBox="0 0 24 24"><path d="M5 9a7 7 0 0 1 12.5-2.5M19 15a7 7 0 0 1-12.5 2.5"/><path d="M17.5 3v3.5H14M6.5 21v-3.5H10"/></svg>',
+  eye:'<svg viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+  rings:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.6"/></svg>',
+  timer:'<svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7.5"/><path d="M12 9v4l2.5 2M10 3h4"/></svg>',
+  undo:'<svg viewBox="0 0 24 24"><path d="M9 6 4.5 10.5 9 15"/><path d="M4.5 10.5H14a5.5 5.5 0 0 1 0 11h-2"/></svg>',
+  redo:'<svg viewBox="0 0 24 24"><path d="m15 6 4.5 4.5L15 15"/><path d="M19.5 10.5H10a5.5 5.5 0 0 0 0 11h2"/></svg>',
+  exp:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5"/><path d="M12 4.5a7.5 7.5 0 0 1 0 15z" fill="currentColor"/></svg>',
+  film:'<svg viewBox="0 0 24 24"><rect x="5" y="6" width="10" height="14" rx="1.5"/><path d="M7 3.5h6M15 9h3.5a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H15"/></svg>',
+  texture:'<svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><g fill="currentColor" stroke="none"><circle cx="8.5" cy="8.5" r="1"/><circle cx="13" cy="7.5" r=".8"/><circle cx="16" cy="11" r="1.1"/><circle cx="9.5" cy="13" r=".7"/><circle cx="12.5" cy="15.5" r="1"/><circle cx="7.5" cy="17" r=".8"/><circle cx="16.5" cy="16.5" r=".7"/></g></svg>',
+  print:'<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="1"/><rect x="7.5" y="5.5" width="9" height="10"/></svg>'
+};
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const nearest = (arr, v) => { let bi=0, bd=1e9; arr.forEach((a,i)=>{ const d=Math.abs(Math.log2(a/v)); if(d<bd){bd=d;bi=i;} }); return bi; };
+
+/* ---------- procedural scene (sunset waterfront) ---------- */
+const scene = document.createElement('canvas'); scene.width = 600; scene.height = 800;
+(function paint(g){
+  let sky = g.createLinearGradient(0,0,0,540);
+  sky.addColorStop(0,'#1a2647'); sky.addColorStop(.35,'#4f4a77'); sky.addColorStop(.62,'#b86b72'); sky.addColorStop(.85,'#ee9a64'); sky.addColorStop(1,'#f8c98a');
+  g.fillStyle = sky; g.fillRect(0,0,600,540);
+  for (let i=0;i<9;i++){ g.fillStyle='rgba(255,190,170,'+(.05+.04*Math.sin(i))+')'; g.beginPath(); g.ellipse(80+i*70, 170+((i*53)%90), 120, 14, -.05, 0, Math.PI*2); g.fill(); }
+  let sun = g.createRadialGradient(390,486,2,390,486,260);
+  sun.addColorStop(0,'rgba(255,248,220,1)'); sun.addColorStop(.06,'rgba(255,226,170,.95)'); sun.addColorStop(.25,'rgba(255,170,110,.35)'); sun.addColorStop(1,'rgba(255,150,100,0)');
+  g.fillStyle = sun; g.fillRect(0,0,600,800);
+  g.fillStyle='#6b4f6a'; g.beginPath(); g.moveTo(0,500); for(let x=0;x<=600;x+=20) g.lineTo(x, 486+Math.sin(x/70)*10+Math.sin(x/23)*4); g.lineTo(600,540); g.lineTo(0,540); g.fill();
+  g.fillStyle='#241c26';
+  const base = 540;
+  [[0,40,70],[38,30,95],[66,44,60],[108,26,120],[132,50,80],[180,36,66],[214,40,104],[252,30,72],[280,60,58],[338,34,90],[370,40,64],[408,28,110],[434,46,70],[478,40,86],[516,30,60],[544,56,92]].forEach(([x,w,h])=>g.fillRect(x,base-h,w,h));
+  [[300,base-58,46],[460,base-86,30],[90,base-95,22]].forEach(([x,y,r])=>{ g.beginPath(); g.arc(x+r/2+6,y,r,Math.PI,0); g.fill(); g.fillRect(x+r/2+4,y-r-18,4,18); });
+  g.fillRect(226,base-190,16,190); g.beginPath(); g.moveTo(222,base-190); g.lineTo(234,base-222); g.lineTo(246,base-190); g.fill();
+  g.fillStyle='rgba(255,200,120,.8)'; for(let i=0;i<26;i++){ g.fillRect((i*97)%590, base-20-((i*37)%60), 3, 4); }
+  let water = g.createLinearGradient(0,540,0,800); water.addColorStop(0,'#5c3f4c'); water.addColorStop(.4,'#2a1f2b'); water.addColorStop(1,'#0c0a0f');
+  g.fillStyle = water; g.fillRect(0,540,600,260);
+  for(let i=0;i<70;i++){ const y=546+i*3.6; const w=90-i*0.9+Math.sin(i*1.7)*30; g.fillStyle='rgba(255,196,130,'+(0.55-i*0.007)+')'; g.fillRect(390-w/2+Math.sin(i*2.3)*16, y, Math.max(6,w), 1.4); }
+  g.fillStyle='#120e14'; [[30,600],[70,620],[470,610],[520,640],[560,600]].forEach(([x,y])=>g.fillRect(x,y,9,200));
+  g.fillStyle='#0c0a0d'; g.fillRect(118,250,9,560); g.fillRect(118,250,70,6); g.fillRect(180,256,4,20);
+  let lamp = g.createRadialGradient(182,292,2,182,292,70); lamp.addColorStop(0,'rgba(255,236,190,1)'); lamp.addColorStop(.15,'rgba(255,190,100,.7)'); lamp.addColorStop(1,'rgba(255,160,80,0)');
+  g.fillStyle=lamp; g.fillRect(100,210,170,170);
+  g.fillStyle='#0c0a0d'; g.fillRect(172,276,20,4); g.fillRect(174,304,16,4);
+})(scene.getContext('2d'));
+const sceneURL = scene.toDataURL('image/jpeg', .9);
+const sctx = scene.getContext('2d');
+const noiseURL = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 1.6 -.3"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>');
+document.documentElement.style.setProperty('--scene', 'url(' + sceneURL + ')');
+document.documentElement.style.setProperty('--noise', 'url("' + noiseURL + '")');
+document.querySelectorAll('[data-icon]').forEach(el => { el.innerHTML = ICONS[el.dataset.icon] || ''; el.classList.add('ico'); });
+
+/* ---------- canisters ---------- */
+function canHTML(f, i){ return `<button class="can" data-film="${i}" style="--c:${f.c};--band:${f.band}" aria-label="${f.name}"><span class="can-body"><i>${f.short} ${f.name.split(' ')[1]}</i><b></b></span><span class="can-name">${f.name.replace(' ','<br>')}</span></button>`; }
+const shelf = document.querySelector('[data-shelf]');
+if (shelf) shelf.innerHTML = FILMS.map(canHTML).join('');
+
+/* ---------- drag helper ---------- */
+function bindStep(el, axis, px, onStep){
+  let start = null, moved = false;
+  el.addEventListener('pointerdown', e => { start = axis==='x' ? e.clientX : e.clientY; moved = false; el.setPointerCapture(e.pointerId); e.stopPropagation(); });
+  el.addEventListener('pointermove', e => {
+    if (start === null) return;
+    const p = axis==='x' ? e.clientX : e.clientY; let d = p - start;
+    while (Math.abs(d) >= px){ const s = Math.sign(d); onStep(-s); start += s*px; d = p - start; moved = true; }
+  });
+  const end = () => { start = null; };
+  el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
+  el.addEventListener('click', e => { e.stopPropagation(); if (moved) return; const r = el.getBoundingClientRect();
+    const half = axis==='x' ? (e.clientX - r.left) / r.width : (e.clientY - r.top) / r.height; if (half < .38) onStep(-1); else if (half > .62) onStep(1); });
+  el.addEventListener('wheel', e => { e.preventDefault(); const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY; if (Math.abs(d) > 2) onStep(Math.sign(d)); }, {passive:false});
+  el.addEventListener('keydown', e => { if (e.key==='ArrowRight'||e.key==='ArrowDown'){onStep(1);e.preventDefault();} if (e.key==='ArrowLeft'||e.key==='ArrowUp'){onStep(-1);e.preventDefault();} });
+}
+
+/* ---------- meter scale builders ---------- */
+function arcSVG(kind){
+  const P = kind==='glass'
+    ? {w:132,h:54,cx:66,cy:78,r:62,span:42,tick:'#efe3c2',lab:'#efe3c2',needle:'#fff4dc',labR:47,sw:1}
+    : {w:50,h:50,cx:25,cy:34,r:20,span:52,tick:'#1d1d1d',lab:'#1d1d1d',needle:'#111',labR:13,sw:.8};
+  let s = `<svg viewBox="0 0 ${P.w} ${P.h}" width="100%" height="100%" style="position:absolute;inset:0">`;
+  for (let v=-3; v<=3.001; v+=1/3){
+    const a = (v/3*P.span - 90) * Math.PI/180, maj = Math.abs(v-Math.round(v))<.01;
+    const r1 = P.r - (maj ? (kind==='glass'?9:6) : (kind==='glass'?5:3));
+    s += `<line x1="${P.cx+Math.cos(a)*r1}" y1="${P.cy+Math.sin(a)*r1}" x2="${P.cx+Math.cos(a)*P.r}" y2="${P.cy+Math.sin(a)*P.r}" stroke="${Math.abs(v)<.01&&kind!=='glass'?'#c0392b':P.tick}" stroke-width="${maj?P.sw*1.3:P.sw*.7}"/>`;
+    if (maj && kind==='glass'){ const lr=P.r-15; s += `<text x="${P.cx+Math.cos(a)*lr}" y="${P.cy+Math.sin(a)*lr+2}" fill="${P.lab}" font-family="IBM Plex Mono,monospace" font-size="6.5" text-anchor="middle">${v===0?'0':(v>0?'+':'−')+Math.abs(Math.round(v))}</text>`; }
+  }
+  if (kind==='glass'){
+    s += `<text x="8" y="49" fill="#9b927c" font-family="IBM Plex Mono,monospace" font-size="5.5">UNDER</text><text x="124" y="49" fill="#9b927c" font-family="IBM Plex Mono,monospace" font-size="5.5" text-anchor="end">OVER</text><text x="66" y="51" fill="#9b927c" font-family="IBM Plex Mono,monospace" font-size="5.5" text-anchor="middle">EV</text>`;
+  } else {
+    s += `<text x="7" y="30" font-size="6" fill="#333" font-family="IBM Plex Mono,monospace">−</text><text x="40" y="30" font-size="6" fill="#333" font-family="IBM Plex Mono,monospace">+</text>`;
+  }
+  s += `<g data-needle data-kind="svgrot" data-cx="${P.cx}" data-cy="${P.cy}" data-span="${P.span}"><line x1="${P.cx}" y1="${P.cy}" x2="${P.cx}" y2="${P.cy-P.r-1}" stroke="${P.needle}" stroke-width="${kind==='glass'?1.1:.9}"/>${kind==='face'?`<line x1="${P.cx}" y1="${P.cy-P.r+5}" x2="${P.cx}" y2="${P.cy-P.r-1}" stroke="#c0392b" stroke-width="1"/>`:''}</g>`;
+  if (kind==='face') s += `<circle cx="${P.cx}" cy="${P.cy}" r="3" fill="#2a2a2a"/>`;
+  return s + '</svg>';
+}
+function linScale(el){
+  const w = el.clientWidth, pad = el.dataset.lin==='e' ? 6 : 12, span = w/2 - pad;
+  let h = '<div class="lin">';
+  for (let v=-3; v<=3.001; v+=1/3){
+    const maj = Math.abs(v-Math.round(v))<.01, x = w/2 + v/3*span;
+    h += `<span class="tk${maj?' maj':''}" style="left:${x}px"></span>`;
+    if (maj) h += `<span class="lb" style="left:${x}px">${Math.round(v)===0?'0':(v>0?'+':'−')+Math.abs(Math.round(v))}</span>`;
+  }
+  return h + `<span class="ndl" data-needle data-kind="x" data-span="${span}"></span></div>`;
+}
+
+/* ---------- meters registry ---------- */
+const meters = [];
+function addMeter(cam, el){ meters.push({cam, el, kind:el.dataset.kind, span:+el.dataset.span, cx:el.dataset.cx, cy:el.dataset.cy, pos:0, vel:0}); }
+
+/* ---------- camera controller ---------- */
+const cams = [];
+function Cam(root, idx){
+  const s = {mode:'A', iso:nearest(ISO,200), sh:nearest(SH,1/250), comp:9, film:idx*2 % FILMS.length, sceneEV:11.2, live:11.2, frames:36, shot:0, focal:1, phase:idx*1.7, exp:0, lastBright:null};
+  const $ = sel => root.querySelectorAll(sel);
+  const vf = root.querySelector('[data-vf]'), sceneEl = root.querySelector('[data-scene]');
+  const self = {root, s};
+
+  // drums
+  const drums = [];
+  $('[data-drum]').forEach(d => {
+    const kind = d.dataset.drum, axis = d.dataset.axis, size = +d.dataset.size;
+    const vals = kind==='shutter' ? SH.map(shLabel) : kind==='iso' ? ISO.map(String) : COMP.map(compLabel);
+    const strip = document.createElement('div'); strip.className = 'drum-strip';
+    strip.innerHTML = vals.map(v => `<span class="drum-item" style="${axis==='x'?'width':'height'}:${size}px">${v}</span>`).join('');
+    d.appendChild(strip); drums.push({d, kind, axis, size, strip});
+    bindStep(d, axis, axis==='x' ? 16 : 14, st => change(kind, st));
+  });
+  $('[data-dragparam]').forEach(el => bindStep(el, 'x', 16, st => change(el.dataset.dragparam, st)));
+  const isoDial = root.querySelector('[data-isodial]');
+  if (isoDial) bindStep(isoDial, 'x', 14, st => change('iso', st));
+
+  function change(kind, st){
+    if (kind==='comp'){ if (s.mode==='M') return; s.comp = clamp(s.comp + st, 0, COMP.length-1); }
+    if (kind==='shutter'){ s.sh = clamp(s.sh + st, 0, SH.length-1); if (s.mode==='A') s.mode='S'; else if (s.mode==='I') s.mode='M'; }
+    if (kind==='iso'){ s.iso = clamp(s.iso + st, 0, ISO.length-1); if (s.mode==='A') s.mode='I'; else if (s.mode==='S') s.mode='M'; }
+    solve(); render();
+  }
+  function evSet(){ return Math.log2(N2/SH[s.sh]) - Math.log2(ISO[s.iso]/100); }
+  function solve(){
+    const target = s.live - COMP[s.comp];
+    const tFor = iso => N2 / Math.pow(2, target + Math.log2(iso/100));
+    if (s.mode==='A'){
+      let i = ISO.indexOf(100);
+      while (i < ISO.length-1 && tFor(ISO[i]) > 1/60) i++;
+      while (i > 0 && tFor(ISO[i]) < 1/4000) i--;
+      s.iso = i; s.sh = nearest(SH, clamp(tFor(ISO[i]), 1/4000, 1));
+    } else if (s.mode==='S'){
+      s.iso = nearest(ISO, clamp(100*Math.pow(2, Math.log2(N2/SH[s.sh]) - target), 25, 3200));
+    } else if (s.mode==='I'){
+      s.sh = nearest(SH, clamp(tFor(ISO[s.iso]), 1/4000, 1));
+    }
+  }
+  function setMode(k){ s.mode = k; solve(); render(); }
+
+  function render(){
+    const f = FILMS[s.film], m = MODES.find(x => x.k===s.mode);
+    const read = {mode:s.mode, modeName:m.t, film:f.name, frames:s.frames, shot:String(s.shot).padStart(2,'0'), shutter:shLabel(SH[s.sh]), iso:ISO[s.iso], comp:compLabel(COMP[s.comp])};
+    $('[data-read]').forEach(el => { const v = read[el.dataset.read]; if (v !== undefined && el.textContent !== String(v)) el.textContent = v; });
+    drums.forEach(({kind, axis, size, strip, d}) => {
+      const i = kind==='shutter' ? s.sh : kind==='iso' ? s.iso : s.comp;
+      const L = axis==='x' ? d.clientWidth : d.clientHeight;
+      const off = L/2 - (i+.5)*size;
+      strip.style.transform = axis==='x' ? `translateX(${off}px)` : `translateY(${off}px)`;
+      [...strip.children].forEach((c,j) => c.classList.toggle('on', j===i));
+    });
+    if (isoDial) isoDial.querySelector('.b-iso-ring').style.transform = `rotate(${-s.iso*15}deg)`;
+    const autoS = s.mode==='A' || s.mode==='I', autoI = s.mode==='A' || s.mode==='S';
+    $('[data-auto="shutter"]').forEach(el => el.classList.toggle('is-auto', autoS));
+    $('[data-auto="iso"]').forEach(el => el.classList.toggle('is-auto', autoI));
+    $('[data-comp]').forEach(el => el.classList.toggle('off', s.mode==='M'));
+    root.style.setProperty('--fc', f.c); root.style.setProperty('--fband', f.band);
+    $('.can').forEach(c => c.classList.toggle('on', +c.dataset.film === s.film));
+    $('.drawer-desc').forEach(d => d.textContent = f.note);
+    mwRender();
+    $('[data-focal] button').forEach(b => b.classList.toggle('on', +b.dataset.f === s.focal));
+    sceneEl.style.transform = `scale(${[1,1.35,1.92][s.focal]})`;
+  }
+  self.updateVF = () => {
+    const b = clamp(Math.pow(2, s.exp*0.5), .22, 2.8);
+    if (s.lastBright !== null && Math.abs(b - s.lastBright) < .015 && s.lastFilm === s.film) return;
+    s.lastBright = b; s.lastFilm = s.film;
+    sceneEl.style.filter = FILMS[s.film].filter + ` brightness(${b.toFixed(3)})`;
+  };
+  self.tick = (t) => {
+    s.live = s.sceneEV + 0.14*Math.sin(t*0.55 + s.phase) + 0.05*Math.sin(t*2.1 + s.phase*2);
+    let e = s.live - evSet();
+    if (s.mode !== 'M' && Math.abs(e - COMP[s.comp]) > 0.3){ solve(); render(); e = s.live - evSet(); }
+    s.exp = e; self.updateVF();
+  };
+
+  // mode wheel
+  const mw = root.querySelector('[data-mw]');
+  mw.innerHTML = `<div class="mw-scrim"></div><div class="mw-wheel"><div class="mw-disc"></div>${MODES.map(m=>`<button class="mw-item" data-mode="${m.k}" aria-label="${m.name}">${m.k}</button>`).join('')}</div><div class="mw-info"><h4></h4><p></p></div>`;
+  function mwRender(){
+    const cur = MODES.findIndex(m => m.k===s.mode), R = 150;
+    mw.querySelectorAll('.mw-item').forEach((b,i) => {
+      const a = (i-cur)*30*Math.PI/180;
+      b.style.transform = `translate(${Math.cos(a)*R}px, ${Math.sin(a)*R}px)`;
+      b.classList.toggle('on', i===cur);
+    });
+    const m = MODES[cur]; mw.querySelector('h4').textContent = m.name; mw.querySelector('p').textContent = m.d;
+  }
+  let mwTimer;
+  const openMW = (v) => { mw.classList.toggle('open', v ?? !mw.classList.contains('open')); clearTimeout(mwTimer); };
+  $('[data-mw-toggle]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); openMW(); }));
+  mw.querySelector('.mw-wheel').addEventListener('click', e => {
+    e.stopPropagation();
+    const b = e.target.closest('.mw-item');
+    if (!mw.classList.contains('open')){ openMW(true); return; }
+    if (b){ setMode(b.dataset.mode); clearTimeout(mwTimer); mwTimer = setTimeout(() => openMW(false), 1100); }
+  });
+  mw.querySelector('.mw-scrim').addEventListener('click', e => { e.stopPropagation(); openMW(false); });
+  mw.querySelector('.mw-wheel').addEventListener('wheel', e => { if (!mw.classList.contains('open')) return; e.preventDefault();
+    const cur = MODES.findIndex(m => m.k===s.mode); const n = clamp(cur + Math.sign(e.deltaY), 0, 3); if (n!==cur) setMode(MODES[n].k); }, {passive:false});
+
+  // metering tap
+  const ret = root.querySelector('[data-ret]');
+  vf.addEventListener('click', e => {
+    if (mw.classList.contains('open')) return;
+    const r = vf.getBoundingClientRect(), px = e.clientX - r.left, py = e.clientY - r.top;
+    const z = [1,1.35,1.92][s.focal], cx = r.width/2, cy = r.height/2;
+    const sx = cx + (px-cx)/z, sy = cy + (py-cy)/z;
+    const k = Math.max(r.width/600, r.height/800), ox = (r.width - 600*k)/2, oy = (r.height - 800*k)/2;
+    const ix = clamp(Math.round((sx-ox)/k), 6, 593), iy = clamp(Math.round((sy-oy)/k), 6, 793);
+    const d = sctx.getImageData(ix-6, iy-6, 13, 13).data; let L = 0;
+    for (let i=0;i<d.length;i+=4){ const lin = c => Math.pow(c/255, 2.2); L += .2126*lin(d[i]) + .7152*lin(d[i+1]) + .0722*lin(d[i+2]); }
+    L /= d.length/4;
+    s.sceneEV = clamp(11.2 + Math.log2(Math.max(L, .002)/0.18) * 0.85, 5, 15.5);
+    ret.style.setProperty('--rx', px + 'px'); ret.style.setProperty('--ry', py + 'px');
+    ret.classList.remove('pulse'); void ret.offsetWidth; ret.classList.add('pulse');
+  });
+
+  // film drawer / row
+  const drawer = root.querySelector('[data-filmdrawer]');
+  if (drawer){
+    drawer.innerHTML = `<div class="drawer-head"><span>LOAD FILM · 10 STOCKS</span><button data-close>DONE</button></div><div class="filmrow">${FILMS.map(canHTML).join('')}</div><p class="drawer-desc"></p>`;
+    drawer.querySelector('[data-close]').addEventListener('click', e => { e.stopPropagation(); drawer.classList.remove('open'); });
+    $('[data-film-open]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); drawer.classList.toggle('open'); }));
+  }
+  const row = root.querySelector('[data-filmrow]');
+  if (row) row.innerHTML = FILMS.map(canHTML).join('');
+  root.addEventListener('click', e => {
+    const c = e.target.closest('.can'); if (!c) return;
+    s.film = +c.dataset.film; s.lastBright = null; render();
+    if (row){ row.scrollTo({left: c.offsetLeft - row.clientWidth/2 + c.offsetWidth/2, behavior: reduce?'auto':'smooth'}); }
+  });
+  if (row) requestAnimationFrame(() => { const c = row.querySelector('.can.on'); if (c) row.scrollLeft = c.offsetLeft - row.clientWidth/2 + c.offsetWidth/2; });
+
+  $('[data-grid-toggle]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); vf.classList.toggle('grid-on'); }));
+  $('[data-flip]').forEach(b => b.addEventListener('click', () => { vf.classList.remove('flipping'); void vf.offsetWidth; vf.classList.add('flipping'); }));
+  $('[data-focal] button').forEach(b => b.addEventListener('click', () => { s.focal = +b.dataset.f; render(); }));
+
+  // shutter
+  const thumbs = [...$('[data-thumb]')];
+  const thumbCanvas = document.createElement('canvas'); thumbCanvas.width = 120; thumbCanvas.height = 160;
+  $('[data-shutter]').forEach(b => b.addEventListener('click', () => {
+    const cur = root.querySelector('[data-curtain]'); cur.classList.remove('fire'); void cur.offsetWidth; cur.classList.add('fire');
+    meters.filter(m => m.cam === self).forEach(m => m.vel += 2.4);
+    s.frames = s.frames > 1 ? s.frames - 1 : 36; s.shot++;
+    const g = thumbCanvas.getContext('2d'); const z = [1,1.35,1.92][s.focal];
+    g.filter = FILMS[s.film].filter + ` brightness(${clamp(Math.pow(2, s.exp*.5), .22, 2.8)})`;
+    const w = 600/z, h = 800/z; g.drawImage(scene, (600-w)/2, (800-h)/2, w, h, 0, 0, 120, 160);
+    const url = thumbCanvas.toDataURL('image/jpeg', .8);
+    thumbs.forEach(t => { if (!t.classList.contains('c-count')) t.style.backgroundImage = `url(${url})`; });
+    render();
+  }));
+
+  // meters
+  root.querySelectorAll('[data-arc]').forEach(el => { el.innerHTML = arcSVG(el.dataset.arc); });
+  root.querySelectorAll('[data-lin]').forEach(el => { el.innerHTML = linScale(el); });
+  root.querySelectorAll('[data-needle]').forEach(el => addMeter(self, el));
+  const fan = root.querySelector('[data-fan]');
+  if (fan) setupFan(self, fan);
+
+  solve(); render();
+  cams.push(self);
+  return self;
+}
+
+/* ---------- B: canvas fan meter with phosphor trail ---------- */
+function setupFan(cam, wrap){
+  const sc = wrap.querySelector('[data-fan-scale]'), nc = wrap.querySelector('[data-fan-needle]');
+  const dpr = Math.min(2, devicePixelRatio || 1), W = wrap.clientWidth, H = wrap.clientHeight;
+  [sc,nc].forEach(c => { c.width = W*dpr; c.height = H*dpr; c.getContext('2d').scale(dpr,dpr); });
+  const cx = W/2, cy = H + 120, R = 164, SPAN = 32;
+  const g = sc.getContext('2d');
+  g.shadowColor = 'rgba(242,196,106,.9)'; g.shadowBlur = 5; g.strokeStyle = '#f6d38c'; g.fillStyle = '#f6d38c';
+  g.font = '500 8.5px "IBM Plex Mono", monospace'; g.textAlign = 'center';
+  for (let v=-3; v<=3.001; v+=1/6){
+    const a = (v/3*SPAN - 90)*Math.PI/180, maj = Math.abs(v-Math.round(v))<.01, third = Math.abs(v*3-Math.round(v*3))<.01;
+    const r1 = maj ? R-24 : third ? R-15 : R-9;
+    g.lineWidth = maj ? 1.6 : 1; g.globalAlpha = maj ? 1 : third ? .8 : .45;
+    g.beginPath(); g.moveTo(cx+Math.cos(a)*r1, cy+Math.sin(a)*r1); g.lineTo(cx+Math.cos(a)*R, cy+Math.sin(a)*R); g.stroke();
+    if (maj){ g.globalAlpha = 1; g.fillText(Math.round(v)===0?'0':(v>0?'+':'−')+Math.abs(Math.round(v)), cx+Math.cos(a)*(R+8), cy+Math.sin(a)*(R+8)+3); }
+  }
+  g.globalAlpha = .7; g.font = '500 7.5px "IBM Plex Mono", monospace'; g.textAlign='left'; g.fillText('UNDER', 4, H-6); g.textAlign='right'; g.fillText('OVER', W-4, H-6); g.textAlign='center'; g.fillText('EV', cx, H-4);
+  const m = {cam, kind:'fan', ctx:nc.getContext('2d'), W, H, cx, cy, R, span:SPAN, pos:0, vel:0};
+  meters.push(m);
+}
+
+/* ---------- animation loop ---------- */
+let last = performance.now();
+function loop(now){
+  const dt = Math.min(.05, (now - last)/1000); last = now; const t = now/1000;
+  cams.forEach(c => c.tick(t));
+  meters.forEach(m => {
+    const target = clamp(m.cam.s.exp/3, -1.18, 1.18) + Math.sin(t*23 + m.span)*0.004;
+    if (reduce){ m.pos = target; m.vel = 0; }
+    else { const k = 85, c = 8.5; m.vel += (k*(target - m.pos) - c*m.vel)*dt; m.pos += m.vel*dt; }
+    if (m.kind==='svgrot') m.el.setAttribute('transform', `rotate(${(m.pos*m.span).toFixed(2)} ${m.cx} ${m.cy})`);
+    else if (m.kind==='x') m.el.style.transform = `translateX(${(m.pos*m.span).toFixed(2)}px)`;
+    else if (m.kind==='fan'){
+      const g = m.ctx;
+      g.globalCompositeOperation = 'destination-out'; g.fillStyle = `rgba(0,0,0,${reduce?1:.2})`; g.fillRect(0,0,m.W,m.H);
+      g.globalCompositeOperation = 'source-over';
+      const a = (m.pos*m.span - 90)*Math.PI/180;
+      g.strokeStyle = '#fff1cf'; g.lineWidth = 1.6; g.shadowColor = 'rgba(255,190,90,1)'; g.shadowBlur = 8;
+      g.beginPath(); g.moveTo(m.cx+Math.cos(a)*(m.R-90), m.cy+Math.sin(a)*(m.R-90)); g.lineTo(m.cx+Math.cos(a)*(m.R+2), m.cy+Math.sin(a)*(m.R+2)); g.stroke();
+    }
+  });
+  requestAnimationFrame(loop);
+}
+
+/* ---------- editor ---------- */
+const TABS = [
+  {id:'exp', label:'Exp.', ctl:[['exposure','Exposure',-2,2,.1,v=>(v>0?'+':v<0?'−':'±')+Math.abs(v).toFixed(1)+' EV'],['contrast','Contrast',-50,50,1],['fade','Fade',0,100,1]]},
+  {id:'film', label:'Film', ctl:['films',['strength','Strength',0,100,1,v=>v+'%'],['warmth','Warmth',-50,50,1]]},
+  {id:'texture', label:'Texture', ctl:[['grain','Grain',0,100,1],['halation','Halation',0,100,1],['leak','Light leak',0,100,1]]},
+  {id:'print', label:'Print', ctl:[['border','Border',['None','Thin','Instant','Strip']],['vignette','Vignette',0,100,1],['date','Date stamp',['Off','On']]]}
+];
+const fmt = v => (v>0?'+':v<0?'−':'')+Math.abs(v);
+function Editor(root, idx){
+  const st = {exposure:0, contrast:8, fade:12, film:[0,3,5,7,8][idx], strength:85, warmth:6, grain:35, halation:[10,30,0,15,0][idx], leak:0, border:[2,3,1,2,0][idx], vignette:30, date:idx===3?1:0};
+  let tab = [0,1,2,1,3][idx]; let hist = [JSON.stringify(st)], hi = 0;
+  root.innerHTML = `<div class="island"></div><div class="sb"><span>9:41</span><i class="bat"></i></div>
+   <div class="ed-head"><button>‹ ROLL</button><span data-title></span><button>SAVE</button></div>
+   <div class="ed-view"><div class="ed-frame"><div class="ed-photo">
+     <div class="l-img"><div class="l-base"></div><div class="l-film"></div></div>
+     <div class="l-fade"></div><div class="l-warm"></div><div class="l-hal"></div><div class="l-leak"></div><div class="l-grain"></div><div class="l-vig"></div>
+     <span class="ed-date">'26 10 04</span></div><span class="ed-edge"></span></div>
+     <canvas class="ed-hist" width="184" height="80" aria-label="Histogram"></canvas>
+     <div class="ed-ur"><button data-undo aria-label="Undo" class="ico">${ICONS.undo}</button><button data-redo aria-label="Redo" class="ico">${ICONS.redo}</button></div></div>
+   <div class="ed-tabs">${TABS.map((t,i)=>`<button class="ed-tab" data-tab="${i}"><span class="ico">${ICONS[t.id]}</span>${t.label}</button>`).join('')}</div>
+   <div class="ed-panel" data-panel></div>`;
+  const q = s => root.querySelector(s);
+  const panel = q('[data-panel]'), L = n => q('.l-'+n);
+  const hc = q('.ed-hist'), hg = hc.getContext('2d');
+  const off = document.createElement('canvas'); off.width = 60; off.height = 80; const og = off.getContext('2d', {willReadFrequently:true});
+
+  function buildPanel(){
+    root.querySelectorAll('.ed-tab').forEach((b,i) => b.classList.toggle('on', i===tab));
+    panel.innerHTML = TABS[tab].ctl.map(c => {
+      if (c==='films') return `<div class="filmrow">${FILMS.map(canHTML).join('')}</div>`;
+      const [k, label] = c;
+      if (Array.isArray(c[2])) return `<div class="ctl"><div class="ctl-top"><span>${label}</span></div><div class="seg">${c[2].map((o,i)=>`<button data-seg="${k}" data-v="${i}">${o}</button>`).join('')}</div></div>`;
+      return `<div class="ctl"><div class="ctl-top"><span>${label}</span><b data-val="${k}"></b></div><input type="range" id="ed${idx}-${k}" data-k="${k}" min="${c[2]}" max="${c[3]}" step="${c[4]}" aria-label="${label}"></div>`;
+    }).join('');
+    sync();
+    const row = panel.querySelector('.filmrow');
+    if (row){ const c = row.querySelector('.can.on'); if (c) row.scrollLeft = c.offsetLeft - row.clientWidth/2 + c.offsetWidth/2; }
+  }
+  function ctlDef(k){ for (const t of TABS) for (const c of t.ctl) if (Array.isArray(c) && c[0]===k) return c; }
+  function sync(){
+    panel.querySelectorAll('input[type=range]').forEach(r => {
+      const k = r.dataset.k, c = ctlDef(k); r.value = st[k];
+      r.style.setProperty('--p', ((st[k]-c[2])/(c[3]-c[2])*100)+'%');
+      panel.querySelector(`[data-val="${k}"]`).textContent = c[5] ? c[5](st[k]) : (c[2] < 0 ? fmt(st[k]) : st[k]);
+    });
+    panel.querySelectorAll('[data-seg]').forEach(b => b.classList.toggle('on', st[b.dataset.seg] === +b.dataset.v));
+    panel.querySelectorAll('.can').forEach(c => c.classList.toggle('on', +c.dataset.film === st.film));
+    q('[data-undo]').disabled = hi === 0; q('[data-redo]').disabled = hi === hist.length-1;
+    apply();
+  }
+  function baseFilter(){ return `brightness(${Math.pow(2, st.exposure*.6).toFixed(3)}) contrast(${(1+st.contrast/110).toFixed(3)})`; }
+  function apply(){
+    const f = FILMS[st.film];
+    L('img').style.filter = baseFilter();
+    L('film').style.filter = f.filter; L('film').style.opacity = st.strength/100;
+    L('fade').style.opacity = st.fade/100 * .8;
+    L('warm').style.background = st.warmth >= 0 ? '#ff9a3c' : '#3c8cff'; L('warm').style.opacity = Math.abs(st.warmth)/50*.7;
+    L('hal').style.opacity = st.halation/100*.55;
+    L('leak').style.opacity = st.leak/100;
+    L('grain').style.opacity = st.grain/100*.9;
+    L('vig').style.opacity = st.vignette/100;
+    q('.ed-frame').dataset.border = st.border;
+    q('.ed-date').classList.toggle('on', st.date === 1);
+    q('.ed-edge').textContent = `▸ ${String(12).padStart(2,'0')}   ${f.name}   ▸ 12A`;
+    q('[data-title]').textContent = `FRAME 12 · ${f.name}`;
+    scheduleHist();
+  }
+  let hPending = false;
+  function scheduleHist(){ if (hPending) return; hPending = true; requestAnimationFrame(drawHist); }
+  function drawHist(){
+    hPending = false; const f = FILMS[st.film];
+    og.globalAlpha = 1; og.filter = baseFilter(); og.drawImage(scene, 0, 0, 60, 80);
+    og.globalAlpha = st.strength/100; og.filter = f.filter + ' ' + baseFilter(); og.drawImage(scene, 0, 0, 60, 80);
+    og.filter = 'none'; og.globalAlpha = st.fade/100*.8; og.globalCompositeOperation = 'lighten'; og.fillStyle = '#4a4540'; og.fillRect(0,0,60,80);
+    og.globalCompositeOperation = 'source-over'; og.globalAlpha = 1;
+    const d = og.getImageData(0,0,60,80).data, bins = new Array(46).fill(0);
+    for (let i=0;i<d.length;i+=4){ const l = .2126*d[i]+.7152*d[i+1]+.0722*d[i+2]; bins[Math.min(45, l/256*46|0)]++; }
+    const mx = Math.max(...bins.slice(1,-1), 1), W = hc.width, H = hc.height;
+    hg.clearRect(0,0,W,H);
+    hg.beginPath(); hg.moveTo(6, H-6);
+    bins.forEach((b,i) => hg.lineTo(6 + i/(bins.length-1)*(W-12), H-6 - Math.min(1, b/mx)*(H-16)));
+    hg.lineTo(W-6, H-6); hg.closePath();
+    hg.fillStyle = 'rgba(220,222,226,.35)'; hg.fill(); hg.strokeStyle = 'rgba(240,241,243,.9)'; hg.lineWidth = 1.6; hg.stroke();
+  }
+  function commit(){ const j = JSON.stringify(st); if (j === hist[hi]) return; hist = hist.slice(0, hi+1); hist.push(j); hi = hist.length-1; sync(); }
+  function restore(){ Object.assign(st, JSON.parse(hist[hi])); sync(); }
+
+  root.addEventListener('input', e => { const k = e.target.dataset.k; if (!k) return; st[k] = +e.target.value; sync(); });
+  root.addEventListener('change', e => { if (e.target.dataset.k) commit(); });
+  root.addEventListener('dblclick', e => { const k = e.target.dataset && e.target.dataset.k; if (!k) return; const c = ctlDef(k); st[k] = c[2] < 0 ? 0 : st[k]; commit(); });
+  root.addEventListener('click', e => {
+    const t = e.target.closest('[data-tab]'); if (t){ tab = +t.dataset.tab; buildPanel(); return; }
+    const sg = e.target.closest('[data-seg]'); if (sg){ st[sg.dataset.seg] = +sg.dataset.v; commit(); return; }
+    const c = e.target.closest('.can'); if (c){ st.film = +c.dataset.film; commit(); return; }
+    if (e.target.closest('[data-undo]') && hi > 0){ hi--; restore(); }
+    if (e.target.closest('[data-redo]') && hi < hist.length-1){ hi++; restore(); }
+  });
+  buildPanel();
+}
+
+document.querySelectorAll('[data-cam]').forEach((r,i) => Cam(r, i));
+document.querySelectorAll('[data-editor]').forEach((r,i) => Editor(r, i));
+// close drawers / wheels when tapping elsewhere in a screen
+document.addEventListener('click', e => {
+  document.querySelectorAll('.drawer.open').forEach(d => { if (!d.contains(e.target)) d.classList.remove('open'); });
+});
+requestAnimationFrame(loop);
+})();
+</script>
