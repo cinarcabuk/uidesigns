@@ -1,0 +1,405 @@
+"""Builds approaches.html (artifact source) and approaches-standalone.html: ten static, new interaction approaches."""
+import pathlib
+root = pathlib.Path(__file__).resolve().parent.parent
+src = (root / 'concepts.html').read_text()
+paint = src[src.index('(function paint(g){'):src.index("})(scene.getContext('2d'));") + len("})(scene.getContext('2d'));")]
+
+BOLT = '<svg viewBox="0 0 24 24"><path d="M13 3 6 13.5h5L10 21l7-10.5h-5z"/></svg>'
+FLIP = '<svg viewBox="0 0 24 24"><path d="M5 9a7 7 0 0 1 12.5-2.5M19 15a7 7 0 0 1-12.5 2.5"/><path d="M17.5 3v3.5H14M6.5 21v-3.5H10"/></svg>'
+SB = '<div class="island"></div><div class="sb"><span>9:41</span><i class="bat"></i></div>'
+def mline(n=.15, w=96):
+    return f'<div class="m-line" style="--n:{n};width:{w}px"><i class="m-ticks"></i><i class="m-ndl"></i></div>'
+def phone(cls, inner, land=False):
+    return f'<div class="phone{" land" if land else ""}"><div class="screen {cls}">{inner}</div></div>'
+
+A = []
+
+# 01 Waist-Level
+A.append(('Waist-Level', 'You look down into the camera like a twin-lens reflex. The square image sits in a deep, bevelled hood with a fresnel screen and is mirrored left to right, as on the real thing. Two side rollers set the shutter and ISO.',
+'New: square 6×6 format and the mirrored view as a creative constraint (with a toggle for people who want it upright).',
+phone('wl', SB + f'''
+  <div class="wl-top"><span class="ro"><b>A</b></span>{mline()}<span class="ro">MIRROR <b>ON</b></span></div>
+  <div class="hood"><div class="sq"><div class="scene mirror"></div><i class="fresnel"></i><i class="sqgrid"></i><i class="sqring"></i></div></div>
+  <div class="wl-cap"><span>6×6</span><span>AURUM 200</span><span>12 / 12</span></div>
+  <div class="wl-knobs">
+    <div class="roller"><i></i><span><b>1/125</b><small>SHUTTER</small></span></div>
+    <span class="chrome-btn"></span>
+    <div class="roller"><i></i><span><b>400</b><small>ISO</small></span></div>
+  </div>
+  <div class="wl-bot"><span class="ico">{BOLT}</span><div class="lens"><span>26</span><span class="on">50</span><span>80</span></div><span class="sqthumb"></span></div>''')))
+
+# 02 Bottom Dial
+labels = ['1/15','1/30','1/60','1/125','1/250','1/500','1/1000','1/2000','1/4000']
+dial_labels = ''.join(f'<span style="--a:{(i-4)*11}deg" class="{"on" if i==4 else ""}">{l}</span>' for i, l in enumerate(labels))
+A.append(('Command Dial', 'One big dial rises from the bottom edge. Choose what it controls with the small tabs (shutter, ISO, EV or lens), then turn it with your thumb. The shutter sits on the dial itself.',
+'New: a single control for every setting, so the screen stays calm and one thumb does everything.',
+phone('cd', SB + f'''
+  <div class="row top"><span class="ro"><b>S</b><small>MODE</small></span><span class="ro"><i class="dot"></i>KINO 250D</span><span class="ro"><small>ISO</small><b>200</b></span></div>
+  <div class="vf"><div class="scene"></div><i class="cross"></i></div>
+  <div class="cd-tabs"><span class="on">SHUTTER</span><span>ISO</span><span>EV</span><span>MM</span></div>
+  <div class="cd-dial"><i class="cd-ticks"></i><i class="cd-index"></i>{dial_labels}</div>
+  <span class="cd-shutter"></span>
+  <span class="cd-flash ico">{BOLT}</span><span class="cd-roll"></span>''')))
+
+# 03 Lens Barrel
+A.append(('Lens Barrel', 'The bottom of the screen is a lens seen from the side. You turn the knurled focus ring, which is engraved with a distance scale and depth-of-field marks. The silver ring below it sets the focal length.',
+'New: real zone focusing. Set 3 m at ƒ8 and shoot from the hip, like street photographers with a rangefinder.',
+phone('lb', SB + f'''
+  <div class="row top"><span class="ro"><b>A</b><small>MODE</small></span><span class="ro"><i class="dot"></i>ARGENT 400</span>{mline(-.1,80)}</div>
+  <div class="vf lb-vf"><div class="scene bw"></div><i class="cross"></i></div>
+  <div class="barrel">
+    <div class="ring focus"><div class="scale"><span>∞</span><span>10</span><span>5</span><span class="on">3</span><span>2</span><span>1.5</span><span>1</span><span>0.7</span><small>m</small></div><i class="knurl"></i><i class="idx"></i>
+      <div class="dof"><span>16</span><span>8</span><span>4</span><b></b><span>4</span><span>8</span><span>16</span></div></div>
+    <div class="ring focal"><span>26</span><span class="on">35</span><span>50</span><small>MM</small><i class="idx"></i></div>
+  </div>
+  <div class="lb-deck"><span class="lbthumb"></span><span class="ico pill">{BOLT}<small>AUTO</small></span><span class="chrome-btn big"></span></div>''')))
+
+# 04 Split-Image
+speeds = ['1000','500','250','125','60','30','15','8','4','2','1']
+scale = ''.join(f'<span class="{"on" if s=="250" else ""}">{s}</span>' for s in speeds)
+A.append(('Split-Image', 'The viewfinder of a 1970s SLR. A split-image circle and a microprism ring sit in the center for manual focus. A shutter-speed scale runs down the right edge, and the needle points at the speed the meter wants.',
+'New: manual focus as the main pleasure. The image breaks in two until it is sharp.',
+phone('si', SB + f'''
+  <div class="si-wrap"><div class="vf si-vf"><div class="scene"></div><i class="prism"></i><i class="splithalf"></i><i class="split"></i></div>
+    <div class="si-scale">{scale}<i class="si-ndl"></i><small>M</small></div></div>
+  <div class="si-info"><span>AURUM 200</span><span>ISO 200</span><span>ƒ1.8</span><span>±0</span></div>
+  <div class="lens"><span>26</span><span class="on">35</span><span>50</span><small>MM</small></div>
+  <div class="si-deck"><span class="ico ring">{BOLT}</span><span class="ring-shutter"></span><span class="sithumb"></span></div>''')))
+
+# 05 Advance Lever
+A.append(('Advance Lever', 'After every shot the shutter locks until you pull the advance lever with your thumb. The round counter clicks on one frame, and the shutter release is a small threaded button, as on a mechanical body.',
+'New: a deliberate rhythm. Each frame costs a gesture, which makes a 36-exposure roll feel finite.',
+phone('al', SB + f'''
+  <div class="row top"><span class="ro"><b>M</b><small>MODE</small></span><span class="ro"><i class="dot"></i>PASTEL 160</span><span class="ro"><small>EV</small><b>±0</b></span></div>
+  <div class="vf"><div class="scene"></div><i class="cross"></i></div>
+  <div class="row bot"><span class="ro"><b>1/125</b></span>{mline(.05)}<span class="ro"><small>ISO</small><b>160</b></span></div>
+  <div class="al-deck">
+    <div class="al-left"><span class="ico">{BOLT}</span><div class="lens"><span>26</span><span class="on">35</span><span>50</span></div></div>
+    <div class="counter"><b>12</b><i></i></div>
+    <span class="release"></span>
+    <div class="lever"><i class="arm"></i><i class="tip"></i><i class="hub"></i></div>
+    <span class="al-hint">← PULL TO ADVANCE</span>
+  </div>''')))
+
+# 06 Ground Glass
+A.append(('Ground Glass', 'Shooting large format on a phone. The image falls on ground glass, upside down, with clipped corners and a fine grid. You expose by sliding the dark slide out of the holder.',
+'New: the slowest, most ceremonial way to shoot, with the upside-down view as part of the look. Tap UPRIGHT to flip it.',
+phone('gg', SB + f'''
+  <div class="row top"><span class="ro">4×5</span><span class="ro"><small>ƒ</small>5.6 · 1/30</span><span class="ro chip">UPRIGHT ⇅</span></div>
+  <div class="glass"><div class="scene inv"></div><i class="gtex"></i><i class="ggrid"></i></div>
+  <div class="row bot"><span class="ro"><i class="dot"></i>VERANO 400</span>{mline(-.2,84)}<span class="ro">SHEET <b>3</b>/10</span></div>
+  <div class="slide"><span>PULL DARK SLIDE TO EXPOSE</span><i class="ribs"></i></div>
+  <div class="gg-bot"><span class="ico">{BOLT}</span><div class="lens"><span>90</span><span class="on">150</span><span>210</span><small>MM EQ.</small></div><span class="ggthumb"></span></div>''')))
+
+# 07 Slide Switches
+def switch(label, opts, on):
+    o = ''.join(f'<span class="{"on" if i==on else ""}">{x}</span>' for i, x in enumerate(opts))
+    return f'<div class="sw"><small>{label}</small><div class="track" style="--n:{len(opts)};--i:{on}"><i class="knob"></i></div><div class="opts">{o}</div></div>'
+A.append(('Slide Switches', 'An industrial-design take: a matte aluminum body with real slide switches for flash, lens and mode. Every setting is visible at a glance, as a position rather than a number.',
+'New: settings you can read without reading. The switch position is the state, like a 1960s radio.',
+phone('ss', SB + f'''
+  <div class="row top"><span class="ro">ƒ1.8</span><span class="ro"><b>1/250</b> · ISO <b>200</b></span>{mline(.1,70)}</div>
+  <div class="ss-win"><div class="vf"><div class="scene"></div><i class="cross"></i></div></div>
+  <div class="ss-panel">
+    <div class="ss-switches">{switch('FLASH',['OFF','ON','AUTO'],2)}{switch('LENS',['26','35','50'],1)}{switch('MODE',['A','S','I','M'],0)}</div>
+    <div class="ss-right"><span class="dish"></span><span class="ssthumb"></span></div>
+  </div>''')))
+
+# 08 Keypad
+def key(v, l, cls=''):
+    return f'<span class="key {cls}"><b>{v}</b><small>{l}</small></span>'
+A.append(('Keypad', 'Every setting is a physical key in a small grid under the image, like a pocket calculator or a synthesizer. Press a key to cycle it, or hold it and drag. The long black key is the shutter.',
+'New: no hidden menus at all. The whole camera is twelve keys, and the layout can be rearranged.',
+phone('kp', SB + f'''
+  <div class="row top"><span class="ro"><i class="dot"></i>LUMEN 100</span>{mline(.25,80)}<span class="ro">24 / 36</span></div>
+  <div class="vf kp-vf"><div class="scene"></div><i class="cross"></i></div>
+  <div class="keys">
+    {key('1/250','SHUTTER')}{key('100','ISO')}{key('±0','EV')}{key('A','MODE')}
+    {key('35','MM')}{key('AUTO','FLASH')}{key('OFF','TIMER')}{key('▦','GRID')}
+    <span class="key roll"></span>{key('LU','FILM')}<span class="key shutter-key"><b>●</b></span>
+  </div>''')))
+
+# 09 Pure Finder
+A.append(('Pure Finder', 'No buttons on the screen at all. The volume button is the shutter, as on a real camera body. Drag along the right edge for EV, swipe the image sideways to change lens, and double-tap it to change film. Faint marks at the edges are the only hints.',
+'New: the phone disappears and only the frame is left. It is the most "camera" of the ten, and the hardest to learn.',
+phone('pf', SB + f'''
+  <div class="pf-hint vol">◀ VOL · SHUTTER</div>
+  <div class="row top"><span class="ro">AURUM 200</span><span class="ro">A · ƒ1.8 · 1/250 · ISO 200</span></div>
+  <div class="vf pf-vf"><div class="scene"></div><i class="cross"></i><i class="swipe">‹ 26 · <b>35</b> · 50 ›</i></div>
+  <div class="pf-edge"><i class="pf-ticks"></i><i class="pf-ndl"></i><small>EV</small></div>
+  <div class="pf-foot">{mline(.08,88)}</div>
+  <div class="pf-legend"><span>2× TAP · FILM</span><span>HOLD · SETTINGS</span><span>↑ SWIPE · ROLL</span></div>''')))
+
+# 10 Grip (landscape)
+A.append(('Grip', 'Built to be held sideways like a compact camera. The image fills the left side and your right hand holds a grip panel. The shutter is under your index finger, and a knurled command dial is under your thumb.',
+'New: the only landscape-first layout. It feels like holding a camera, not a phone.',
+phone('gp', f'''<div class="island land-island"></div>
+  <div class="gp-left"><div class="gp-top"><span class="ro"><b>A</b><small>MODE</small></span><span class="ro"><i class="dot"></i>NOCTA 800T</span><span class="ro">9:41</span></div>
+    <div class="vf gp-vf"><div class="scene"></div><i class="cross"></i></div>
+    <div class="gp-bot"><span class="ro"><b>1/125</b><small>S</small></span>{mline(-.05,110)}<span class="ro"><small>ISO</small><b>800</b></span><span class="ro"><small>EV</small><b>±0</b></span></div></div>
+  <div class="gp-grip">
+    <div class="gp-row"><span class="ico">{BOLT}</span><span class="ico">{FLIP}</span><span class="gp-shutter"></span></div>
+    <div class="lens v"><span>26</span><span class="on">35</span><span>50</span></div>
+    <div class="gp-row"><span class="gpthumb"></span><div class="cmd"><i></i><small>DIAL · S</small></div></div>
+  </div>''', land=True)))
+
+def card(i, name, desc, new, html, wide=False):
+    return f'''<figure class="card{" wide" if wide else ""}"><div class="ph">{html}</div><figcaption><b>{i:02d}</b><div><h3>{name}</h3><p>{desc}</p><p class="new">{new}</p></div></figcaption></figure>'''
+cards = '\n'.join(card(i, *a, wide=(a[0]=='Grip')) for i, a in enumerate(A, 1))
+
+CSS = r"""
+/* Layout: contact sheet of ten static phones (one landscape, full row). Single black look by design. */
+:root{--bg:#0a0a0b;--ink:#e9eaec;--silver:#c3c6cb;--muted:#7d8087;--line:#26272a;
+  --f-display:'Michroma','Eurostile','Arial Black',sans-serif;--f-body:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;--f-mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --chrome:radial-gradient(circle at 42% 34%,#fff 0%,#d6d8db 22%,#8d9095 58%,#c9cbcf 82%,#6f7277 100%);
+  --brushed:repeating-linear-gradient(0deg,rgba(255,255,255,.09) 0 1px,rgba(0,0,0,.045) 1px 2px,transparent 2px 3px),linear-gradient(180deg,#e1e3e6 0%,#babdc2 38%,#d2d4d8 62%,#a3a6ab 100%);
+  --noise:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  color-scheme:dark}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--f-body);font-size:15px;line-height:1.55;padding-inline:clamp(16px,4vw,48px);padding-block:0 64px;background:radial-gradient(1200px 600px at 70% -10%,#1b1c1f 0%,transparent 60%),var(--bg)}
+.wrap{max-width:1240px;margin:0 auto}
+.hero{padding-block:56px 32px;display:grid;gap:16px;border-bottom:1px solid var(--line);margin-bottom:44px}
+.eyebrow{font:500 11px var(--f-mono);letter-spacing:.18em;text-transform:uppercase;color:#8b8e94}
+h1{font-family:var(--f-display);font-weight:400;font-size:clamp(26px,4.2vw,44px);line-height:1.12;margin:0;text-wrap:balance;
+  background:linear-gradient(180deg,#f4f5f6 0%,#b7bac0 55%,#e2e4e7 70%,#8d9096 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{max-width:70ch;color:#b9bcc2;margin:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:52px 32px}
+.card{margin:0;display:grid;gap:16px;justify-items:center;align-content:start}
+.card.wide{grid-column:1/-1}
+.card .ph{max-width:100%;overflow-x:auto}
+.card figcaption{display:grid;grid-template-columns:auto 1fr;gap:12px;max-width:300px}
+.card.wide figcaption{max-width:640px}
+.card figcaption>b{font:400 22px var(--f-display);color:transparent;-webkit-text-stroke:1px #8b8e94;line-height:1.1}
+.card h3{margin:0 0 4px;font:400 13px var(--f-display);letter-spacing:.08em;text-transform:uppercase}
+.card p{margin:0;font-size:13.5px;color:#a9acb2}
+.card p.new{margin-top:8px;font-size:13px;color:#d6d8db;border-top:1px solid var(--line);padding-top:8px}
+footer{padding-block:44px 0;color:var(--muted);font-size:13px;max-width:70ch}
+
+/* ---- phone base ---- */
+.phone{width:300px;height:640px;border-radius:50px;padding:7px;flex:none;
+  background:linear-gradient(140deg,#e6e8eb 0%,#7c7f85 22%,#cfd2d6 48%,#5d6065 72%,#b9bcc1 100%);box-shadow:0 0 0 1px #000,0 30px 60px -20px rgba(0,0,0,.8)}
+.phone.land{width:640px;height:300px}
+.screen{position:relative;width:100%;height:100%;border-radius:43px;overflow:hidden;background:#000;display:flex;flex-direction:column;color:#e8e9eb;
+  --ink:#d6d8db;--dim:#6c6f74}
+.island{position:absolute;top:10px;left:50%;width:84px;height:24px;border-radius:14px;background:#000;transform:translateX(-50%);z-index:5}
+.land-island{top:50%;left:10px;width:24px;height:84px;transform:translateY(-50%)}
+.sb{flex:none;height:42px;display:flex;align-items:center;justify-content:space-between;padding:6px 26px 0;font-size:12px;font-weight:600}
+.bat{display:inline-block;width:22px;height:10px;border:1px solid currentColor;border-radius:3px;position:relative}
+.bat::before{content:'';position:absolute;inset:1.5px 6px 1.5px 1.5px;background:currentColor;border-radius:1px}
+.row{flex:none;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:0 14px}
+.top{height:30px}.bot{height:40px}
+.ro{font:500 10px var(--f-mono);color:var(--ink);display:inline-flex;align-items:baseline;gap:4px;white-space:nowrap;letter-spacing:.03em}
+.ro small{font-size:7.5px;color:var(--dim);letter-spacing:.1em}
+.dot{width:7px;height:7px;border-radius:50%;background:#c9cbcf;display:inline-block;align-self:center}
+.vf{flex:none;position:relative;margin:0 16px;aspect-ratio:3/4;overflow:hidden;border-radius:1px;background:#111}
+.scene{position:absolute;inset:0;background:var(--scene) center/cover;filter:sepia(.2) saturate(1.1) contrast(1.05) hue-rotate(-6deg)}
+.scene.bw{filter:grayscale(1) contrast(1.2)}
+.scene.mirror{transform:scaleX(-1)}
+.scene.inv{transform:rotate(180deg);filter:sepia(.1) saturate(.9) contrast(.95) brightness(.95)}
+.cross{position:absolute;left:50%;top:50%;width:20px;height:20px;transform:translate(-50%,-50%)}
+.cross::before,.cross::after{content:'';position:absolute;background:rgba(255,255,255,.85)}
+.cross::before{left:50%;top:0;bottom:0;width:1px}.cross::after{top:50%;left:0;right:0;height:1px}
+.ico{display:inline-grid;place-items:center;color:var(--ink)}
+.ico svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.lens{display:flex;align-items:center;justify-content:center;gap:2px}
+.lens span{font:400 11px var(--f-mono);color:var(--dim);padding:5px 8px;border-bottom:1px solid transparent}
+.lens span.on{color:var(--ink);border-bottom-color:currentColor}
+.lens small{font:500 7.5px var(--f-mono);color:var(--dim);letter-spacing:.12em;margin-left:2px}
+.chrome-btn{width:58px;height:58px;border-radius:50%;background:var(--chrome);box-shadow:0 0 0 3px #0b0b0c,0 0 0 4.5px #6f7277,0 6px 12px rgba(0,0,0,.5);flex:none}
+.chrome-btn.big{width:70px;height:70px}
+.thumb{background:var(--scene) center/cover}
+.m-line{position:relative;height:18px}
+.m-line .m-ticks{position:absolute;left:4px;right:4px;top:2px;height:8px;
+  background:repeating-linear-gradient(90deg,var(--tick,#8b8e94) 0 1px,transparent 1px calc((100% - 1px)/18));
+  -webkit-mask:linear-gradient(#000 0 0) top/100% 4px no-repeat,repeating-linear-gradient(90deg,#000 0 1px,transparent 1px calc((100% - 1px)/6));mask:linear-gradient(#000 0 0) top/100% 4px no-repeat,repeating-linear-gradient(90deg,#000 0 1px,transparent 1px calc((100% - 1px)/6))}
+.m-line .m-ndl{position:absolute;top:-2px;height:14px;width:1px;left:calc(50% + var(--n)*40px);background:var(--needle,#fff)}
+.m-line .m-ndl::after{content:'';position:absolute;left:50%;top:-1px;transform:translateX(-50%);border:3px solid transparent;border-top:4px solid var(--needle,#fff);border-bottom:0}
+
+/* ===== 01 Waist-level ===== */
+.wl{justify-content:flex-start}
+.wl-top{height:30px;display:flex;align-items:center;justify-content:space-between;padding:0 18px}
+.hood{flex:none;margin:4px auto 0;width:262px;height:262px;border:16px solid;border-color:#1f2023 #141517 #0c0d0e #18191b;box-shadow:inset 0 0 18px rgba(0,0,0,.9)}
+.sq{position:relative;width:100%;height:100%;overflow:hidden}
+.fresnel{position:absolute;inset:0;background:repeating-radial-gradient(circle at 50% 50%,rgba(255,255,255,.06) 0 1px,transparent 1px 7px)}
+.sqgrid{position:absolute;inset:0;background:linear-gradient(90deg,transparent calc(25% - .5px),rgba(255,255,255,.22) 0 calc(25% + .5px),transparent 0 calc(75% - .5px),rgba(255,255,255,.22) 0 calc(75% + .5px),transparent 0),linear-gradient(180deg,transparent calc(25% - .5px),rgba(255,255,255,.22) 0 calc(25% + .5px),transparent 0 calc(75% - .5px),rgba(255,255,255,.22) 0 calc(75% + .5px),transparent 0)}
+.sqring{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px;border-radius:50%;border:1px solid rgba(255,255,255,.55)}
+.wl-cap{display:flex;justify-content:space-between;padding:8px 26px 0;font:500 9px var(--f-mono);letter-spacing:.14em;color:#8b8e94}
+.wl-knobs{flex:1;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.roller{width:86px;height:54px;border-radius:8px;position:relative;overflow:hidden;background:linear-gradient(180deg,#0a0a0b,#3c3d41 30%,#1c1d1f 60%,#050505);box-shadow:0 0 0 1px #2a2b2e}
+.roller i{position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.14) 0 1px,transparent 1px 4px);-webkit-mask:linear-gradient(90deg,#000 0 12px,transparent 12px calc(100% - 12px),#000 0);mask:linear-gradient(90deg,#000 0 12px,transparent 12px calc(100% - 12px),#000 0)}
+.roller span{position:absolute;inset:0;display:grid;place-content:center;text-align:center;line-height:1.2}
+.roller b{font:500 14px var(--f-mono)}
+.roller small{font:500 7px var(--f-mono);letter-spacing:.16em;color:#7d8087}
+.wl-bot{height:78px;display:flex;align-items:center;justify-content:space-between;padding:0 26px 18px}
+.sqthumb{width:44px;height:44px;border:1px solid #6f7277;background:var(--scene) center/cover}
+
+/* ===== 02 Command dial ===== */
+.cd .vf{width:240px;margin:0 auto}
+.cd-tabs{display:flex;justify-content:center;gap:4px;margin-top:10px}
+.cd-tabs span{font:500 8.5px var(--f-mono);letter-spacing:.12em;color:#6c6f74;padding:5px 8px;border-radius:10px;border:1px solid transparent}
+.cd-tabs span.on{color:#fff;border-color:#4a4c50}
+.cd-dial{position:absolute;left:50%;top:446px;width:460px;height:460px;margin-left:-230px;border-radius:50%;
+  background:radial-gradient(circle,#1c1d20 0 52%,#0e0f10 52.3% 100%);box-shadow:inset 0 2px 0 rgba(255,255,255,.18),inset 0 0 0 1px #2c2d30,0 -8px 24px rgba(0,0,0,.6)}
+.cd-ticks{position:absolute;inset:6px;border-radius:50%;background:repeating-conic-gradient(from -1deg,rgba(255,255,255,.55) 0 .35deg,transparent .35deg 2.75deg);-webkit-mask:radial-gradient(circle,transparent 95%,#000 95.3%);mask:radial-gradient(circle,transparent 95%,#000 95.3%)}
+.cd-index{position:absolute;left:50%;top:-1px;transform:translateX(-50%);border:6px solid transparent;border-top:8px solid #fff;border-bottom:0;z-index:2}
+.cd-dial span{position:absolute;left:50%;top:50%;font:500 10px var(--f-mono);color:#8b8e94;transform:translate(-50%,-50%) rotate(var(--a)) translateY(-200px)}
+.cd-dial span.on{color:#fff;font-size:12px}
+.cd-shutter{position:absolute;left:50%;bottom:26px;width:66px;height:66px;margin-left:-33px;border-radius:50%;box-shadow:inset 0 0 0 1.5px #e8e9eb;z-index:2}
+.cd-shutter::after{content:'';position:absolute;inset:6px;border-radius:50%;background:#e8e9eb}
+.cd-flash{position:absolute;left:30px;bottom:44px;z-index:2}
+.cd-roll{position:absolute;right:28px;bottom:36px;width:34px;height:44px;border:1px solid #6f7277;border-radius:2px;background:var(--scene) center/cover;z-index:2}
+
+/* ===== 03 Lens barrel ===== */
+.lb .lb-vf{width:236px;margin:0 auto}
+.barrel{margin:12px 0 0;display:grid;gap:3px}
+.ring{position:relative;overflow:hidden}
+.ring.focus{height:72px;background:linear-gradient(180deg,#050505,#2c2d30 22%,#4a4c50 34%,#1f2022 60%,#050505)}
+.ring .scale{position:absolute;left:0;right:0;top:6px;display:flex;justify-content:center;gap:16px;font:500 10px var(--f-mono);color:#c9cbcf;transform:translateX(-14px)}
+.ring .scale .on{color:#fff}
+.ring .scale small{font-size:7px;color:#8b8e94;align-self:end}
+.knurl{position:absolute;left:0;right:0;top:24px;height:22px;background:repeating-linear-gradient(90deg,#5a5c60 0 1.5px,#0d0d0e 1.5px 4px);box-shadow:inset 0 3px 4px rgba(0,0,0,.7),inset 0 -3px 4px rgba(0,0,0,.7)}
+.ring .idx{position:absolute;left:50%;top:0;width:1px;height:20px;background:#fff}
+.dof{position:absolute;left:0;right:0;bottom:5px;display:flex;justify-content:center;gap:10px;font:500 7.5px var(--f-mono);color:#8b8e94}
+.dof b{width:1px;height:8px;background:#fff}
+.ring.focal{height:34px;display:flex;align-items:center;justify-content:center;gap:22px;background:var(--brushed);color:#1b1c1e;font:500 11px var(--f-mono)}
+.ring.focal span{color:#55585d}.ring.focal span.on{color:#000;font-weight:600}
+.ring.focal small{font-size:7px;color:#55585d;letter-spacing:.12em}
+.ring.focal .idx{background:#000;height:6px}
+.lb-deck{flex:1;display:flex;align-items:center;justify-content:space-between;padding:0 26px 14px}
+.lbthumb{width:42px;height:56px;border:1px solid #6f7277;border-radius:2px;background:var(--scene) center/cover}
+.pill{grid-auto-flow:column;gap:6px;padding:7px 12px;border-radius:16px;border:1px solid #3a3b3e}
+.pill small{font:500 8px var(--f-mono);letter-spacing:.12em}
+
+/* ===== 04 Split-image ===== */
+.si-wrap{display:grid;grid-template-columns:1fr 34px;align-items:stretch;margin:6px 6px 0 16px;gap:4px}
+.si-vf{margin:0;width:100%}
+.prism{position:absolute;left:50%;top:50%;width:92px;height:92px;margin:-46px;border-radius:50%;
+  background:repeating-conic-gradient(rgba(255,255,255,.16) 0 4deg,rgba(0,0,0,.18) 4deg 8deg);-webkit-mask:radial-gradient(circle,transparent 31px,#000 31.5px 45px,transparent 45.5px);mask:radial-gradient(circle,transparent 31px,#000 31.5px 45px,transparent 45.5px)}
+.splithalf{position:absolute;inset:0;background:var(--scene) calc(50% + 9px) 50%/cover no-repeat;filter:sepia(.2) saturate(1.1) contrast(1.05) hue-rotate(-6deg);
+  clip-path:inset(calc(50% - 30px) calc(50% - 30px) 50% calc(50% - 30px) round 30px 30px 0 0)}
+.split{position:absolute;left:50%;top:50%;width:60px;height:60px;margin:-30px;border-radius:50%;box-shadow:0 0 0 1px rgba(255,255,255,.55);
+  background:linear-gradient(transparent calc(50% - .5px),rgba(255,255,255,.6) 0 calc(50% + .5px),transparent 0)}
+.si-scale{position:relative;display:flex;flex-direction:column;justify-content:space-between;padding:6px 10px 18px 0;font:500 8.5px var(--f-mono);color:#6c6f74;text-align:right}
+.si-scale span.on{color:#fff}
+.si-scale small{position:absolute;bottom:0;right:0;font-size:8px;color:#fff;border:1px solid #6c6f74;padding:0 3px}
+.si-ndl{position:absolute;right:-4px;top:calc(6px + 2*(100% - 24px)/10 + 2px);width:9px;height:1px;background:#fff}
+.si-ndl::before{content:'';position:absolute;left:-5px;top:-3px;border:3px solid transparent;border-right:5px solid #fff;border-left:0}
+.si-info{display:flex;justify-content:space-between;padding:10px 20px 0;font:500 9.5px var(--f-mono);color:#c9cbcf;letter-spacing:.06em}
+.si .lens{margin-top:10px}
+.si-deck{flex:1;display:flex;align-items:center;justify-content:space-between;padding:0 28px 16px}
+.ico.ring{width:42px;height:42px;border-radius:50%;border:1px solid #5d6065}
+.ring-shutter{width:76px;height:76px;border-radius:50%;box-shadow:inset 0 0 0 1.5px #e8e9eb;position:relative}
+.ring-shutter::after{content:'';position:absolute;inset:6px;border-radius:50%;background:#e8e9eb}
+.sithumb{width:42px;height:56px;border:1px solid #6f7277;border-radius:2px;background:var(--scene) center/cover}
+
+/* ===== 05 Advance lever ===== */
+.al .vf{width:240px;margin:0 auto}
+.al-deck{flex:1;position:relative;margin:4px 0 0;background:var(--brushed);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),inset 0 2px 0 rgba(0,0,0,.25);color:#1b1c1e;--ink:#1b1c1e;--dim:#55585d}
+.al-left{position:absolute;left:18px;top:20px;display:grid;gap:12px;justify-items:start}
+.al-left .lens{margin-left:-8px}
+.counter{position:absolute;left:150px;top:22px;width:46px;height:46px;border-radius:50%;background:#050505;box-shadow:inset 0 2px 4px #000,0 1px 0 rgba(255,255,255,.8);display:grid;place-items:center}
+.counter b{font:500 14px var(--f-mono);color:#fff}
+.counter i{position:absolute;inset:3px;border-radius:50%;background:repeating-conic-gradient(rgba(255,255,255,.5) 0 1deg,transparent 1deg 10deg);-webkit-mask:radial-gradient(circle,transparent 16px,#000 16.5px);mask:radial-gradient(circle,transparent 16px,#000 16.5px)}
+.release{position:absolute;left:206px;top:28px;width:34px;height:34px;border-radius:50%;background:var(--chrome);box-shadow:0 0 0 4px #9a9da2,0 0 0 5px #55585d,0 0 0 8px #c4c6ca,0 0 0 9px #6f7277,0 4px 8px rgba(0,0,0,.4)}
+.lever{position:absolute;right:30px;top:76px;width:0;height:0}
+.lever .arm{position:absolute;right:-6px;top:-6px;width:196px;height:12px;border-radius:6px;transform-origin:calc(100% - 6px) 6px;transform:rotate(-14deg);background:linear-gradient(180deg,#f1f2f4,#9a9da2 55%,#d5d7da)}
+.lever .tip{position:absolute;right:178px;top:28px;width:30px;height:20px;border-radius:5px;background:#121214;box-shadow:0 2px 4px rgba(0,0,0,.4);transform:rotate(-14deg)}
+.lever .hub{position:absolute;right:-12px;top:-12px;width:24px;height:24px;border-radius:50%;background:var(--chrome);box-shadow:0 0 0 1px #6f7277}
+.al-hint{position:absolute;left:18px;bottom:18px;font:500 8.5px var(--f-mono);letter-spacing:.14em;color:#3e4044}
+
+/* ===== 06 Ground glass ===== */
+.glass{flex:none;position:relative;margin:4px 16px 0;aspect-ratio:4/5;overflow:hidden;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px)}
+.gtex{position:absolute;inset:0;background:var(--noise),radial-gradient(ellipse at center,rgba(255,255,255,.08),rgba(0,0,0,.55) 100%);background-size:90px,100%;mix-blend-mode:screen;opacity:.42}
+.ggrid{position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.14) 0 1px,transparent 1px 25%),repeating-linear-gradient(180deg,rgba(255,255,255,.14) 0 1px,transparent 1px 20%)}
+.chip{border:1px solid #4a4c50;border-radius:10px;padding:2px 7px}
+.slide{flex:none;position:relative;margin:4px 16px 0;height:50px;border-radius:3px;background:linear-gradient(180deg,#2a2b2e,#141516);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 3px 6px rgba(0,0,0,.6);display:flex;align-items:center;padding-left:14px}
+.slide span{font:500 8.5px var(--f-mono);letter-spacing:.16em;color:#c9cbcf}
+.slide .ribs{position:absolute;right:10px;top:9px;bottom:9px;width:40px;background:repeating-linear-gradient(90deg,#55585d 0 2px,transparent 2px 6px);border-radius:2px}
+.gg-bot{flex:1;display:flex;align-items:center;justify-content:space-between;padding:0 22px 14px}
+.ggthumb{width:38px;height:48px;border:1px solid #6f7277;background:var(--scene) center/cover;transform:none}
+
+/* ===== 07 Slide switches ===== */
+.ss{background:var(--noise),linear-gradient(180deg,#d3d4d6,#c1c3c6);background-size:120px,100%;color:#1b1c1e;--ink:#1b1c1e;--dim:#5b5e63;--tick:#3e4044;--needle:#111}
+.ss-win{flex:none;margin:2px 14px 0;padding:6px;border-radius:12px;background:#0a0a0b;box-shadow:inset 0 2px 5px #000,0 1px 0 rgba(255,255,255,.7)}
+.ss-win .vf{margin:0;width:100%;aspect-ratio:4/5;border-radius:6px}
+.ss-panel{flex:1;display:grid;grid-template-columns:1fr auto;gap:10px;padding:12px 18px 18px;align-items:center}
+.ss-switches{display:grid;gap:9px}
+.sw small{font:600 7.5px var(--f-mono);letter-spacing:.16em;color:#3e4044}
+.track{position:relative;height:16px;margin-top:2px;border-radius:8px;background:#8d9095;box-shadow:inset 0 2px 3px rgba(0,0,0,.45)}
+.knob{position:absolute;top:-3px;height:22px;width:calc(100% / var(--n));left:calc(100% / var(--n) * var(--i));border-radius:5px;background:repeating-linear-gradient(90deg,#2a2b2e 0 1.5px,#4a4c50 1.5px 3px);box-shadow:0 2px 3px rgba(0,0,0,.45)}
+.opts{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;margin-top:3px}
+.opts span{font:500 8px var(--f-mono);text-align:center;color:#6c6f74}.opts span.on{color:#000}
+.ss-right{display:grid;justify-items:center;gap:12px}
+.dish{width:66px;height:66px;border-radius:50%;background:radial-gradient(circle at 50% 60%,#3a3b3e,#111 60%,#000);box-shadow:inset 0 3px 6px rgba(0,0,0,.8),0 0 0 3px #b4b6ba,0 0 0 4px #7d8086}
+.ssthumb{width:46px;height:34px;border-radius:4px;border:2px solid #111;background:var(--scene) center/cover}
+
+/* ===== 08 Keypad ===== */
+.kp .kp-vf{width:226px;margin:0 auto}
+.keys{flex:1;display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:50px;gap:6px;padding:12px 14px 22px;align-content:end}
+.key{border-radius:8px;display:grid;align-content:center;justify-items:center;gap:1px;background:linear-gradient(180deg,#e7e8ea,#bfc1c5);box-shadow:inset 0 1px 0 #fff,0 2px 0 #6f7277,0 3px 6px rgba(0,0,0,.4);color:#1b1c1e}
+.key b{font:600 12px var(--f-mono)}
+.key small{font:600 6.5px var(--f-mono);letter-spacing:.14em;color:#55585d}
+.key.roll{background:var(--scene) center/cover;box-shadow:0 0 0 1px #8d9095,0 2px 0 #3a3b3e}
+.key.shutter-key{grid-column:span 2;background:linear-gradient(180deg,#2a2b2e,#0b0b0c);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 2px 0 #000,0 3px 6px rgba(0,0,0,.5);color:#e8e9eb}
+.key.shutter-key b{font-size:14px}
+
+/* ===== 09 Pure finder ===== */
+.pf .row{justify-content:center;gap:14px}
+.pf .ro{color:#8b8e94}
+.pf-vf{width:246px;margin:6px auto 0}
+.swipe{position:absolute;left:0;right:0;bottom:12px;text-align:center;font:500 9.5px var(--f-mono);color:rgba(255,255,255,.75);font-style:normal;letter-spacing:.1em}
+.swipe b{color:#fff}
+.pf-hint.vol{position:absolute;left:4px;top:118px;writing-mode:vertical-rl;transform:rotate(180deg);font:500 7.5px var(--f-mono);letter-spacing:.16em;color:#6c6f74}
+.pf-edge{position:absolute;right:4px;top:150px;width:10px;height:200px}
+.pf-ticks{position:absolute;inset:0;background:repeating-linear-gradient(180deg,#55585d 0 1px,transparent 1px 10px)}
+.pf-ndl{position:absolute;left:-2px;right:-2px;top:46%;height:2px;background:#fff}
+.pf-edge small{position:absolute;bottom:-14px;right:0;font:500 7px var(--f-mono);color:#6c6f74}
+.pf-foot{display:flex;justify-content:center;margin-top:14px}
+.pf-legend{margin-top:auto;display:flex;justify-content:center;gap:12px;padding:0 0 26px;font:500 7.5px var(--f-mono);letter-spacing:.12em;color:#7d8087}
+
+/* ===== 10 Grip (landscape) ===== */
+.gp{flex-direction:row}
+.gp-left{flex:none;width:420px;display:flex;flex-direction:column;padding:12px 0 10px 40px}
+.gp-top,.gp-bot{display:flex;justify-content:space-between;align-items:center;height:26px;padding-right:10px}
+.gp-vf{margin:4px 0;width:auto;height:220px;aspect-ratio:3/2}
+.gp-grip{flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:20px 24px 20px 12px;border-left:1px solid #1d1e20;background:linear-gradient(90deg,#070708,#111214)}
+.gp-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.gp-shutter{width:58px;height:58px;border-radius:50%;box-shadow:inset 0 0 0 1.5px #e8e9eb;position:relative}
+.gp-shutter::after{content:'';position:absolute;inset:6px;border-radius:50%;background:#e8e9eb}
+.lens.v{justify-content:flex-start}
+.gpthumb{width:58px;height:40px;border:1px solid #6f7277;border-radius:2px;background:var(--scene) center/cover}
+.cmd{position:relative;width:76px;height:44px;border-radius:8px;overflow:hidden;background:linear-gradient(180deg,#050505,#3a3b3f 35%,#18191b 65%,#050505)}
+.cmd i{position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.16) 0 1px,transparent 1px 4px)}
+.cmd small{position:absolute;left:0;right:0;bottom:-16px;text-align:center;font:500 7px var(--f-mono);color:#6c6f74;letter-spacing:.12em}
+"""
+
+body = f"""<title>Film Camera UI · New Approaches</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=IBM+Plex+Mono:wght@400;500;600&family=Michroma&display=swap">
+<style>{CSS}</style>
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">Working title pending · Round 4 · Static mockups</span>
+    <h1>Ten new ways to hold a film camera</h1>
+    <p class="lede">These are new starting points, not variations on E. Each one is built around a different real camera or object, and each changes how you shoot, not only how the screen looks. They stay black and silver and clean. They avoid the red, paper and film-strip route your partner is taking. These are still screens to compare, not working demos.</p>
+  </header>
+  <div class="grid">
+{cards}
+  </div>
+  <footer>Round 4. The black and silver E from round 3 is unchanged on its own page. Tell me the numbers that interest you, including half-ideas such as "E with the lens barrel from 03", and I will make them interactive.</footer>
+</div>
+<script>
+(() => {{
+const scene = document.createElement('canvas'); scene.width = 600; scene.height = 800;
+{paint}
+document.documentElement.style.setProperty('--scene', 'url(' + scene.toDataURL('image/jpeg', .85) + ')');
+}})();
+</script>
+"""
+(root / 'approaches.html').write_text(body)
+head = '<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
+i = body.index('</style>') + len('</style>')
+(root / 'approaches-standalone.html').write_text(head + body[:i] + '\n</head><body>\n' + body[i:] + '</body></html>\n')
+print('ok', len(body))
