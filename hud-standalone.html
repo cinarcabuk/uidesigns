@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Film Camera UI · On-Image HUD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@200;300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: dark gallery of ten static screens; nine portrait in a grid, one landscape across a full row. Single dark look by design. */
+:root{--bg:#070708;--ink:#e9eaec;--dim:#7a7c82;--line:#1f2023;--red:#e2231a;
+  --sans:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'JetBrains Mono',ui-monospace,Menlo,monospace;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--sans);font-size:15px;line-height:1.55;padding-inline:clamp(16px,4vw,56px);padding-block:0 80px}
+.wrap{max-width:1180px;margin:0 auto}
+.hero{padding-block:72px 32px;display:grid;gap:16px;border-bottom:1px solid var(--line);margin-bottom:56px}
+.eyebrow{font:500 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+h1{margin:0;font-weight:600;font-size:clamp(30px,5vw,54px);line-height:1.02;letter-spacing:-.03em;text-wrap:balance}
+h1 span{display:inline-block;width:.9em;height:2px;background:var(--red);vertical-align:.25em;margin-left:.2em}
+.lede{margin:0;color:#a8aab0;max-width:68ch}
+.kept{display:flex;flex-wrap:wrap;gap:8px}
+.kept span{font:500 11px var(--mono);color:#cfd0d4;border:1px solid #2a2b2e;border-radius:3px;padding:4px 9px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:72px 32px}
+.card{margin:0;display:grid;gap:18px;justify-items:center;align-content:start}
+.card.wide{grid-column:1/-1}
+.card .ph{max-width:100%;overflow-x:auto}
+.card figcaption{max-width:300px;display:grid;gap:5px}
+.card.wide figcaption{max-width:640px}
+.no{font:500 11px var(--mono);color:var(--dim);letter-spacing:.06em;text-transform:uppercase}
+.card h3{margin:0;font-weight:600;font-size:19px;letter-spacing:-.01em}
+.card p{margin:0;font-size:14px;color:#a8aab0}
+footer{margin-top:72px;padding-top:18px;border-top:1px solid var(--line);color:var(--dim);font-size:13.5px;max-width:70ch}
+
+/* ---- phone ---- */
+.phone{width:300px;height:640px;border-radius:50px;padding:7px;flex:none;background:linear-gradient(140deg,#3a3b3f,#151618 40%,#2a2b2e 70%,#111);box-shadow:0 0 0 1px #000,0 30px 55px -20px rgba(0,0,0,.85)}
+.phone.land{width:640px;height:300px}
+.screen{position:relative;width:100%;height:100%;border-radius:43px;overflow:hidden;background:#000;color:#e9eaec;font-family:var(--sans);--ink:#e9eaec;--dim:#8a8c92}
+.island{position:absolute;top:10px;left:50%;width:84px;height:24px;border-radius:14px;background:#000;transform:translateX(-50%);z-index:9}
+.land-island{top:50%;left:10px;width:24px;height:84px;transform:translateY(-50%)}
+.sb{position:absolute;left:0;right:0;top:0;height:42px;display:flex;align-items:center;justify-content:space-between;padding:6px 26px 0;font:600 12px system-ui,sans-serif;z-index:5}
+.bat{display:inline-block;width:22px;height:10px;border:1px solid currentColor;border-radius:3px;position:relative}
+.bat::before{content:'';position:absolute;inset:1.5px 6px 1.5px 1.5px;background:currentColor;border-radius:1px}
+.at{position:absolute;display:flex;align-items:center;gap:8px;white-space:nowrap;z-index:4}
+.at.row{gap:14px}
+.at.row.wide{gap:24px;align-items:flex-end}
+.at.ctr{left:0!important;right:0;justify-content:center}
+.img{position:absolute;overflow:hidden;background:#111}
+.img.full{z-index:0}
+.scene{position:absolute;inset:0;background:var(--scene) center/cover}
+.cross{position:absolute;left:50%;top:50%;width:16px;height:16px;transform:translate(-50%,-50%);z-index:2}
+.cross::before,.cross::after{content:'';position:absolute;background:rgba(255,255,255,.85)}
+.cross::before{left:50%;top:0;bottom:0;width:1px}.cross::after{top:50%;left:0;right:0;height:1px}
+.scrim{position:absolute;left:0;right:0;pointer-events:none;z-index:1}
+.scrim.t{top:0;height:48px;background:linear-gradient(rgba(0,0,0,.55),transparent)}
+.scrim.b{bottom:0;height:60px;background:linear-gradient(transparent,rgba(0,0,0,.6))}
+.scrim.full.t{height:130px;background:linear-gradient(rgba(0,0,0,.7),transparent)}
+.scrim.full.b{height:250px;background:linear-gradient(transparent,rgba(0,0,0,.82) 45%)}
+.scrim.lt{top:0;left:0;width:520px;height:70px;background:linear-gradient(rgba(0,0,0,.65),transparent)}
+.scrim.lb{bottom:0;left:0;width:520px;height:80px;top:auto;background:linear-gradient(transparent,rgba(0,0,0,.7))}
+.dim{font:500 9.5px var(--mono);color:var(--dim)}
+.film{display:inline-flex;align-items:center;gap:7px}
+.film b{font:600 10px var(--mono);letter-spacing:.08em}
+.bars{display:inline-flex;gap:1.5px}
+.bars i{width:9px;height:3px}
+.pr{display:grid;gap:0;line-height:1.15}
+.pr small{font:500 6.5px var(--sans);letter-spacing:.12em;color:rgba(255,255,255,.62)}
+.pr b{font:500 11px var(--sans);letter-spacing:.01em}
+.pr.r{text-align:right}
+.pr.ul b{box-shadow:inset 0 -2px 0 var(--u);padding-bottom:2px}
+.hist{display:block;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.18);border-radius:2px}
+.hist polygon{fill:rgba(255,255,255,.55)}
+.meter{position:relative;display:block;height:20px}
+.meter .tk{position:absolute;left:0;right:0;top:2px;height:7px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.75) 0 1px,transparent 1px calc((100% - 1px)/18));
+  -webkit-mask:linear-gradient(#000 0 0) top/100% 3px no-repeat,repeating-linear-gradient(90deg,#000 0 1px,transparent 1px calc((100% - 1px)/6));mask:linear-gradient(#000 0 0) top/100% 3px no-repeat,repeating-linear-gradient(90deg,#000 0 1px,transparent 1px calc((100% - 1px)/6))}
+.meter b{position:absolute;top:-3px;width:1px;height:14px;background:var(--red)}
+.ml{position:absolute;bottom:-1px;left:0;font:500 6.5px var(--mono);color:rgba(255,255,255,.6)}
+.ml.c{left:50%;transform:translateX(-50%)}.ml.r{left:auto;right:0}
+.redt{font:500 8px var(--mono);color:var(--red);letter-spacing:.06em}
+.lens{display:flex;gap:4px}
+.lens span{font:500 11px var(--mono);color:rgba(255,255,255,.5);padding:4px 9px;border-bottom:1px solid transparent}
+.lens span.on{color:#fff;border-bottom-color:#fff}
+.lens.v{flex-direction:column;gap:0}
+.lens.v span{padding:1px 4px;border-bottom:0;border-left:1px solid transparent;font-size:10px}
+.lens.v span.on{border-left-color:#fff}
+.shutter{position:absolute;border-radius:50%;box-shadow:inset 0 0 0 1.5px #e9eaec;z-index:4}
+.shutter::after{content:'';position:absolute;inset:6px;border-radius:50%;background:#e9eaec}
+.shutter.in{position:relative;display:block;width:58px;height:58px;flex:none}
+.roll{position:absolute;border-radius:3px;overflow:hidden;border:1px solid rgba(255,255,255,.45);background:var(--scene) center/cover;z-index:4}
+.roll>span{position:absolute;left:0;right:0;bottom:0;font:500 7px var(--mono);text-align:center;padding:6px 0 2px;background:linear-gradient(transparent,rgba(0,0,0,.85))}
+.key{display:inline-grid;place-items:center;font:500 8.5px var(--mono);letter-spacing:.08em;color:#e9eaec;padding:6px 9px;border:1px solid rgba(255,255,255,.28);border-radius:3px;background:rgba(0,0,0,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.key.tall{padding:16px 9px}
+.stack{display:grid;gap:6px}
+.prog{display:block;height:3px;background:rgba(255,255,255,.18);border-radius:2px;overflow:hidden}
+.prog i{display:block;height:100%}
+
+/* 03 edge labels */
+.edge{position:absolute;border:1px solid #55575c}
+.gap{display:inline-flex;align-items:center;gap:6px;background:#000;padding:0 6px;font:500 9.5px var(--mono)}
+.gap.vert{writing-mode:vertical-rl;transform:rotate(180deg);padding:6px 0}
+.gap.vert.r{transform:none}
+.el .gap .meter{width:90px}
+/* 04 corners */
+.cb{position:absolute;width:18px;height:18px;border:0 solid rgba(255,255,255,.75);z-index:4}
+.cb.tl{left:12px;top:52px;border-left-width:1px;border-top-width:1px}.cb.tr{right:12px;top:52px;border-right-width:1px;border-top-width:1px}
+.cb.bl{left:12px;top:424px;border-left-width:1px;border-bottom-width:1px}.cb.br{right:12px;top:424px;border-right-width:1px;border-bottom-width:1px}
+.blk{display:grid;gap:3px}
+.blk.r{justify-items:end;text-align:right}
+.blk small{font:500 6.5px var(--mono);letter-spacing:.12em;color:rgba(255,255,255,.65)}
+.blk .big{font:300 26px/1 var(--sans);letter-spacing:-.02em}
+.cn .blk .pr{display:inline-grid;margin-right:12px}
+.cn .at:has(.pr) .blk{display:flex;gap:14px}
+/* 05 frame lines */
+.cap{position:absolute;box-shadow:0 0 0 1px rgba(255,255,255,.85),0 0 0 999px rgba(0,0,0,.62);z-index:1}
+/* 06 scope */
+.wave{position:absolute;left:8px;right:8px;bottom:8px;height:34px;width:calc(100% - 16px);background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.15);z-index:2}
+.wave polyline{fill:none;stroke:rgba(255,255,255,.75);stroke-width:1;vector-effect:non-scaling-stroke}
+.wave line{stroke:var(--red);stroke-width:1;vector-effect:non-scaling-stroke}
+.clip{position:absolute;right:12px;bottom:44px;font:500 6.5px var(--mono);color:var(--red);letter-spacing:.12em;z-index:2}
+/* 07 counter */
+.count{font:200 72px/1 var(--sans);letter-spacing:-.03em;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.95)}
+.count small{font-size:16px;-webkit-text-stroke:0;color:rgba(255,255,255,.7);margin-left:2px}
+.count.sm{font-size:30px;align-self:center}
+.count.sm small{font-size:10px}
+/* 08 signature hud */
+.stripe{position:absolute;left:0;top:60px;width:3px;height:90px;display:flex;flex-direction:column;z-index:2}
+.stripe i{flex:1}
+/* 09 split */
+.panel{position:absolute;left:0;right:0;top:412px;bottom:0;background:#060607;border-top:1px solid #1d1e20;z-index:2}
+.cell{display:grid;gap:4px;align-content:center;height:46px;padding:0 8px;border:1px solid #1d1e20;border-radius:4px;width:82px}
+.cell small{font:500 6.5px var(--mono);letter-spacing:.12em;color:var(--dim)}
+.cell b{font:500 10px var(--mono)}
+.sm .cell .hist{width:64px}
+/* 10 landscape */
+.ls .col{position:absolute;right:0;top:0;bottom:0;width:106px;background:#060607;border-left:1px solid #1d1e20;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;z-index:4}
+.ls .col .key{width:78px;padding:5px 0}
+.fb{display:inline-flex;align-items:center;gap:6px}
+</style>
+</head><body>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">Working title pending · Round 10 · Static mockups</span>
+    <h1>Information on the image<span></span></h1>
+    <p class="lede">Ten screens testing the cinema-camera idea of putting information on the image itself, in three families: framed (black margin, readouts on the image), borderless (full bleed) and hybrid. Everything from earlier rounds still applies.</p>
+    <div class="kept"><span>simple, tiny details</span><span>red only as hairlines or text</span><span>film color signatures</span><span>film name at the top · FILM ▸ key</span><span>analog meter</span><span>lens · flash · flip · roll · shutter</span></div>
+  </header>
+  <div class="grid">
+<figure class="card"><div class="ph"><div class="phone"><div class="screen ov"><div class="island"></div><div class="sb"><span>9:41</span><i class="bat"></i></div><div class="at " style="left:16px;top:44px"><span class="film"><b>AURUM 200</b><span class="bars"><i style="background:#d9a441"></i><i style="background:#b8432f"></i><i style="background:#2e3b4e"></i></span></span></div><div class="at " style="left:234px;top:44px"><span class="dim">12/36</span></div><div class="img" style="left:14px;top:62px;width:258px;height:344px"><div class="scene" style="filter:sepia(.25) saturate(1.25) contrast(1.05) hue-rotate(-8deg) brightness(1.03)"></div><div class="scrim t"></div><div class="scrim b"></div><div class="at row" style="left:10px;top:8px"><span class="pr "><small>SHUTTER</small><b>1/250</b></span><span class="pr "><small>ISO</small><b>200</b></span><span class="pr "><small>EV</small><b>+0.0</b></span><span class="pr "><small>LENS</small><b>35</b></span></div><div class="at " style="left:10px;top:304px"><svg class="hist" width="64" height="26" viewBox="0 0 64 26"><polygon points="0,26 0.0,23.4 1.9,22.5 3.8,20.8 5.6,18.2 7.5,15.6 9.4,13.0 11.3,11.3 13.2,10.4 15.1,12.1 16.9,13.9 18.8,14.7 20.7,13.0 22.6,9.5 24.5,5.2 26.4,1.7 28.2,3.5 30.1,6.9 32.0,10.4 33.9,13.9 35.8,15.6 37.6,14.7 39.5,12.1 41.4,7.8 43.3,2.6 45.2,0.0 47.1,5.2 48.9,12.1 50.8,17.3 52.7,19.9 54.6,21.7 56.5,22.5 58.4,20.8 60.2,18.2 62.1,20.8 64.0,23.4 64,26"/></svg></div><div class="at " style="left:160px;top:312px"><span class="meter" style="width:84px"><i class="tk"></i><b style="left:56%"></b><span class="ml">−3</span><span class="ml c">0</span><span class="ml r">+3</span></span></div><i class="cross"></i></div><div class="at " style="left:16px;top:420px"><span class="key ">FLASH · A</span></div><div class="at " style="left:100px;top:416px"><span class="lens"><span>26</span><span class="on">35</span><span>50</span></span></div><div class="at " style="left:230px;top:420px"><span class="key ">FLIP</span></div><span class="roll" style="left:28px;top:488px;width:40px;height:52px"><span>12/36</span></span><span class="shutter" style="left:108.0px;top:479.0px;width:70px;height:70px"></span><div class="at " style="left:214px;top:500px"><span class="key tall">FILM ▸</span></div></div></div></div><figcaption><span class="no">01 · framed</span><h3>Overlay</h3><p>The black margin stays, but the readouts move onto the image like a cinema camera's monitor: labelled values along the top edge, a histogram bottom left and the needle meter bottom right. Below the frame there are only controls.</p></figcaption></figure>
+<figure class="card"><div class="ph"><div class="phone"><div class="screen bl"><div class="img full" style="left:0px;top:0px;width:286px;height:626px"><div class="scene" style="filter:saturate(.85) contrast(1.1) sepia(.08) hue-rotate(6deg)"></div><i class="cross"></i></div><div class="scrim full t"></div><div class="scrim full b"></div><div class="island"></div><div class="sb"><span>9:41</span><i class="bat"></i></div><div class="at " style="left:18px;top:44px"><span class="film"><b>KINO 250D</b><span class="bars"><i style="background:#c0362c"></i><i style="background:#e7d9bf"></i><i style="background:#3d4a3a"></i></span></span></div><div class="at " style="left:232px;top:44px"><span class="dim">12/36</span></div><div class="at row" style="left:18px;top:64px"><span class="pr "><small>SHUTTER</small><b>1/250</b></span><span class="pr "><small>ISO</small><b>200</b></span><span class="pr "><small>EV</small><b>+0.0</b></span><span class="pr "><small>LENS</small><b>35</b></span></div><div class="at " style="left:18px;top:440px"><svg class="hist" width="64" height="26" viewBox="0 0 64 26"><polygon points="0,26 0.0,23.4 1.9,22.5 3.8,20.8 5.6,18.2 7.5,15.6 9.4,13.0 11.3,11.3 13.2,10.4 15.1,12.1 16.9,13.9 18.8,14.7 20.7,13.0 22.6,9.5 24.5,5.2 26.4,1.7 28.2,3.5 30.1,6.9 32.0,10.4 33.9,13.9 35.8,15.6 37.6,14.7 39.5,12.1 41.4,7.8 43.3,2.6 45.2,0.0 47.1,5.2 48.9,12.1 50.8,17.3 52.7,19.9 54.6,21.7 56.5,22.5 58.4,20.8 60.2,18.2 62.1,20.8 64.0,23.4 64,26"/></svg></div><div class="at " style="left:106px;top:446px"><span class="prog" style="width:70px"><i style="width:33%;background:linear-gradient(90deg,#c0362c,#e7d9bf)"></i></span></div><div class="at " style="left:190px;top:446px"><span class="meter" style="width:78px"><i class="tk"></i><b style="left:56%"></b><span class="ml">−3</span><span class="ml c">0</span><span class="ml r">+3</span></span></div><div class="at " style="left:98px;top:478px"><span class="lens"><span>26</span><span class="on">35</span><span>50</span></span></div><span class="roll" style="left:26px;top:526px;width:40px;height:52px"><span>12/36</span></span><span class="shutter" style="left:108.0px;top:517.0px;width:70px;height:70px"></span><div class="at " style="left:206px;top:512px"><div class="stack"><span class="key ">FILM ▸</span><span class="key ">FLASH · A</span><span class="key ">FLIP</span></div></div></div></div></div><figcaption><span class="no">02 · borderless</span><h3>Borderless</h3><p>Full bleed: the image runs under the status bar to every edge. Information sits on soft scrims at the top and bottom, and the controls float over the image. It is the most immersive of the ten and the least like a "frame".</p></figcaption></figure>
+<figure class="card"><div class="ph"><div class="phone"><div class="screen el"><div class="island"></div><div class="sb"><span>9:41</span><i class="bat"></i></div><div class="edge" style="left:16px;top:58px;width:254px;height:352px"></div><div class="img" style="left:22px;top:64px;width:242px;height:340px"><div class="scene" style="filter:hue-rotate(-20deg) saturate(1.1) contrast(1.06) brightness(.96)"></div><i class="cross"></i></div><div class="at " style="left:24px;top:51px"><span class="gap"><span class="film"><b>NOCTA 800T</b><span class="bars"><i style="background:#1e6f7a"></i><i style="background:#c9473a"></i><i style="background:#0e1b2c"></i></span></span></span></div><div class="at " style="left:212px;top:51px"><span class="gap dim">12/36</span></div><div class="at " style="left:8px;top:170px"><span class="gap vert">S 1/250</span></div><div class="at " style="left:266px;top:170px"><span class="gap vert r">ISO 800</span></div><div class="at " style="left:84px;top:404px"><span class="gap"><span class="meter" style="width:90px"><i class="tk"></i><b style="left:60%"></b></span><span class="redt">+0.3</span></span></div><div class="at " style="left:98px;top:430px"><span class="lens"><span>26</span><span class="on">35</span><span>50</span></span></div><span class="roll" style="left:28px;top:498px;width:40px;height:52px"><span>12/36</span></span><span class="shutter" style="left:108.0px;top:489.0px;width:70px;height:70px"></span><div class="at " style="left:206px;top:486px"><div class="stack"><span class="key ">FILM ▸</span><span class="key ">FLASH · A</span><span class="key ">FLIP</span></div></div></div></div></div><figcaption><span class="no">03 · framed</span><h3>Edge Labels</h3><p>A thin border sits a few pixels outside the image, and the readouts are set into the border line itself, like the legend breaking a frame on a technical drawing. Film and frames run along the top, shutter and ISO down the sides, and the meter along the bottom.</p></figcaption></figure>
+<figure class="card"><div class="ph"><div class="phone"><div class="screen cn"><div class="img full" style="left:0px;top:0px;width:286px;height:626px"><div class="scene" style="filter:saturate(1.6) contrast(1.22) hue-rotate(-4deg) brightness(.97)"></div></div><div class="scrim full b"></div><div class="island"></div><div class="sb"><span>9:41</span><i class="bat"></i></div><i class="cb tl"></i><i class="cb tr"></i><i class="cb bl"></i><i class="cb br"></i><div class="at " style="left:22px;top:58px"><div class="blk"><span class="film"><b>LUMEN 100</b><span class="bars"><i style="background:#2f5fd0"></i><i style="background:#e8eef9"></i><i style="background:#d23b2a"></i></span></span><small>36 EXP · SLIDE</small></div></div><div class="at " style="left:206px;top:58px"><div class="blk r"><b class="big">12</b><small>OF 36</small></div></div><div class="at " style="left:22px;top:398px"><div class="blk"><span class="pr "><small>S</small><b>1/250</b></span><span class="pr "><small>ISO</small><b>100</b></span></div></div><div class="at " style="left:184px;top:404px"><div class="blk r"><span class="meter" style="width:80px"><i class="tk"></i><b style="left:56%"></b><span class="ml">−3</span><span class="ml c">0</span><span class="ml r">+3</span></span></div></div><div class="at " style="left:98px;top:458px"><span class="lens"><span>26</span><span class="on">35</span><span>50</span></span></div><span class="roll" style="left:26px;top:520px;width:40px;height:52px"><span>12/36</span></span><span class="shutter" style="left:108.0px;top:511.0px;width:70px;height:70px"></span><div class="at " style="left:206px;top:506px"><div class="stack"><span class="key ">FILM ▸</span><span class="key ">FLASH · A</span><span class="key ">FLIP</span></div></div></div></div></div><figcaption><span class="no">04 · borderless</span><h3>Corners</h3><p>Borderless, with the information pushed into four corner blocks like an instrument display: film top left, frames top right, exposure bottom left and the meter bottom right. The middle of the image stays completely clean.</p></figcaption></figure>
+<figure class="card"><div class="ph"><div class="phone"><div class="screen fl"><div class="img full" style="left:0px;top:0px;width:286px;height:626px"><div class="scene" style="filter:sepia(.12) saturate(.9) contrast(.94) brightness(1.06)"></div></div><div class="cap" style="left:14px;top:66px;width:258px;height:344px"><i class="cross"></i></div><div class="island"></div><div class="sb"><span>9:41</span><i class="bat"></i></div><div class="at " style="left:16px;top:46px"><span class="film"><b>VERANO 400</b><span class="bars"><i style="background:#e58b6b"></i><i style="background:#f3d3a8"></i><i style="background:#4f7a6a"></i></span></span></div><div class="at " style="left:232px;top:46px"><span class="dim">12/36</span></div><div class="at row" style="left:14px;top:418px"><span class="pr "><small>S</small><b>1/250</b></span><span class="pr "><small>ISO</small><b>400</b></span><span class="pr "><small>EV</small><b>+0.0</b></span></div><div class="at " style="left:186px;top:422px"><span class="meter" style="width:84px"><i class="tk"></i><b style="left:56%"></b><span class="ml">−3</span><span class="ml c">0</span><span class="ml r">+3</span></span></div><div class="at " style="left:98px;top:460px"><span class="lens"><span>26</span><span class="on">35</span><span>50</span></span></div><span class="roll" style="left:26px;top:520px;width:40px;height:52px"><span>12/36</span></span><span class="shutter" style="left:108.0px;top:511.0px;width:70px;height:70px"></span><div class="at " style="left:206px;top:506px"><div class="stack"><span class="key ">FILM ▸</span><span class="key ">FLASH · A</span><span class="key ">FLIP</span></div></div></div></div></div><figcaption><span class="no">05 · hybrid</span><h3>Frame Lines</h3><p>The preview fills the screen, but the area that will be captured is marked with thin frame lines and everything outside is dimmed, like the guides on a cinema monitor. The readouts are printed in the dimmed zone, so the black margin comes back as a translucent one.</p></figcaption></figure>
+<figure class="card"><div class="ph"><div class="phone"><div class="screen sc"><div class="island"></div><div class="sb"><span>9:41</span><i class="bat"></i></div><div class="at " style="left:16px;top:44px"><span class="film"><b>MERIDIAN XP</b><span class="bars"><i style="background:#7b4fa0"></i><i style="background:#3fbf9b"></i><i style="background:#f0c43a"></i></span></span></div><div class="at " style="left:234px;top:44px"><span class="dim">12/36</span></div><div class="img" style="left:14px;top:62px;width:258px;height:344px"><div class="scene" style="filter:saturate(1.5) hue-rotate(25deg) contrast(1.25) sepia(.1)"></div><div class="scrim t"></div><div class="at row" style="left:10px;top:8px"><span class="pr "><small>SHUTTER</small><b>1/250</b></span><span class="pr "><small>ISO</small><b>200</b></span><span class="pr "><small>EV</small><b>+0.0</b></span><span class="pr "><small>LENS</small><b>35</b></span></div><svg class="wave" viewBox="0 0 243 30" preserveAspectRatio="none"><polyline points="0,19.0 3,16.0 6,12.9 9,10.1 12,8.1 15,7.3 18,7.8 21,9.7 24,12.9 27,17.1 30,16.4 33,12.0 36,8.4 39,6.0 42,5.2 45,6.0 48,8.2 51,11.6 54,15.5 57,18.4 60,14.8 63,12.0 66,10.4 69,10.0 72,10.6 75,12.1 78,14.2 81,16.4 84,18.5 87,17.8 90,16.6 93,15.8 96,15.6 99,15.7 102,16.2 105,16.8 108,17.5 111,18.3 114,18.7 117,17.7 120,16.6 123,15.5 126,14.7 129,14.2 132,14.3 135,15.0 138,16.5 141,18.7 144,16.6 147,13.7 150,11.0 153,9.0 156,7.9 159,8.2 162,9.8 165,12.7 168,16.6 171,17.0 174,12.6 177,8.8 180,6.2 183,5.1 186,5.6 189,7.6 192,10.8 195,14.9 198,18.9 201,15.0 204,11.9 207,9.9 210,9.2 213,9.7 216,11.2 219,13.4 222,15.8 225,18.1 228,17.8 231,16.4 234,15.5 237,15.2 240,15.3"/><line x1="0" y1="3" x2="243" y2="3"/></svg><span class="clip">CLIP</span><i class="cross"></i></div><div class="at " style="left:16px;top:420px"><span class="key ">FLASH · A</span></div><div class="at " style="left:100px;top:416px"><span class="lens"><span>26</span><span class="on">35</span><span>50</span></span></div><div class="at " style="left:230px;top:420px"><span class="key ">FLIP</span></div><span class="roll" style="left:28px;top:488px;width:40px;height:52px"><span>12/36</span></span><span class="shutter" style="left:108.0px;top:479.0px;width:70px;height:70px"></span><div class="at " style="left:214px;top:500px"><span class="key tall">FILM ▸</span></div></div></div></div><figcaption><span class="no">06 · framed</span><h3>Scope</h3><p>The meter is a waveform scope laid across the bottom of the image, as on a cinema monitor. A faint trace shows the brightness across the scene, and a red hairline marks where highlights would clip.</p></figcaption></figure>
+<figure class="card"><div class="ph"><div class="phone"><div class="screen ct"><div class="img full" style="left:0px;top:0px;width:286px;height:626px"><div class="scene" style="filter:sepia(.3) saturate(.8) contrast(.9) brightness(1.08) hue-rotate(-10deg)"></div><i class="cross"></i></div><div class="scrim full t"></div><div class="scrim full b"></div><div class="island"></div><div class="sb"><span>9:41</span><i class="bat"></i></div><div class="at " style="left:18px;top:46px"><span class="film"><b>INSTA 600</b><span class="bars"><i style="background:#efe6d2"></i><i style="background:#6fb3c9"></i><i style="background:#e2735a"></i></span></span></div><div class="at " style="left:18px;top:70px"><span class="pr "><small>S</small><b>1/125</b></span></div><div class="at " style="left:18px;top:96px"><span class="pr "><small>ISO</small><b>600</b></span></div><div class="at ctr" style="left:0px;top:58px"><span class="count">12<small>/36</small></span></div><div class="at " style="left:232px;top:70px"><span class="pr r"><small>EV</small><b>+0.0</b></span></div><div class="at " style="left:232px;top:96px"><span class="pr r"><small>LENS</small><b>35</b></span></div><div class="at " style="left:100px;top:440px"><span class="meter" style="width:86px"><i class="tk"></i><b style="left:56%"></b><span class="ml">−3</span><span class="ml c">0</span><span class="ml r">+3</span></span></div><div class="at " style="left:98px;top:474px"><span class="lens"><span>26</span><span class="on">35</span><span>50</span></span></div><span class="roll" style="left:26px;top:526px;width:40px;height:52px"><span>12/36</span></span><span class="shutter" style="left:108.0px;top:517.0px;width:70px;height:70px"></span><div class="at " style="left:206px;top:512px"><div class="stack"><span class="key ">FILM ▸</span><span class="key ">FLASH · A</span><span class="key ">FLIP</span></div></div></div></div></div><figcaption><span class="no">07 · borderless</span><h3>Counter</h3><p>Borrowing the large timecode from cinema cameras, but counting frames: a big outlined frame number sits at the top of a borderless view, with small readouts on each side. On a roll of 36, the count is the most "film" number there is.</p></figcaption></figure>
+<figure class="card"><div class="ph"><div class="phone"><div class="screen sh"><div class="island"></div><div class="sb"><span>9:41</span><i class="bat"></i></div><div class="at " style="left:16px;top:44px"><span class="film"><b>PASTEL 160</b></span></div><div class="at " style="left:234px;top:44px"><span class="dim">12/36</span></div><div class="img" style="left:14px;top:62px;width:258px;height:344px"><div class="scene" style="filter:saturate(.65) contrast(.85) brightness(1.12) sepia(.15)"></div><div class="scrim t"></div><div class="at row" style="left:10px;top:8px"><span class="pr ul" style="--u:#9fd3bd"><small>S</small><b>1/250</b></span><span class="pr ul" style="--u:#f2c6d3"><small>ISO</small><b>160</b></span><span class="pr ul" style="--u:#f4e9b8"><small>EV</small><b>+0.0</b></span><span class="pr ul" style="--u:#5f6167"><small>LENS</small><b>35</b></span></div><span class="stripe"><i style="background:#9fd3bd"></i><i style="background:#f2c6d3"></i><i style="background:#f4e9b8"></i></span><div class="at " style="left:160px;top:312px"><span class="meter" style="width:84px"><i class="tk"></i><b style="left:56%"></b><span class="ml">−3</span><span class="ml c">0</span><span class="ml r">+3</span></span></div><i class="cross"></i></div><div class="at " style="left:16px;top:420px"><span class="key ">FLASH · A</span></div><div class="at " style="left:100px;top:416px"><span class="lens"><span>26</span><span class="on">35</span><span>50</span></span></div><div class="at " style="left:230px;top:420px"><span class="key ">FLIP</span></div><span class="roll" style="left:28px;top:488px;width:40px;height:52px"><span>12/36</span></span><span class="shutter" style="left:108.0px;top:479.0px;width:70px;height:70px"></span><div class="at " style="left:214px;top:500px"><span class="key tall">FILM ▸</span></div></div></div></div><figcaption><span class="no">08 · framed</span><h3>Signature HUD</h3><p>The film's colors become the HUD itself. Each value along the top is underlined in one of the film's colors, and a thin stripe runs down the edge of the image. Change film and the whole interface retints, while red stays reserved for the meter needle.</p></figcaption></figure>
+<figure class="card"><div class="ph"><div class="phone"><div class="screen sm"><div class="img full" style="left:0px;top:0px;width:286px;height:412px"><div class="scene" style="filter:grayscale(1) contrast(1.15)"></div><i class="cross"></i></div><div class="scrim full t"></div><div class="island"></div><div class="sb"><span>9:41</span><i class="bat"></i></div><div class="at " style="left:18px;top:46px"><span class="film"><b>ARGENT 400</b><span class="bars"><i style="background:#e9e9e9"></i><i style="background:#8a8a8a"></i><i style="background:#1a1a1a"></i></span></span></div><div class="at row" style="left:18px;top:66px"><span class="pr "><small>S</small><b>1/250</b></span><span class="pr "><small>ISO</small><b>400</b></span><span class="pr "><small>EV</small><b>+0.0</b></span><span class="pr "><small>LENS</small><b>35</b></span></div><div class="panel"></div><div class="at " style="left:14px;top:424px"><div class="cell"><svg class="hist" width="70" height="28" viewBox="0 0 70 28"><polygon points="0,28 0.0,25.2 2.1,24.3 4.1,22.4 6.2,19.6 8.2,16.8 10.3,14.0 12.4,12.1 14.4,11.2 16.5,13.1 18.5,14.9 20.6,15.9 22.6,14.0 24.7,10.3 26.8,5.6 28.8,1.9 30.9,3.7 32.9,7.5 35.0,11.2 37.1,14.9 39.1,16.8 41.2,15.9 43.2,13.1 45.3,8.4 47.4,2.8 49.4,0.0 51.5,5.6 53.5,13.1 55.6,18.7 57.6,21.5 59.7,23.3 61.8,24.3 63.8,22.4 65.9,19.6 67.9,22.4 70.0,25.2 70,28"/></svg></div></div><div class="at " style="left:100px;top:424px"><div class="cell"><small>ROLL</small><b>12 / 36</b><span class="prog" style="width:70px"><i style="width:33%;background:linear-gradient(90deg,#e9e9e9,#8a8a8a)"></i></span></div></div><div class="at " style="left:186px;top:424px"><div class="cell"><span class="meter" style="width:76px"><i class="tk"></i><b style="left:56%"></b><span class="ml">−3</span><span class="ml c">0</span><span class="ml r">+3</span></span></div></div><div class="at " style="left:98px;top:484px"><span class="lens"><span>26</span><span class="on">35</span><span>50</span></span></div><span class="roll" style="left:26px;top:530px;width:40px;height:52px"><span>12/36</span></span><span class="shutter" style="left:108.0px;top:521.0px;width:70px;height:70px"></span><div class="at " style="left:206px;top:516px"><div class="stack"><span class="key ">FILM ▸</span><span class="key ">FLASH · A</span><span class="key ">FLIP</span></div></div></div></div></div><figcaption><span class="no">09 · hybrid</span><h3>Split Monitor</h3><p>The image runs borderless across the top two-thirds, and the bottom is a solid instrument panel modelled on a cinema camera's status bar: histogram, roll progress shown in the film's colors, and the meter, with one row of controls below.</p></figcaption></figure>
+<figure class="card wide"><div class="ph"><div class="phone land"><div class="screen ls"><div class="img full" style="left:0px;top:0px;width:520px;height:286px"><div class="scene" style="filter:hue-rotate(-20deg) saturate(1.1) contrast(1.06) brightness(.96)"></div><i class="cross"></i></div><div class="scrim lt"></div><div class="scrim lb"></div><div class="island land-island"></div><div class="at row wide" style="left:44px;top:14px"><span class="pr"><small>FILM</small><b class="fb">NOCTA 800T <span class="bars"><i style="background:#1e6f7a"></i><i style="background:#c9473a"></i><i style="background:#0e1b2c"></i></span></b></span><span class="pr "><small>SHUTTER</small><b>1/250</b></span><span class="pr "><small>ISO</small><b>800</b></span><span class="count sm">12<small>/36</small></span><span class="pr "><small>EV</small><b>+0.0</b></span><span class="pr "><small>LENS</small><b>35</b></span></div><div class="at " style="left:44px;top:236px"><svg class="hist" width="70" height="28" viewBox="0 0 70 28"><polygon points="0,28 0.0,25.2 2.1,24.3 4.1,22.4 6.2,19.6 8.2,16.8 10.3,14.0 12.4,12.1 14.4,11.2 16.5,13.1 18.5,14.9 20.6,15.9 22.6,14.0 24.7,10.3 26.8,5.6 28.8,1.9 30.9,3.7 32.9,7.5 35.0,11.2 37.1,14.9 39.1,16.8 41.2,15.9 43.2,13.1 45.3,8.4 47.4,2.8 49.4,0.0 51.5,5.6 53.5,13.1 55.6,18.7 57.6,21.5 59.7,23.3 61.8,24.3 63.8,22.4 65.9,19.6 67.9,22.4 70.0,25.2 70,28"/></svg></div><div class="at " style="left:210px;top:246px"><span class="prog" style="width:100px"><i style="width:33%;background:linear-gradient(90deg,#1e6f7a,#c9473a)"></i></span></div><div class="at " style="left:400px;top:240px"><span class="meter" style="width:84px"><i class="tk"></i><b style="left:56%"></b><span class="ml">−3</span><span class="ml c">0</span><span class="ml r">+3</span></span></div><div class="col"><span class="key ">FLASH · A</span><span class="key ">FLIP</span><span class="shutter in"></span><span class="key ">FILM ▸</span><span class="lens v"><span>26</span><span class="on">35</span><span>50</span></span></div></div></div></div><figcaption><span class="no">10 · borderless</span><h3>Landscape</h3><p>The closest to the Blackmagic layout, held sideways. The image runs borderless to the left edge. Labelled values sit along the top with the frame count in the middle, and histogram, roll progress and meter sit along the bottom. A solid control column on the right holds flash, flip, the shutter, the lens and the roll.</p></figcaption></figure>
+  </div>
+  <footer>Round 10. Earlier rounds are unchanged on their own pages.</footer>
+</div>
+<script>
+(() => {
+const scene = document.createElement('canvas'); scene.width = 600; scene.height = 800;
+(function paint(g){
+  let sky = g.createLinearGradient(0,0,0,540);
+  sky.addColorStop(0,'#1a2647'); sky.addColorStop(.35,'#4f4a77'); sky.addColorStop(.62,'#b86b72'); sky.addColorStop(.85,'#ee9a64'); sky.addColorStop(1,'#f8c98a');
+  g.fillStyle = sky; g.fillRect(0,0,600,540);
+  for (let i=0;i<9;i++){ g.fillStyle='rgba(255,190,170,'+(.05+.04*Math.sin(i))+')'; g.beginPath(); g.ellipse(80+i*70, 170+((i*53)%90), 120, 14, -.05, 0, Math.PI*2); g.fill(); }
+  let sun = g.createRadialGradient(390,486,2,390,486,260);
+  sun.addColorStop(0,'rgba(255,248,220,1)'); sun.addColorStop(.06,'rgba(255,226,170,.95)'); sun.addColorStop(.25,'rgba(255,170,110,.35)'); sun.addColorStop(1,'rgba(255,150,100,0)');
+  g.fillStyle = sun; g.fillRect(0,0,600,800);
+  g.fillStyle='#6b4f6a'; g.beginPath(); g.moveTo(0,500); for(let x=0;x<=600;x+=20) g.lineTo(x, 486+Math.sin(x/70)*10+Math.sin(x/23)*4); g.lineTo(600,540); g.lineTo(0,540); g.fill();
+  g.fillStyle='#241c26';
+  const base = 540;
+  [[0,40,70],[38,30,95],[66,44,60],[108,26,120],[132,50,80],[180,36,66],[214,40,104],[252,30,72],[280,60,58],[338,34,90],[370,40,64],[408,28,110],[434,46,70],[478,40,86],[516,30,60],[544,56,92]].forEach(([x,w,h])=>g.fillRect(x,base-h,w,h));
+  [[300,base-58,46],[460,base-86,30],[90,base-95,22]].forEach(([x,y,r])=>{ g.beginPath(); g.arc(x+r/2+6,y,r,Math.PI,0); g.fill(); g.fillRect(x+r/2+4,y-r-18,4,18); });
+  g.fillRect(226,base-190,16,190); g.beginPath(); g.moveTo(222,base-190); g.lineTo(234,base-222); g.lineTo(246,base-190); g.fill();
+  g.fillStyle='rgba(255,200,120,.8)'; for(let i=0;i<26;i++){ g.fillRect((i*97)%590, base-20-((i*37)%60), 3, 4); }
+  let water = g.createLinearGradient(0,540,0,800); water.addColorStop(0,'#5c3f4c'); water.addColorStop(.4,'#2a1f2b'); water.addColorStop(1,'#0c0a0f');
+  g.fillStyle = water; g.fillRect(0,540,600,260);
+  for(let i=0;i<70;i++){ const y=546+i*3.6; const w=90-i*0.9+Math.sin(i*1.7)*30; g.fillStyle='rgba(255,196,130,'+(0.55-i*0.007)+')'; g.fillRect(390-w/2+Math.sin(i*2.3)*16, y, Math.max(6,w), 1.4); }
+  g.fillStyle='#120e14'; [[30,600],[70,620],[470,610],[520,640],[560,600]].forEach(([x,y])=>g.fillRect(x,y,9,200));
+  g.fillStyle='#0c0a0d'; g.fillRect(118,250,9,560); g.fillRect(118,250,70,6); g.fillRect(180,256,4,20);
+  let lamp = g.createRadialGradient(182,292,2,182,292,70); lamp.addColorStop(0,'rgba(255,236,190,1)'); lamp.addColorStop(.15,'rgba(255,190,100,.7)'); lamp.addColorStop(1,'rgba(255,160,80,0)');
+  g.fillStyle=lamp; g.fillRect(100,210,170,170);
+  g.fillStyle='#0c0a0d'; g.fillRect(172,276,20,4); g.fillRect(174,304,16,4);
+})(scene.getContext('2d'));
+document.documentElement.style.setProperty('--scene', 'url(' + scene.toDataURL('image/jpeg', .85) + ')');
+})();
+</script>
+</body></html>
