@@ -1,0 +1,436 @@
+"""Builds styles.html (artifact source) and styles-standalone.html: ten static screens, each in a new visual style."""
+import pathlib
+root = pathlib.Path(__file__).resolve().parent.parent
+src = (root / 'concepts.html').read_text()
+paint = src[src.index('(function paint(g){'):src.index("})(scene.getContext('2d'));") + len("})(scene.getContext('2d'));")]
+
+BOLT = '<svg viewBox="0 0 24 24"><path d="M13 3 6 13.5h5L10 21l7-10.5h-5z"/></svg>'
+FLIP = '<svg viewBox="0 0 24 24"><path d="M5 9a7 7 0 0 1 12.5-2.5M19 15a7 7 0 0 1-12.5 2.5"/><path d="M17.5 3v3.5H14M6.5 21v-3.5H10"/></svg>'
+def sb(t='9:41'): return f'<div class="island"></div><div class="sb"><span>{t}</span><i class="bat"></i></div>'
+def phone(cls, inner): return f'<div class="phone"><div class="screen {cls}">{inner}</div></div>'
+
+S = []
+
+# 01 Darkroom Timer
+nums = ['1"','1/2','1/4','1/8','1/15','1/30','1/60','1/125','1/250','1/500','1/1000','B']
+dial = ''.join(f'<span style="--a:{i*30}deg">{n}</span>' for i, n in enumerate(nums))
+S.append(('Darkroom Timer', 'Luminous paint on black, taken from the mechanical timers that hang on darkroom walls. Shutter speeds sit around a clock face, and the glowing hand is the setting. Press the center of the clock to expose.',
+ phone('dt', sb() + f'''
+  <div class="dt-top"><span>ISO 200</span><span>AURUM 200</span><span>12/36</span></div>
+  <div class="dt-vf"><div class="scene"></div><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i></div>
+  <div class="dt-meter"><span>−</span><i></i><i></i><i class="on"></i><i></i><i></i><span>+</span></div>
+  <div class="dt-deck">
+    <div class="dt-side"><span class="lum ico">{BOLT}</span><small>AUTO</small></div>
+    <div class="clock">{dial}<i class="hand"></i><i class="sweep"></i><b>EXPOSE</b></div>
+    <div class="dt-side"><span class="lum lens">35</span><small>MM</small></div>
+  </div>''')))
+
+# 02 Cyanotype
+S.append(('Cyanotype', 'The camera drawn as its own blueprint, in white line on Prussian blue (cyanotype is one of the oldest photographic processes). Settings are callouts with leader lines, and the notes are handwritten in the margin.',
+ phone('cy', sb() + '''
+  <div class="cy-title"><span>SHEET 1 / 1</span><span>FILM CAMERA · REAR VIEW</span></div>
+  <div class="cy-stage">
+    <div class="cy-vf"><div class="scene"></div><i class="cy-cross"></i></div>
+    <div class="dim h"><span>3 : 4</span></div><div class="dim v"><span>FRAME</span></div>
+    <div class="callout c1"><i></i><span>SHUTTER<b>1/250</b></span></div>
+    <div class="callout c2"><i></i><span>ISO<b>200</b></span></div>
+    <em class="note n1">meter ±0 ✓</em>
+  </div>
+  <div class="cy-row"><span>f = <b>35</b> mm</span><span class="faint">26 · 50</span><span>FILM: AURUM 200</span></div>
+  <div class="cy-deck">
+    <div class="cy-shutter"><i></i><small>R 34 · EXPOSE</small></div>
+    <div class="cy-col"><span class="cy-sq">ϟ <small>AUTO</small></span><span class="cy-sq">⟲</span></div>
+    <div class="cy-roll"><div class="scene"></div><small>ROLL · 12/36</small></div>
+  </div>
+  <em class="note n2">← hold to change</em>''')))
+
+# 03 Light Table
+S.append(('Light Table', 'A bright, backlit light table, the opposite of a dark camera screen. The live image sits in a plastic slide mount, and a chrome loupe magnifies the focus point. Settings are written on clear acetate tabs.',
+ phone('lt', sb() + '''
+  <div class="lt-tabs"><span>A</span><span>1/250</span><span>ISO 200</span><span>±0</span></div>
+  <div class="mount"><div class="window"><div class="scene"></div></div><span class="mtxt l">AURUM 200</span><span class="mtxt r">№ 12</span></div>
+  <div class="loupe"><div class="lz"></div></div>
+  <div class="lt-meter"><i></i><b></b><i></i></div>
+  <div class="lt-lens"><span>26</span><span class="on">35</span><span>50</span></div>
+  <div class="lt-deck"><span class="lt-slide"></span><span class="lt-shutter"></span><div class="lt-col"><span class="lt-chip">ϟ AUTO</span><span class="lt-chip">⟲ FLIP</span></div></div>''')))
+
+# 04 Field Camera
+S.append(('Field Camera', 'Mahogany and brass, like a wooden field camera from 1900. Settings are engraved on screwed-on brass plaques, the meter is a small brass gauge, and the shutter is the plunger of a cable release.',
+ phone('fc', sb() + '''
+  <div class="fc-plaque top"><i class="screw"></i><span>Aurum · 200</span><span>No. 12</span><i class="screw"></i></div>
+  <div class="fc-frame"><div class="scene"></div></div>
+  <div class="fc-row">
+    <div class="fc-plaque sm"><small>Shutter</small><b>1/250</b></div>
+    <div class="fc-gauge"><i></i></div>
+    <div class="fc-plaque sm"><small>Speed</small><b>200</b></div>
+  </div>
+  <div class="fc-lens"><span>26</span><span class="on">35</span><span>50</span><small>m/m</small></div>
+  <div class="fc-deck"><span class="knob">ϟ</span><span class="plunger"><i></i></span><span class="knob">⟲</span></div>''')))
+
+# 05 Toy Camera
+S.append(('Toy Camera', 'Chunky injection-molded plastic in mint and lilac, like a cheap medium-format toy camera. Exposure is set with weather symbols instead of numbers, so sun, cloud or indoors is the whole meter.',
+ phone('tc', sb() + '''
+  <div class="tc-top"><span class="tc-badge">AURUM 200</span><span class="tc-count">12</span></div>
+  <div class="tc-win"><div class="scene"></div></div>
+  <div class="tc-weather"><span class="on">☀</span><span>⛅</span><span>☁</span><span>⌂</span></div>
+  <div class="tc-lens"><span>26</span><span class="on">35</span><span>50</span></div>
+  <div class="tc-deck"><span class="tc-flash">ϟ<small>ON</small></span><span class="tc-shutter"></span><span class="tc-roll"><div class="scene"></div></span></div>''')))
+
+# 06 Terminal
+S.append(('Terminal', 'The camera as a 1980s amber terminal. Everything is text, the image is shown through scanlines, and the meter is drawn in ASCII. The shutter is a bracketed command with a blinking cursor.',
+ phone('tm', sb() + '''
+  <div class="tm-head">FILMCAM v0.1 · ROLL 01 · 12/36</div>
+  <div class="tm-vf"><div class="scene"></div><i class="scan"></i></div>
+  <pre class="tm-body">&gt; FILM ...... <b>AURUM 200</b>
+&gt; MODE ...... <b>[A]</b> S  I  M
+&gt; SHUTTER ... <b>1/250</b>   <i>auto</i>
+&gt; ISO ....... <b>200</b>     <i>auto</i>
+&gt; METER ..... [---|<b>●</b>|---] +0.0
+&gt; LENS ...... 26 <b>[35]</b> 50
+&gt; FLASH ..... OFF ON <b>[AUTO]</b></pre>
+  <div class="tm-cmd"><span class="tm-btn">[ EXPOSE ]</span><span class="cur"></span><span class="tm-r">[ROLL]</span></div>''')))
+
+# 07 Enamel
+S.append(('Enamel', 'Glossy vitreous enamel in deep green with white, like an old railway or station sign. The shapes are rounded and the type is bold, so it reads instantly. Each setting is its own small sign.',
+ phone('en', sb() + '''
+  <div class="en-plate"><span>AURUM 200</span><span class="en-num">12</span></div>
+  <div class="en-frame"><div class="scene"></div></div>
+  <div class="en-signs"><span><small>SHUTTER</small>1/250</span><span class="meter"><small>METER</small><i>◀ ● ▶</i></span><span><small>ISO</small>200</span></div>
+  <div class="en-lens"><span>26</span><span class="on">35</span><span>50</span></div>
+  <div class="en-deck"><span class="en-btn">ϟ</span><span class="en-shutter"><i></i></span><span class="en-btn">⟲</span></div>''')))
+
+# 08 80s LCD
+S.append(('Pocket LCD', 'A 1986 autofocus compact: titanium-grey plastic, a segment LCD on top with ghosted segments, and small colored rubber buttons. The orange date imprint glows in the corner of the frame.',
+ phone('lc', sb() + '''
+  <div class="lcd"><div class="segs"><span class="g">8/8888</span><span class="v">1/250</span></div><div class="segs sm"><span class="g">888</span><span class="v">200</span><small>ISO</small></div><div class="segs sm"><span class="g">88</span><span class="v">12</span></div>
+    <div class="lcd-bar"><i></i><i></i><i></i><i class="on"></i><i></i><i></i><i></i></div><span class="lcd-ic">ϟA</span><span class="lcd-ic">35mm</span></div>
+  <div class="lc-win"><div class="scene"></div><span class="date">'86 10 06</span></div>
+  <div class="lc-ridge"></div>
+  <div class="lc-btns"><span class="rb o">MODE</span><span class="rb b">FLASH</span><span class="rb g">ZOOM</span><span class="rb">DATE</span></div>
+  <div class="lc-deck"><span class="lc-roll"><div class="scene"></div></span><span class="lc-shutter"></span><span class="lc-film">AURUM<br>200</span></div>''')))
+
+# 09 Frosted Glass
+S.append(('Frosted Glass', 'Full-bleed and modern. The image fills the screen, and the controls float on frosted glass slabs that blur whatever is behind them. It is the one direction that deliberately drops the black frame, to compare against.',
+ phone('fg', '''<div class="fg-bg"><div class="scene"></div></div><div class="island"></div><div class="sb"><span>9:41</span><i class="bat"></i></div>
+  <div class="fg-chips"><span class="glass">A</span><span class="glass">AURUM 200</span><span class="glass">ϟ AUTO</span></div>
+  <div class="fg-focus"></div>
+  <div class="fg-panel glass">
+    <div class="fg-read"><span><small>SHUTTER</small>1/250</span><span><small>ISO</small>200</span><span><small>EV</small>±0</span></div>
+    <div class="fg-meter"><i></i><b></b></div>
+    <div class="fg-lens"><span>26</span><span class="on">35</span><span>50</span></div>
+    <div class="fg-deck"><span class="fg-roll"><div class="scene"></div></span><span class="fg-shutter"></span><span class="fg-flip">⟲</span></div>
+  </div>''')))
+
+# 10 Walkman
+S.append(('Cassette', 'A metallic-blue portable tape player. The film is the cassette: its window shows two reels, and the tape moves from one to the other as you use up the roll. The shutter is the orange REC key in a row of piano keys.',
+ phone('wm', sb() + '''
+  <div class="wm-vf"><div class="scene"></div><span class="wm-tag">1/250 · ISO 200 · ±0</span></div>
+  <div class="cassette"><div class="label"><span>AURUM 200</span><small>TYPE II · 36 EXP</small></div>
+    <div class="reels"><i class="reel full"></i><div class="tape"></div><i class="reel"></i></div><span class="ctr">012</span></div>
+  <div class="wm-lens"><span>26</span><span class="on">35</span><span>50</span><small>MM</small></div>
+  <div class="keys"><span><b>◀◀</b><small>FILM</small></span><span><b>ϟ</b><small>AUTO</small></span><span><b>⟲</b><small>FLIP</small></span><span class="rec"><b>●</b><small>REC</small></span></div>''')))
+
+cards = '\n'.join(f'''<figure class="card"><div class="ph">{html}</div><figcaption><span class="no">{i:02d}</span><h3>{name}</h3><p>{desc}</p></figcaption></figure>'''
+                  for i, (name, desc, html) in enumerate(S, 1))
+
+CSS = r"""
+/* Layout: a light gallery wall, the opposite of earlier rounds, so each phone's own palette carries. Single light look by design. */
+:root{--wall:#e4e5e7;--ink:#141516;--muted:#5d6067;--rule:#c9cbcf;
+  --f-display:'Bricolage Grotesque','Arial Narrow',system-ui,sans-serif;--f-mono:'DM Mono',ui-monospace,Menlo,monospace;
+  --noise:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  color-scheme:light}
+*{box-sizing:border-box}
+html,body{background:var(--wall);color:var(--ink)}
+body{font-family:var(--f-display);font-size:15px;line-height:1.55;padding-inline:clamp(16px,4vw,56px);padding-block:0 72px}
+.wrap{max-width:1260px;margin:0 auto}
+.hero{padding-block:64px 36px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px 48px;align-items:end;border-bottom:2px solid var(--ink);margin-bottom:48px}
+.hero .eyebrow{grid-column:1/-1}
+.eyebrow{font:500 11.5px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+h1{font-weight:800;font-size:clamp(34px,6vw,72px);line-height:.95;letter-spacing:-.03em;margin:0;font-stretch:90%;text-wrap:balance}
+.lede{margin:0;color:#34363a;max-width:56ch}
+@media (max-width:760px){.hero{grid-template-columns:1fr}}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:56px 32px}
+.card{margin:0;display:grid;gap:14px;justify-items:center;align-content:start}
+.card figcaption{max-width:300px;display:grid;gap:4px}
+.no{font:500 11px var(--f-mono);color:var(--muted)}
+.card h3{margin:0;font-weight:700;font-size:20px;letter-spacing:-.01em}
+.card p{margin:0;font-size:14px;color:#3d4045}
+footer{margin-top:56px;padding-top:20px;border-top:2px solid var(--ink);color:#3d4045;font-size:14px;max-width:70ch}
+
+.phone{width:300px;height:640px;border-radius:50px;padding:7px;flex:none;background:#1b1c1e;box-shadow:0 0 0 1px #000,0 30px 50px -24px rgba(0,0,0,.55)}
+.screen{position:relative;width:100%;height:100%;border-radius:43px;overflow:hidden;display:flex;flex-direction:column}
+.island{position:absolute;top:10px;left:50%;width:84px;height:24px;border-radius:14px;background:#000;transform:translateX(-50%);z-index:9}
+.sb{flex:none;height:42px;display:flex;align-items:center;justify-content:space-between;padding:6px 26px 0;font:600 12px system-ui,sans-serif;position:relative;z-index:8}
+.bat{display:inline-block;width:22px;height:10px;border:1px solid currentColor;border-radius:3px;position:relative}
+.bat::before{content:'';position:absolute;inset:1.5px 6px 1.5px 1.5px;background:currentColor;border-radius:1px}
+.scene{position:absolute;inset:0;background:var(--scene) center/cover}
+.ico svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* ===== 01 Darkroom timer ===== */
+.dt{background:#0a0c0b;color:#c4f7a8;--lum:#c4f7a8;--glow:0 0 6px rgba(160,255,130,.75);font-family:'Barlow Condensed',sans-serif}
+.dt .sb{color:#8fa98a}
+.dt-top{display:flex;justify-content:space-between;padding:4px 22px 8px;font:600 12px 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-shadow:var(--glow)}
+.dt-vf{position:relative;flex:none;margin:0 18px;aspect-ratio:4/5;overflow:hidden;border-radius:4px;filter:saturate(.85)}
+.dt-vf .c{position:absolute;width:16px;height:16px;border:0 solid var(--lum);filter:drop-shadow(0 0 3px rgba(160,255,130,.8))}
+.c.tl{left:8px;top:8px;border-left-width:2px;border-top-width:2px}.c.tr{right:8px;top:8px;border-right-width:2px;border-top-width:2px}
+.c.bl{left:8px;bottom:8px;border-left-width:2px;border-bottom-width:2px}.c.br{right:8px;bottom:8px;border-right-width:2px;border-bottom-width:2px}
+.dt-meter{display:flex;justify-content:center;align-items:center;gap:7px;margin:10px 0 0;font-size:14px;text-shadow:var(--glow)}
+.dt-meter i{width:16px;height:4px;border-radius:2px;background:#1d2a1b}
+.dt-meter i.on{background:var(--lum);box-shadow:var(--glow)}
+.dt-deck{flex:1;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 16px 14px}
+.dt-side{display:grid;justify-items:center;gap:4px;font-size:11px;letter-spacing:.16em}
+.lum{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--lum);display:grid;place-items:center;box-shadow:var(--glow),inset 0 0 6px rgba(160,255,130,.3);font-size:17px;font-weight:600}
+.clock{position:relative;width:162px;height:162px;border-radius:50%;background:radial-gradient(circle,#121614 0 60%,#070908 61%);box-shadow:0 0 0 3px #2a2f2b,0 0 0 4px #0a0c0b,0 0 0 6px #3a403b}
+.clock span{position:absolute;left:50%;top:50%;font-size:10.5px;font-weight:600;transform:translate(-50%,-50%) rotate(var(--a)) translateY(-66px) rotate(calc(var(--a) * -1));text-shadow:var(--glow)}
+.clock .hand{position:absolute;left:50%;top:50%;width:3px;height:58px;margin-left:-1.5px;transform-origin:50% 0;transform:rotate(60deg);background:var(--lum);box-shadow:var(--glow);border-radius:2px}
+.clock .sweep{position:absolute;left:50%;top:50%;width:1px;height:46px;transform-origin:50% 0;transform:rotate(200deg);background:#5c7a56}
+.clock b{position:absolute;left:50%;top:50%;width:58px;height:58px;margin:-29px;border-radius:50%;display:grid;place-items:center;font-size:11px;letter-spacing:.16em;background:#0e120f;box-shadow:0 0 0 1.5px var(--lum),var(--glow);text-shadow:var(--glow)}
+
+/* ===== 02 Cyanotype ===== */
+.cy{background:var(--noise),radial-gradient(ellipse at 40% 30%,#24508f,#163a6e 70%,#11305d);background-size:140px,100%;color:#eef4ff;font-family:'DM Mono',monospace;--w:rgba(238,244,255,.9)}
+.cy-title{display:flex;justify-content:space-between;margin:0 14px;padding:4px 6px;border:1px solid var(--w);font-size:8px;letter-spacing:.12em}
+.cy-stage{position:relative;flex:none;height:330px;margin:10px 14px 0}
+.cy-vf{position:absolute;left:34px;top:14px;width:218px;height:290px;outline:1px solid var(--w);outline-offset:3px;overflow:hidden}
+.cy-vf .scene{filter:grayscale(1) sepia(1) hue-rotate(180deg) saturate(2.4) brightness(.85) contrast(1.15)}
+.cy-cross{position:absolute;inset:0;background:linear-gradient(var(--w),var(--w)) center/1px 26px no-repeat,linear-gradient(var(--w),var(--w)) center/26px 1px no-repeat}
+.dim{position:absolute;font-size:8px;letter-spacing:.12em}
+.dim.h{left:31px;width:224px;top:316px;height:1px;background:var(--w)}
+.dim.h::before,.dim.h::after{content:'';position:absolute;top:-3px;border:3px solid transparent}
+.dim.h::before{left:0;border-right:5px solid var(--w);border-left:0}.dim.h::after{right:0;border-left:5px solid var(--w);border-right:0}
+.dim.h span{position:absolute;left:50%;top:-6px;transform:translateX(-50%);background:#173c71;padding:0 4px}
+.dim.v{left:14px;top:11px;width:1px;height:296px;background:var(--w)}
+.dim.v span{position:absolute;left:-5px;top:50%;writing-mode:vertical-rl;transform:translate(-50%,-50%) rotate(180deg);background:#173c71;padding:4px 0}
+.callout{position:absolute;display:flex;align-items:center;font-size:8px;letter-spacing:.12em}
+.callout i{width:46px;height:1px;background:var(--w);transform-origin:left;position:relative}
+.callout i::before{content:'';position:absolute;left:-3px;top:-3px;width:6px;height:6px;border-radius:50%;border:1px solid var(--w)}
+.callout span{display:grid;line-height:1.2;padding-left:4px}
+.callout b{font-size:13px;font-weight:500;letter-spacing:.02em}
+.c1{left:170px;top:60px}.c1 i{transform:rotate(-20deg)}
+.c2{left:180px;top:200px}
+.c1 span,.c2 span{background:#173c71;padding:3px 5px;border:1px solid var(--w)}
+.note{position:absolute;font:500 16px 'Caveat',cursive;color:#fff;transform:rotate(-4deg);font-style:normal}
+.n1{left:60px;top:240px}
+.n2{right:96px;bottom:150px;font-size:14px;transform:rotate(3deg)}
+.cy-row{display:flex;justify-content:space-between;align-items:baseline;margin:6px 18px 0;padding-top:6px;border-top:1px dashed var(--w);font-size:9.5px;letter-spacing:.08em}
+.cy-row b{font-size:13px}.cy-row .faint{opacity:.55}
+.cy-deck{flex:1;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:4px 20px 18px;gap:10px}
+.cy-shutter{position:relative;width:72px;height:72px;border-radius:50%;border:1.5px solid var(--w)}
+.cy-shutter i{position:absolute;inset:8px;border-radius:50%;border:1px dashed var(--w)}
+.cy-shutter::before,.cy-shutter::after{content:'';position:absolute;background:var(--w)}
+.cy-shutter::before{left:50%;top:-8px;bottom:-8px;width:1px}.cy-shutter::after{top:50%;left:-8px;right:-8px;height:1px}
+.cy-shutter small{position:absolute;left:50%;top:84px;transform:translateX(-50%);font-size:7px;letter-spacing:.12em;white-space:nowrap}
+.cy-col{display:grid;gap:8px}
+.cy-sq{width:44px;height:36px;border:1px solid var(--w);display:grid;place-items:center;font-size:15px;line-height:1}
+.cy-sq small{font-size:6.5px;letter-spacing:.1em}
+.cy-roll{justify-self:end;position:relative;width:56px;height:74px;border:1px solid var(--w);overflow:hidden}
+.cy-roll .scene{inset:5px;filter:grayscale(1) sepia(1) hue-rotate(180deg) saturate(2) brightness(.9)}
+.cy-roll small{position:absolute;left:0;right:0;bottom:-1px;font-size:6px;text-align:center;background:#173c71;letter-spacing:.08em}
+
+/* ===== 03 Light table ===== */
+.lt{background:radial-gradient(ellipse at 50% 40%,#ffffff 0%,#f4f6f7 55%,#e1e4e7 100%);color:#1f2124;font-family:'DM Mono',monospace}
+.lt::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(0,0,0,.025) 0 1px,transparent 1px 30px),repeating-linear-gradient(0deg,rgba(0,0,0,.025) 0 1px,transparent 1px 30px)}
+.lt>*{position:relative}
+.lt .sb{color:#1f2124}
+.lt-tabs{display:flex;gap:6px;justify-content:center;margin-top:2px}
+.lt-tabs span{font-size:10.5px;padding:5px 9px;background:rgba(170,200,230,.28);border:1px solid rgba(80,110,140,.35);border-radius:2px;backdrop-filter:blur(1px)}
+.mount{flex:none;position:relative;margin:14px auto 0;width:244px;height:316px;background:linear-gradient(180deg,#fafafa,#e9eaeb);border-radius:10px;box-shadow:0 1px 0 #fff inset,0 6px 14px rgba(0,0,0,.18),0 0 0 1px #d4d6d9;display:grid;place-items:center}
+.window{position:relative;width:204px;height:272px;border-radius:8px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
+.window .scene{filter:saturate(1.1) brightness(1.08)}
+.mtxt{position:absolute;bottom:6px;font-size:8px;letter-spacing:.12em;color:#5d6067}
+.mtxt.l{left:16px}.mtxt.r{right:16px}
+.loupe{position:absolute;left:170px;top:236px;width:96px;height:96px;border-radius:50%;padding:7px;background:linear-gradient(145deg,#f7f8f9,#8e9298 45%,#d5d8dc 60%,#6c7076);box-shadow:0 10px 18px rgba(0,0,0,.3);z-index:3}
+.lz{width:100%;height:100%;border-radius:50%;background:var(--scene) no-repeat;background-size:420px 560px;background-position:-150px -300px;box-shadow:inset 0 0 12px rgba(0,0,0,.35)}
+.lt-meter{display:flex;justify-content:center;align-items:center;gap:0;margin-top:14px}
+.lt-meter i{width:52px;height:1px;background:#1f2124}
+.lt-meter b{width:9px;height:9px;border-radius:50%;background:#1f2124}
+.lt-lens{display:flex;justify-content:center;gap:8px;margin-top:12px}
+.lt-lens span{font-size:12px;padding:4px 10px;border-radius:14px;color:#7a7e85}
+.lt-lens span.on{color:#1f2124;box-shadow:inset 0 0 0 1px #1f2124}
+.lt-deck{flex:1;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 22px 18px;gap:12px}
+.lt-slide{width:48px;height:48px;border-radius:6px;background:linear-gradient(180deg,#fafafa,#e9eaeb);box-shadow:0 0 0 1px #d4d6d9,0 3px 6px rgba(0,0,0,.15);position:relative}
+.lt-slide::after{content:'';position:absolute;inset:8px;border-radius:4px;background:var(--scene) center/cover}
+.lt-shutter{width:76px;height:76px;border-radius:50%;background:radial-gradient(circle,#1f2124 0 58%,transparent 59%),linear-gradient(145deg,#f7f8f9,#8e9298 45%,#d5d8dc 60%,#6c7076);box-shadow:0 8px 16px rgba(0,0,0,.28)}
+.lt-col{justify-self:end;display:grid;gap:6px}
+.lt-chip{font-size:9.5px;padding:5px 8px;background:rgba(170,200,230,.28);border:1px solid rgba(80,110,140,.35);border-radius:2px}
+
+/* ===== 04 Field camera ===== */
+.fc{color:#2a1a0e;font-family:'Libre Caslon Text',Georgia,serif;
+  background:var(--noise),repeating-linear-gradient(92deg,rgba(0,0,0,.18) 0 2px,transparent 2px 9px,rgba(255,200,150,.05) 9px 11px,transparent 11px 17px),linear-gradient(180deg,#6a2f17,#4b1f0e 50%,#5b2812);background-size:160px,100%,100%}
+.fc .sb{color:#f0d9b5}
+.brass{background:linear-gradient(180deg,#f3d98e,#c99a3e 45%,#e6c26c 60%,#a87a2a)}
+.fc-plaque{position:relative;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:5px 18px;border-radius:3px;background:linear-gradient(180deg,#f3d98e,#c99a3e 45%,#e6c26c 60%,#a87a2a);box-shadow:0 2px 3px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.5);font-variant:small-caps;letter-spacing:.06em;text-shadow:0 1px 0 rgba(255,240,200,.6)}
+.fc-plaque.top{margin:2px 18px 0;font-size:13px}
+.screw{position:absolute;top:50%;width:7px;height:7px;margin-top:-3.5px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff3c8,#9a6d22);box-shadow:inset 0 0 0 .5px #6a4a12}
+.screw::after{content:'';position:absolute;left:1px;right:1px;top:3px;height:1px;background:#6a4a12;transform:rotate(35deg)}
+.fc-plaque .screw:first-child{left:5px}.fc-plaque .screw:last-child{right:5px}
+.fc-frame{flex:none;position:relative;margin:12px 22px 0;aspect-ratio:3/4;overflow:hidden;border:6px solid transparent;border-image:linear-gradient(180deg,#f3d98e,#a87a2a) 1;box-shadow:0 0 0 1px #2a1406,0 8px 16px rgba(0,0,0,.5)}
+.fc-frame .scene{filter:sepia(.35) contrast(1.05)}
+.fc-row{display:flex;justify-content:space-between;align-items:center;margin:10px 20px 0}
+.fc-plaque.sm{display:grid;justify-items:center;gap:0;padding:3px 12px;line-height:1.1}
+.fc-plaque.sm small{font-size:9px;font-style:italic;font-variant:normal}
+.fc-plaque.sm b{font-size:14px;font-weight:700;font-variant-numeric:lining-nums}
+.fc-gauge{width:46px;height:46px;border-radius:50%;padding:3px;background:linear-gradient(145deg,#f3d98e,#a87a2a);box-shadow:0 3px 5px rgba(0,0,0,.5)}
+.fc-gauge i{display:block;width:100%;height:100%;border-radius:50%;position:relative;background:radial-gradient(circle,#fbf3df,#e6d6b2)}
+.fc-gauge i::after{content:'';position:absolute;left:50%;top:5px;width:1px;height:16px;background:#2a1a0e;transform-origin:bottom;transform:rotate(8deg)}
+.fc-lens{display:flex;justify-content:center;align-items:baseline;gap:14px;margin-top:10px;color:#f0d9b5;font-size:14px}
+.fc-lens span{opacity:.55}.fc-lens span.on{opacity:1;border-bottom:1px solid #f0d9b5}
+.fc-lens small{font-style:italic;font-size:11px;opacity:.7}
+.fc-deck{flex:1;display:flex;align-items:center;justify-content:space-around;padding:0 20px 16px}
+.knob{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:18px;background:repeating-conic-gradient(#c99a3e 0 6deg,#f3d98e 6deg 12deg);box-shadow:0 3px 5px rgba(0,0,0,.5)}
+.plunger{width:78px;height:78px;border-radius:50%;background:radial-gradient(circle at 45% 35%,#f8e6ad,#c99a3e 55%,#7d5a1c);box-shadow:0 5px 10px rgba(0,0,0,.55),0 0 0 4px #3a1a0a;display:grid;place-items:center}
+.plunger i{width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 45% 35%,#2b1a0d,#0d0703);box-shadow:inset 0 2px 3px rgba(255,255,255,.15)}
+
+/* ===== 05 Toy camera ===== */
+.tc{background:radial-gradient(circle at 30% 20%,#b9ead7,#94d4bd 60%,#7fc4ab);color:#1f3a33;font-family:'Bricolage Grotesque',sans-serif}
+.tc .sb{color:#1f3a33}
+.tc-top{display:flex;justify-content:space-between;align-items:center;padding:2px 18px 0}
+.tc-badge{font-weight:800;font-size:12px;padding:6px 12px;border-radius:20px;background:#cdbbff;box-shadow:0 3px 0 #9d86e6}
+.tc-count{width:36px;height:36px;border-radius:50%;background:repeating-conic-gradient(#fff4b8 0 10deg,#f1dc72 10deg 20deg);display:grid;place-items:center;font-weight:800;font-size:13px;box-shadow:0 3px 0 #c8b04a}
+.tc-win{flex:none;position:relative;margin:12px 20px 0;aspect-ratio:1;border-radius:28px;overflow:hidden;border:8px solid #1f3a33;box-shadow:0 6px 0 #5ea78d}
+.tc-weather{display:flex;justify-content:center;gap:8px;margin-top:18px}
+.tc-weather span{width:44px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:19px;background:rgba(255,255,255,.45);box-shadow:0 3px 0 rgba(31,58,51,.25)}
+.tc-weather span.on{background:#fff4b8;box-shadow:0 3px 0 #c8b04a}
+.tc-lens{display:flex;justify-content:center;gap:10px;margin-top:14px}
+.tc-lens span{width:44px;height:30px;border-radius:15px;display:grid;place-items:center;font-weight:700;font-size:13px;background:rgba(255,255,255,.4)}
+.tc-lens span.on{background:#cdbbff;box-shadow:0 3px 0 #9d86e6}
+.tc-deck{flex:1;display:flex;align-items:center;justify-content:space-between;padding:0 24px 14px}
+.tc-flash{width:52px;height:52px;border-radius:16px;background:#fff;display:grid;place-items:center;font-size:20px;line-height:.8;font-weight:800;box-shadow:0 4px 0 rgba(31,58,51,.3)}
+.tc-flash small{font-size:9px}
+.tc-shutter{width:84px;height:84px;border-radius:50%;background:radial-gradient(circle at 40% 30%,#fff9d6,#ffd84a 50%,#e9b81c);box-shadow:0 7px 0 #b88d0e,0 10px 16px rgba(0,0,0,.2)}
+.tc-roll{position:relative;width:52px;height:52px;border-radius:14px;overflow:hidden;border:4px solid #1f3a33}
+
+/* ===== 06 Terminal ===== */
+.tm{background:#120c02;color:#ffb000;font-family:'VT323',monospace;text-shadow:0 0 5px rgba(255,170,0,.55)}
+.tm::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 1px,transparent 1px 3px);pointer-events:none;z-index:7}
+.tm .sb{color:#ffb000}
+.tm-head{padding:0 18px 6px;font-size:15px;border-bottom:1px dashed rgba(255,176,0,.5);margin:0 14px}
+.tm-vf{flex:none;position:relative;margin:10px 18px 0;aspect-ratio:4/3;overflow:hidden;border:1px solid #ffb000}
+.tm-vf .scene{filter:grayscale(1) sepia(1) saturate(3.2) hue-rotate(-12deg) contrast(1.3) brightness(.9)}
+.tm-vf .scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.45) 0 1px,transparent 1px 2px)}
+.tm-body{margin:12px 16px 0;font:inherit;font-size:16px;line-height:1.28;white-space:pre}
+.tm-body b{font-weight:400;color:#ffd27a}
+.tm-body i{font-style:normal;opacity:.55}
+.tm-cmd{margin-top:auto;display:flex;align-items:center;gap:6px;padding:0 18px 26px;font-size:22px}
+.tm-btn{padding:6px 10px;background:#ffb000;color:#120c02;text-shadow:none}
+.cur{width:12px;height:22px;background:#ffb000}
+.tm-r{margin-left:auto;font-size:17px}
+
+/* ===== 07 Enamel ===== */
+.en{background:radial-gradient(ellipse at 30% 0%,rgba(255,255,255,.25),transparent 45%),linear-gradient(180deg,#235a43,#174332);color:#fbfbf7;font-family:'Rubik',sans-serif}
+.en .sb{color:#fbfbf7}
+.en-plate{display:flex;justify-content:space-between;align-items:center;margin:2px 16px 0;padding:6px 8px 6px 16px;border-radius:22px;border:2.5px solid #fbfbf7;font-weight:700;font-size:13px;letter-spacing:.08em}
+.en-num{width:28px;height:28px;border-radius:50%;background:#fbfbf7;color:#174332;display:grid;place-items:center;font-size:12px}
+.en-frame{flex:none;position:relative;margin:12px 16px 0;aspect-ratio:3/4;border-radius:22px;overflow:hidden;border:6px solid #fbfbf7;box-shadow:0 0 0 2px #0d2a1f,0 8px 0 #0f3324}
+.en-signs{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;margin:14px 16px 0}
+.en-signs span{display:grid;justify-items:center;padding:5px 4px;border-radius:12px;background:#fbfbf7;color:#174332;font-weight:700;font-size:14px;line-height:1.1}
+.en-signs small{font-size:7.5px;letter-spacing:.14em;font-weight:600}
+.en-signs .meter i{font-style:normal;font-size:12px;letter-spacing:.1em}
+.en-lens{display:flex;justify-content:center;gap:8px;margin-top:12px}
+.en-lens span{padding:4px 14px;border-radius:14px;border:2px solid rgba(251,251,247,.5);font-weight:600;font-size:13px;color:rgba(251,251,247,.7)}
+.en-lens span.on{border-color:#fbfbf7;background:#fbfbf7;color:#174332}
+.en-deck{flex:1;display:flex;align-items:center;justify-content:space-around;padding:0 18px 14px}
+.en-btn{width:48px;height:48px;border-radius:50%;border:2.5px solid #fbfbf7;display:grid;place-items:center;font-size:20px;font-weight:700}
+.en-shutter{width:80px;height:80px;border-radius:50%;background:#fbfbf7;display:grid;place-items:center;box-shadow:0 6px 0 #0f3324}
+.en-shutter i{width:58px;height:58px;border-radius:50%;border:3px solid #174332}
+
+/* ===== 08 Pocket LCD ===== */
+.lc{background:var(--noise),linear-gradient(180deg,#c3c5c7,#a9acaf);background-size:100px,100%;color:#26282b;font-family:'Share Tech Mono',monospace}
+.lc .sb{color:#26282b}
+.lcd{position:relative;margin:2px 14px 0;padding:8px 12px 8px;border-radius:6px;background:linear-gradient(180deg,#a7b39c,#97a38b);box-shadow:inset 0 2px 4px rgba(0,0,0,.35),0 0 0 3px #3a3c3f,0 0 0 4px #8a8d91;display:grid;grid-template-columns:1fr auto auto;gap:4px 12px;align-items:end}
+.segs{position:relative;font-size:30px;line-height:1;font-style:italic;letter-spacing:.02em}
+.segs.sm{font-size:20px}
+.segs .g{color:rgba(30,40,25,.1)}
+.segs .v{position:absolute;right:0;bottom:0;color:#1d2618}
+.segs small{position:absolute;left:0;top:-9px;font-size:8px;font-style:normal;color:#1d2618}
+.lcd-bar{grid-column:1/2;display:flex;gap:3px}
+.lcd-bar i{width:14px;height:5px;background:rgba(30,40,25,.12);transform:skewX(-12deg)}
+.lcd-bar i.on{background:#1d2618}
+.lcd-ic{font-size:11px;color:#1d2618}
+.lc-win{flex:none;position:relative;margin:12px 20px 0;aspect-ratio:4/5;border-radius:6px;overflow:hidden;box-shadow:0 0 0 6px #1b1c1e,0 0 0 7px #7d8084}
+.date{position:absolute;right:10px;bottom:8px;font-size:15px;color:#ff9a2e;text-shadow:0 0 5px rgba(255,140,30,.9);letter-spacing:.06em}
+.lc-ridge{height:10px;margin:14px 24px 0;background:repeating-linear-gradient(90deg,#8e9195 0 2px,#c7c9cc 2px 4px);border-radius:3px}
+.lc-btns{display:flex;justify-content:center;gap:8px;margin-top:12px}
+.rb{font-size:9px;letter-spacing:.06em;display:grid;justify-items:center;gap:4px}
+.rb::before{content:'';width:30px;height:12px;border-radius:6px;background:#4a4c50;box-shadow:inset 0 -2px 0 rgba(0,0,0,.35)}
+.rb.o::before{background:#f08a24}.rb.b::before{background:#3d6fd6}.rb.g::before{background:#43a36b}
+.lc-deck{flex:1;display:flex;align-items:center;justify-content:space-between;padding:0 24px 16px}
+.lc-roll{position:relative;width:46px;height:46px;border-radius:6px;overflow:hidden;box-shadow:0 0 0 3px #1b1c1e}
+.lc-shutter{width:78px;height:78px;border-radius:50%;background:radial-gradient(circle at 45% 35%,#4a4c50,#141516 70%);box-shadow:0 0 0 5px #8e9195,0 0 0 6px #5d6064,0 6px 10px rgba(0,0,0,.35)}
+.lc-film{font-size:10px;line-height:1.2;text-align:center;padding:6px 8px;border:1px solid #26282b;border-radius:4px}
+
+/* ===== 09 Frosted glass ===== */
+.fg{background:#000;color:#fff;font-family:'Bricolage Grotesque',sans-serif}
+.fg-bg{position:absolute;inset:0}
+.fg-bg .scene{filter:saturate(1.15)}
+.fg .sb{color:#fff}
+.glass{background:rgba(255,255,255,.16);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
+.fg-chips{position:relative;display:flex;justify-content:space-between;padding:4px 16px 0}
+.fg-chips span{font-size:12px;font-weight:600;padding:6px 12px;border-radius:16px}
+.fg-focus{position:absolute;left:50%;top:40%;width:64px;height:64px;margin:-32px;border-radius:14px;border:1.5px solid rgba(255,255,255,.9)}
+.fg-panel{position:absolute;left:10px;right:10px;bottom:10px;border-radius:34px;padding:14px 16px 18px;display:grid;gap:10px}
+.fg-read{display:flex;justify-content:space-around;font-size:17px;font-weight:600}
+.fg-read span{display:grid;justify-items:center;line-height:1.1}
+.fg-read small{font-size:8.5px;font-weight:500;letter-spacing:.12em;opacity:.75}
+.fg-meter{position:relative;height:3px;margin:0 30px;border-radius:2px;background:rgba(255,255,255,.3)}
+.fg-meter b{position:absolute;left:54%;top:-4px;width:11px;height:11px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.fg-lens{display:flex;justify-content:center;gap:6px}
+.fg-lens span{font-size:12px;font-weight:600;padding:5px 12px;border-radius:14px;opacity:.7}
+.fg-lens span.on{background:rgba(255,255,255,.9);color:#111;opacity:1}
+.fg-deck{display:flex;align-items:center;justify-content:space-between;padding:0 10px}
+.fg-roll{position:relative;width:46px;height:46px;border-radius:12px;overflow:hidden;border:2px solid rgba(255,255,255,.6)}
+.fg-shutter{width:72px;height:72px;border-radius:50%;border:3px solid #fff;position:relative}
+.fg-shutter::after{content:'';position:absolute;inset:5px;border-radius:50%;background:#fff}
+.fg-flip{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-size:20px;background:rgba(255,255,255,.2)}
+
+/* ===== 10 Cassette ===== */
+.wm{background:repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 1px,transparent 1px 3px),linear-gradient(180deg,#5b7fca,#33529a 50%,#3f62ae);color:#eef2ff;font-family:'DM Mono',monospace}
+.wm .sb{color:#eef2ff}
+.wm-vf{flex:none;position:relative;margin:2px 18px 0;aspect-ratio:4/5;border-radius:8px;overflow:hidden;box-shadow:0 0 0 5px #121a33,0 0 0 6px rgba(255,255,255,.35)}
+.wm-tag{position:absolute;left:8px;bottom:8px;font-size:9.5px;padding:3px 7px;border-radius:4px;background:rgba(0,0,0,.55)}
+.cassette{position:relative;margin:16px 22px 0;height:92px;border-radius:8px;background:#121a33;box-shadow:inset 0 2px 6px rgba(0,0,0,.6),0 1px 0 rgba(255,255,255,.3);padding:8px 10px}
+.label{display:flex;justify-content:space-between;align-items:baseline;padding:3px 8px;border-radius:3px;background:linear-gradient(90deg,#e9edf5,#cfd6e6);color:#121a33;font-size:11px;font-weight:500}
+.label small{font-size:8px;letter-spacing:.08em}
+.reels{display:flex;justify-content:center;align-items:center;gap:0;margin-top:8px;position:relative}
+.reel{width:40px;height:40px;border-radius:50%;background:radial-gradient(circle,#eef2ff 0 5px,transparent 5.5px),repeating-conic-gradient(#121a33 0 20deg,#c7cfe2 20deg 40deg);box-shadow:0 0 0 4px #3a2a1e}
+.reel.full{box-shadow:0 0 0 8px #3a2a1e}
+.tape{width:70px;height:16px;border-radius:3px;background:rgba(238,242,255,.12);border:1px solid rgba(238,242,255,.25);margin:0 14px}
+.ctr{position:absolute;right:10px;bottom:8px;font-size:11px;padding:1px 5px;background:#000;color:#eef2ff;border-radius:2px}
+.wm-lens{display:flex;justify-content:center;align-items:baseline;gap:8px;margin-top:12px;font-size:12px}
+.wm-lens span{opacity:.6;padding:2px 6px}.wm-lens span.on{opacity:1;border-bottom:1.5px solid #eef2ff}
+.wm-lens small{font-size:8px;opacity:.7}
+.keys{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:12px 18px 22px;align-items:stretch}
+.keys span{display:grid;align-content:center;justify-items:center;gap:2px;border-radius:4px 4px 10px 10px;background:linear-gradient(180deg,#dfe4ef,#a9b3c9);color:#1a2340;box-shadow:inset 0 1px 0 #fff,0 4px 0 #1d2b55,0 6px 8px rgba(0,0,0,.3)}
+.keys b{font-size:16px;font-weight:500}
+.keys small{font-size:7.5px;letter-spacing:.12em}
+.keys .rec{background:linear-gradient(180deg,#ffb15c,#f2822a);color:#3a1a00}
+"""
+
+body = f"""<title>Film Camera UI · Ten Styles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=DM+Mono:wght@400;500&family=VT323&family=Share+Tech+Mono&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@500;600&family=Rubik:wght@500;600;700&family=Caveat:wght@500&display=swap">
+<style>{CSS}</style>
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">Working title pending · Round 5 · Static mockups</span>
+    <h1>Ten styles, from scratch</h1>
+    <p class="lede">A clean break from the black and silver rounds. Each screen takes its look from a different object or era: lab equipment, blueprints, wood and brass, toys, terminals, signs, 80s compacts, glass and tape. Every one still has the parts a film camera needs: a viewfinder, settings, a meter, film, lens, flash, shutter and camera roll. These are still screens to compare.</p>
+  </header>
+  <div class="grid">
+{cards}
+  </div>
+  <footer>Round 5. The earlier pages are unchanged: round 3 (E in black and silver) and round 4 (ten approaches). Mixing is welcome, for example the Cassette's reel counter on the Waist-Level camera.</footer>
+</div>
+<script>
+(() => {{
+const scene = document.createElement('canvas'); scene.width = 600; scene.height = 800;
+{paint}
+document.documentElement.style.setProperty('--scene', 'url(' + scene.toDataURL('image/jpeg', .85) + ')');
+}})();
+</script>
+"""
+(root / 'styles.html').write_text(body)
+head = '<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
+i = body.index('</style>') + len('</style>')
+(root / 'styles-standalone.html').write_text(head + body[:i] + '\n</head><body>\n' + body[i:] + '</body></html>\n')
+print('ok', len(body))
