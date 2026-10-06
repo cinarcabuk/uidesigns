@@ -1,0 +1,296 @@
+"""Builds gadget.html (artifact source) and gadget-standalone.html: six static takes on E as an old-but-futuristic gadget,
+with a 2-3 color signature per film."""
+import pathlib
+root = pathlib.Path(__file__).resolve().parent.parent
+src = (root / 'concepts.html').read_text()
+paint = src[src.index('(function paint(g){'):src.index("})(scene.getContext('2d'));") + len("})(scene.getContext('2d'));")]
+
+FILMS = [
+ ('AURUM 200',   ['#d9a441','#b8432f','#2e3b4e']),
+ ('VERANO 400',  ['#e58b6b','#f3d3a8','#4f7a6a']),
+ ('LUMEN 100',   ['#2f5fd0','#e8eef9','#d23b2a']),
+ ('NOCTA 800T',  ['#1e6f7a','#c9473a','#0e1b2c']),
+ ('KINO 250D',   ['#c0362c','#e7d9bf','#3d4a3a']),
+ ('ARGENT 400',  ['#e9e9e9','#8a8a8a','#1a1a1a']),
+ ('GRAFIT 3200', ['#4a4a4a','#c8c8c8','#d02a1f']),
+ ('PASTEL 160',  ['#9fd3bd','#f2c6d3','#f4e9b8']),
+ ('INSTA 600',   ['#efe6d2','#6fb3c9','#e2735a']),
+ ('MERIDIAN XP', ['#7b4fa0','#3fbf9b','#f0c43a']),
+]
+F = dict(FILMS)
+BOLT = '<svg viewBox="0 0 24 24"><path d="M13 3 6 13.5h5L10 21l7-10.5h-5z"/></svg>'
+FLIP = '<svg viewBox="0 0 24 24"><path d="M5 9a7 7 0 0 1 12.5-2.5M19 15a7 7 0 0 1-12.5 2.5"/><path d="M17.5 3v3.5H14M6.5 21v-3.5H10"/></svg>'
+SB = '<div class="island"></div><div class="sb"><span>9:41</span><i class="bat"></i></div>'
+
+def sig(film, cls='sig'):
+    return f'<span class="{cls}">' + ''.join(f'<i style="background:{c}"></i>' for c in F[film]) + '</span>'
+def top(film, extra=''):
+    return f'''<div class="t"><span class="ro"><b>A</b><small>MODE</small></span><span class="ro"><small>ƒ</small>1.8</span>
+      <span class="ro film">{sig(film)}<span>{film}</span></span>{extra}<span class="ro"><small>EV</small><b>±0</b></span></div>'''
+def bot(meter, iso='200'):
+    return f'<div class="b"><span class="ro auto"><b>1/250</b><small>S</small></span>{meter}<span class="ro auto"><small>ISO</small><b>{iso}</b></span></div>'
+def lens(): return '<div class="lens"><span>26</span><span class="on">35</span><span>50</span><small>MM</small></div>'
+def deck(flash=BOLT, custom=FLIP, roll='12 / 36', fl_cls='', cu_cls=''):
+    return f'''<div class="deck"><span class="shutter"></span><div class="mid"><span class="btn flash {fl_cls}">{flash}<em>A</em></span><span class="btn custom {cu_cls}">{custom}</span></div>
+      <span class="roll"><span>{roll}</span></span></div>'''
+def phone(cls, film, inner_vf, meter, extra_top='', extra='', dk=None, iso='200'):
+    return f'''<div class="phone"><div class="screen {cls}">{SB}{top(film, extra_top)}
+      <div class="win"><div class="vf"><div class="scene" style="filter:{FILT[film]}"></div>{inner_vf}</div></div>
+      {bot(meter, iso)}{lens()}{dk or deck()}{extra}</div></div>'''
+
+FILT = {
+ 'AURUM 200':'sepia(.25) saturate(1.25) contrast(1.05) hue-rotate(-8deg) brightness(1.03)',
+ 'NOCTA 800T':'hue-rotate(-20deg) saturate(1.1) contrast(1.06) brightness(.96)',
+ 'KINO 250D':'saturate(.85) contrast(1.1) sepia(.08) hue-rotate(6deg)',
+ 'LUMEN 100':'saturate(1.6) contrast(1.22) hue-rotate(-4deg) brightness(.97)',
+ 'MERIDIAN XP':'saturate(1.5) hue-rotate(25deg) contrast(1.25) sepia(.1)',
+ 'PASTEL 160':'saturate(.65) contrast(.85) brightness(1.12) sepia(.15)',
+}
+
+def dotmeter(pos=7, n=13):
+    return '<div class="dm">' + ''.join(f'<i class="{"z" if i==6 else ""}{" on" if i==pos else ""}"></i>' for i in range(n)) + '</div>'
+LINE = '<div class="lm"><i class="tk"></i><i class="nd"></i><span>−3</span><span>0</span><span>+3</span></div>'
+
+V = []
+# 01 Dot
+V.append(('Dot', 'Nothing-style restraint. The numbers are set in a dot-matrix face, the meter is a row of dots with one lit, and thin light strips mark the frame corners like glyph lights. Red appears only as one dot: the shutter\'s center, and the meter\'s zero.',
+ 'Film signature: three dots before the film name.',
+ phone('dot', 'AURUM 200', '<i class="gl g1"></i><i class="gl g2"></i><i class="gl g3"></i><i class="gl g4"></i><i class="cross"></i>', dotmeter(),
+       extra_top='', dk=deck(roll='12 / 36'))))
+# 02 Grey
+V.append(('Grey', 'Late-90s console plastic: light grey, black window, soft geometric symbols. Each control has one shape in one color: a red circle for the shutter, a green triangle for flash, a pink square for the custom button and a blue cross on the camera roll.',
+ 'Film signature: a three-color bar under the film name, like a logo stripe.',
+ phone('grey', 'LUMEN 100', '<i class="cross"></i>', '<div class="groove"><i></i></div>', iso='100',
+       dk='''<div class="deck"><span class="shutter"><b class="sym o"></b></span><div class="mid"><span class="btn flash"><b class="sym tri"></b></span><span class="btn custom"><b class="sym sq"></b></span></div>
+         <span class="roll"><span>12 / 36</span><b class="sym x"></b></span></div>''')))
+# 03 Signal
+V.append(('Signal', 'Red used as a language. Everything is white, grey or black except the few things that matter right now: the meter needle, the selected lens and the shutter\'s core. The film\'s color code runs as a thin strip down the edge of the frame.',
+ 'Film signature: a vertical three-color strip on the left edge of the frame.',
+ phone('sgn', 'NOCTA 800T', '<i class="cross"></i>', LINE, iso='800',
+       extra='<span class="strip">' + ''.join(f'<i style="background:{c}"></i>' for c in F['NOCTA 800T']) + '</span>')))
+# 04 Test card
+V.append(('Calibration', 'Borrowed from test charts and lab instruments. Registration marks sit at the frame corners and fine ruler ticks run along its edges. A tiny color checker under the frame shows the loaded film\'s colors next to three greys.',
+ 'Film signature: the color-checker patches, so the film shows as a calibration target.',
+ phone('cal', 'KINO 250D', '<i class="reg tl"></i><i class="reg tr"></i><i class="reg bl"></i><i class="reg br"></i><i class="ruler h"></i><i class="ruler v"></i>', LINE,
+       extra='<div class="checker">' + ''.join(f'<i style="background:{c}"></i>' for c in F['KINO 250D'] + ['#e6e6e6', '#8c8c8c', '#2a2a2a']) + '<small>KN-250D · REF</small></div>')))
+# 05 VFD
+V.append(('VFD', 'The readouts glow like the vacuum-fluorescent display on an 80s hi-fi deck: teal light on dark glass, with the unlit segments faintly visible behind. The meter is a VFD bar graph.',
+ 'Film signature: three small colored LEDs beside the glowing film name.',
+ phone('vfd', 'MERIDIAN XP', '<i class="cross"></i>', '<div class="bars">' + ''.join(f'<i class="{c}"></i>' for c in ['','','','','','on','on z','on','','','','','']) + '</div>')))
+# 06 Transparent
+V.append(('Transparent', 'A smoked, see-through body. Faint line drawings of the insides show through the margins: screws, a ribbon cable, a coil and tiny part numbers. From arm\'s length it is plain black. Up close it is full of detail.',
+ 'Film signature: three colored cells inside a small "film module" outline.',
+ phone('trn', 'PASTEL 160', '<i class="cross"></i>', LINE, iso='160',
+       extra='''<svg class="guts" viewBox="0 0 286 626" aria-hidden="true">
+         <g fill="none" stroke="currentColor" stroke-width=".8">
+           <circle cx="12" cy="60" r="4"/><path d="M9 57l6 6M15 57l-6 6"/><circle cx="274" cy="60" r="4"/><path d="M271 57l6 6M277 57l-6 6"/>
+           <circle cx="12" cy="600" r="4"/><circle cx="274" cy="600" r="4"/>
+           <path d="M6 120v300q0 10 8 10M280 120v300q0 10-8 10"/>
+           <rect x="104" y="500" width="78" height="78" rx="14"/><rect x="110" y="506" width="66" height="66" rx="11"/><rect x="116" y="512" width="54" height="54" rx="8"/>
+           <path d="M20 480h60q8 0 8 8v40M206 480h60q8 0 8-8"/>
+           <rect x="218" y="488" width="48" height="12" rx="2"/>
+         </g>
+         <g fill="currentColor" font-family="JetBrains Mono, monospace" font-size="4.5"><text x="20" y="476">FPC-07 · SHUTTER BUS</text><text x="218" y="508">FM-160 · REV 2</text><text x="122" y="590">COIL · 0.33µH</text><text x="230" y="616">S/N 000012</text></g>
+       </svg>''')))
+
+cards = '\n'.join(f'''<figure class="card"><div class="ph">{html}</div><figcaption><span class="no">{i:02d}</span><h3>{n}</h3><p>{d}</p><p class="sig-note">{s}</p></figcaption></figure>'''
+                  for i, (n, d, s, html) in enumerate(V, 1))
+palette = '\n'.join(f'''<div class="pf"><span class="sw">{''.join(f'<i style="background:{c}"></i>' for c in cols)}</span><b>{name}</b></div>''' for name, cols in FILMS)
+
+CSS = r"""
+/* Layout: dark gallery. Six E screens share the E skeleton (readouts around a black-margined frame, compact meter, lens row, shutter · flash+custom · roll), each with a different gadget finish. Single dark look by design. */
+:root{--bg:#070708;--ink:#e9eaec;--dim:#7a7c82;--line:#1f2023;--red:#e2231a;
+  --sans:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'JetBrains Mono',ui-monospace,Menlo,monospace;--dot:'Doto','JetBrains Mono',monospace;
+  --noise:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  color-scheme:dark}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--sans);font-size:15px;line-height:1.55;padding-inline:clamp(16px,4vw,56px);padding-block:0 80px}
+.wrap{max-width:1180px;margin:0 auto}
+.hero{padding-block:72px 32px;display:grid;gap:16px;border-bottom:1px solid var(--line)}
+.eyebrow{font:500 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.eyebrow b{color:var(--red);font-weight:500}
+h1{margin:0;font-weight:600;font-size:clamp(30px,5vw,54px);line-height:1.02;letter-spacing:-.03em;text-wrap:balance}
+h1 i{font-style:normal;color:var(--red)}
+.lede{margin:0;color:#a8aab0;max-width:66ch}
+.palette{padding-block:32px;border-bottom:1px solid var(--line);margin-bottom:56px;display:grid;gap:14px}
+.palette h2{margin:0;font:500 11px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.pl{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px 20px}
+.pf{display:flex;align-items:center;gap:10px;font:500 11px var(--mono);letter-spacing:.06em}
+.sw{display:flex;width:42px;height:12px;border-radius:2px;overflow:hidden;box-shadow:0 0 0 1px #2a2b2e;flex:none}
+.sw i{flex:1}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:72px 32px}
+.card{margin:0;display:grid;gap:18px;justify-items:center;align-content:start}
+.card figcaption{max-width:300px;display:grid;gap:5px}
+.no{font:500 11px var(--mono);color:var(--dim)}
+.card h3{margin:0;font-weight:600;font-size:19px;letter-spacing:-.01em}
+.card p{margin:0;font-size:14px;color:#a8aab0}
+.card p.sig-note{margin-top:6px;padding-top:8px;border-top:1px solid var(--line);font:500 11.5px/1.5 var(--mono);color:#d4d5d8}
+footer{margin-top:72px;padding-top:18px;border-top:1px solid var(--line);color:var(--dim);font-size:13.5px;max-width:70ch}
+
+/* ---- phone + E skeleton ---- */
+.phone{width:300px;height:640px;border-radius:50px;padding:7px;background:linear-gradient(140deg,#3a3b3f,#151618 40%,#2a2b2e 70%,#111);box-shadow:0 0 0 1px #000,0 30px 55px -20px rgba(0,0,0,.85)}
+.screen{position:relative;width:286px;height:626px;border-radius:43px;overflow:hidden;background:#000;color:#e9eaec;display:flex;flex-direction:column;
+  --ink:#d9dadd;--dim:#66686e;--acc:var(--red)}
+.island{position:absolute;top:10px;left:50%;width:84px;height:24px;border-radius:14px;background:#000;transform:translateX(-50%);z-index:9}
+.sb{flex:none;height:42px;display:flex;align-items:center;justify-content:space-between;padding:6px 26px 0;font:600 12px system-ui,sans-serif;position:relative;z-index:3}
+.bat{display:inline-block;width:22px;height:10px;border:1px solid currentColor;border-radius:3px;position:relative}
+.bat::before{content:'';position:absolute;inset:1.5px 6px 1.5px 1.5px;background:currentColor;border-radius:1px}
+.t,.b{flex:none;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:0 15px;position:relative;z-index:3}
+.t{height:30px}.b{height:42px}
+.ro{font:500 9.5px var(--mono);color:var(--ink);display:inline-flex;align-items:center;gap:4px;white-space:nowrap;letter-spacing:.02em}
+.ro small{font-size:7px;color:var(--dim);letter-spacing:.1em}
+.ro.auto b{opacity:.75}
+.ro .sig{display:inline-flex;gap:2px}
+.ro .sig i{width:6px;height:6px;border-radius:50%;box-shadow:0 0 0 .5px rgba(255,255,255,.25)}
+.win{flex:none;margin:0 16px;position:relative;z-index:2}
+.vf{position:relative;aspect-ratio:3/4;overflow:hidden;background:#111}
+.scene{position:absolute;inset:0;background:var(--scene) center/cover}
+.cross{position:absolute;left:50%;top:50%;width:18px;height:18px;transform:translate(-50%,-50%)}
+.cross::before,.cross::after{content:'';position:absolute;background:rgba(255,255,255,.85)}
+.cross::before{left:50%;top:0;bottom:0;width:1px}.cross::after{top:50%;left:0;right:0;height:1px}
+.lens{flex:none;height:38px;display:flex;justify-content:center;align-items:center;gap:2px;position:relative;z-index:3}
+.lens span{font:400 11.5px var(--mono);color:var(--dim);padding:5px 10px;border-bottom:1px solid transparent}
+.lens span.on{color:var(--ink);border-bottom-color:var(--acc)}
+.lens small{font:500 7.5px var(--mono);color:var(--dim);letter-spacing:.12em;margin-left:2px}
+.deck{flex:1;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:2px 26px 18px;gap:10px;position:relative;z-index:3}
+.shutter{justify-self:start;width:72px;height:72px;border-radius:50%;position:relative;box-shadow:inset 0 0 0 1.5px var(--ink)}
+.shutter::after{content:'';position:absolute;inset:6px;border-radius:50%;background:var(--ink)}
+.mid{display:grid;justify-items:center;gap:8px}
+.btn{position:relative;border-radius:50%;display:grid;place-items:center;border:1px solid #4a4c50;color:var(--ink)}
+.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.btn em{position:absolute;right:5px;top:3px;font:600 6.5px var(--mono);font-style:normal}
+.custom em{display:none}
+.flash{width:38px;height:38px}.custom{width:48px;height:48px}
+.custom::after{content:'';position:absolute;right:3px;bottom:5px;width:3px;height:3px;border-radius:50%;background:currentColor;opacity:.6}
+.roll{justify-self:end;width:60px;height:82px;border-radius:3px;position:relative;overflow:hidden;border:1px solid #5d6065;background:var(--scene) center/cover}
+.roll>span{position:absolute;left:0;right:0;bottom:0;font:500 7.5px var(--mono);text-align:center;padding:7px 0 3px;background:linear-gradient(transparent,rgba(0,0,0,.85));color:#e9eaec}
+.lm{position:relative;width:104px;height:24px}
+.lm .tk{position:absolute;left:6px;right:6px;top:0;height:8px;background:repeating-linear-gradient(90deg,var(--tick,#77797f) 0 1px,transparent 1px calc((100% - 1px)/18));
+  -webkit-mask:linear-gradient(#000 0 0) top/100% 4px no-repeat,repeating-linear-gradient(90deg,#000 0 1px,transparent 1px calc((100% - 1px)/6));mask:linear-gradient(#000 0 0) top/100% 4px no-repeat,repeating-linear-gradient(90deg,#000 0 1px,transparent 1px calc((100% - 1px)/6))}
+.lm .nd{position:absolute;top:-4px;height:15px;width:1.5px;left:calc(50% + 8px);background:var(--needle,var(--acc))}
+.lm span{position:absolute;bottom:0;font:500 7.5px var(--mono);color:var(--dim);transform:translateX(-50%)}
+.lm span:nth-of-type(1){left:6px}.lm span:nth-of-type(2){left:50%}.lm span:nth-of-type(3){left:calc(100% - 6px)}
+
+/* ===== 01 Dot ===== */
+.dot .ro b,.dot .ro:not(.film){font-family:var(--dot);font-weight:700;font-size:12px;letter-spacing:.04em}
+.dot .ro small{font-family:var(--mono);font-weight:500}
+.dot .film span{font-family:var(--mono);font-size:9px}
+.dot .shutter::before{content:'';position:absolute;left:50%;top:50%;width:9px;height:9px;margin:-4.5px;border-radius:50%;background:var(--red);z-index:2}
+.gl{position:absolute;background:#fff;border-radius:2px;box-shadow:0 0 6px rgba(255,255,255,.8);opacity:.9}
+.gl.g1{left:8px;top:8px;width:22px;height:2px}.gl.g2{right:8px;top:8px;width:2px;height:22px}
+.gl.g3{left:8px;bottom:8px;width:2px;height:22px}.gl.g4{right:8px;bottom:8px;width:22px;height:2px}
+.dm{display:flex;gap:5px;align-items:center}
+.dm i{width:3px;height:3px;border-radius:50%;background:#2c2d30}
+.dm i.z{background:#5a2420}
+.dm i.on{background:#fff;box-shadow:0 0 4px #fff;width:4px;height:4px}
+.dot .lens span{font-family:var(--dot);font-weight:700;font-size:13px}
+.dot .btn{border-color:#333438}
+
+/* ===== 02 Grey ===== */
+.grey{background:var(--noise),linear-gradient(180deg,#c9c9c7,#b3b3b1 60%,#a9a9a7);background-size:110px,100%;color:#2b2b2b;--ink:#2b2b2b;--dim:#6a6a68;--acc:#2b2b2b;--tick:#4a4a48;--needle:#2b2b2b}
+.grey .sb{color:#2b2b2b}
+.grey .win{padding:6px;border-radius:12px;background:#0d0d0d;box-shadow:inset 0 2px 4px #000,0 1px 0 rgba(255,255,255,.6);margin:0 12px}
+.grey .vf{border-radius:7px}
+.grey .film{flex-direction:column;align-items:center;gap:2px}
+.grey .film .sig{order:2;gap:0}
+.grey .film .sig i{width:18px;height:2.5px;border-radius:0;box-shadow:none}
+.groove{width:104px;height:8px;border-radius:4px;background:#8d8d8b;box-shadow:inset 0 1px 2px rgba(0,0,0,.45);position:relative}
+.groove i{position:absolute;left:calc(50% + 4px);top:-3px;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#6a6a68,#2b2b2b);box-shadow:0 1px 2px rgba(0,0,0,.5)}
+.grey .shutter{box-shadow:0 0 0 3px #a3a3a1,0 4px 0 #8a8a88,0 6px 10px rgba(0,0,0,.25);background:radial-gradient(circle at 45% 35%,#6a6a68,#3a3a39 70%)}
+.grey .shutter::after{display:none}
+.grey .btn{border:0;background:radial-gradient(circle at 45% 35%,#5c5c5a,#2f2f2e 70%);box-shadow:0 3px 0 #8a8a88}
+.grey .btn svg{display:none}.grey .btn em{display:none}
+.grey .custom::after{display:none}
+.grey .roll{border:3px solid #2b2b2b;border-radius:6px}
+.sym{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+.sym.o{width:30px;height:30px;border-radius:50%;border:3px solid #e2483f}
+.sym.tri{width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:15px solid #3fbf8f;margin-top:-1px}
+.sym.tri::after{content:'';position:absolute;left:-5px;top:5px;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:8px solid #3a3a39}
+.sym.sq{width:17px;height:17px;border:2.5px solid #e88ab4}
+.sym.x{left:auto;right:4px;top:6px;transform:none;width:11px;height:11px;background:linear-gradient(45deg,transparent 42%,#4c7bd9 42% 58%,transparent 58%),linear-gradient(-45deg,transparent 42%,#4c7bd9 42% 58%,transparent 58%)}
+
+/* ===== 03 Signal ===== */
+.sgn .shutter{box-shadow:inset 0 0 0 1.5px #e9eaec}
+.sgn .shutter::after{inset:6px;background:#e9eaec}
+.sgn .shutter::before{content:'';position:absolute;inset:26px;border-radius:50%;background:var(--red);z-index:2}
+.sgn .film .sig{display:none}
+.strip{position:absolute;left:8px;top:84px;width:4px;height:84px;display:flex;flex-direction:column;z-index:4}
+.strip i{flex:1}
+.sgn .lens span.on{color:#fff}
+
+/* ===== 04 Calibration ===== */
+.cal .film .sig{display:none}
+.reg{position:absolute;width:16px;height:16px;border-radius:50%;border:1px solid rgba(255,255,255,.8)}
+.reg::before,.reg::after{content:'';position:absolute;background:rgba(255,255,255,.8)}
+.reg::before{left:50%;top:-5px;bottom:-5px;width:1px}.reg::after{top:50%;left:-5px;right:-5px;height:1px}
+.reg.tl{left:8px;top:8px}.reg.tr{right:8px;top:8px}.reg.bl{left:8px;bottom:8px}.reg.br{right:8px;bottom:8px}
+.ruler{position:absolute;opacity:.6}
+.ruler.h{left:34px;right:34px;top:0;height:5px;background:repeating-linear-gradient(90deg,#fff 0 1px,transparent 1px 8px)}
+.ruler.v{top:34px;bottom:34px;right:0;width:5px;background:repeating-linear-gradient(180deg,#fff 0 1px,transparent 1px 8px)}
+.checker{position:absolute;left:16px;right:16px;top:450px;display:flex;align-items:center;gap:3px;z-index:3}
+.checker i{width:9px;height:9px;box-shadow:0 0 0 .5px rgba(255,255,255,.3)}
+.checker small{margin-left:auto;font:500 6.5px var(--mono);color:#66686e;letter-spacing:.1em}
+.cal .b{margin-top:2px}
+.cal .lens{margin-top:12px}
+.cal .shutter::before{content:'';position:absolute;inset:-6px;background:linear-gradient(#e9eaec,#e9eaec) center/1px 100% no-repeat,linear-gradient(#e9eaec,#e9eaec) center/100% 1px no-repeat;opacity:.35}
+
+/* ===== 05 VFD ===== */
+.vfd{--vfd:#7ff3e0;--ink:#7ff3e0;--dim:#2f6a62;--acc:#7ff3e0}
+.vfd .t,.vfd .b{margin:0 10px;padding:0 6px;background:linear-gradient(180deg,#05110f,#020807);border-radius:4px}
+.vfd .t{margin-bottom:6px}.vfd .b{margin-top:6px}
+.vfd .ro{font-family:var(--dot);font-weight:800;font-size:12px;text-shadow:0 0 6px rgba(127,243,224,.8)}
+.vfd .ro small{font-family:var(--mono);font-size:6.5px;text-shadow:none}
+.vfd .film span:last-child{font-size:10px}
+.vfd .sig i{width:4px;height:4px;box-shadow:0 0 5px currentColor}
+.bars{display:flex;gap:2px;align-items:flex-end}
+.bars i{width:4px;height:9px;background:#0f2c28}
+.bars i.on{background:var(--vfd);box-shadow:0 0 5px var(--vfd)}
+.bars i.z{height:12px}
+.vfd .lens span{font-family:var(--dot);font-weight:800;font-size:13px}
+.vfd .lens span.on{text-shadow:0 0 6px rgba(127,243,224,.8)}
+.vfd .shutter{box-shadow:inset 0 0 0 1.5px #e9eaec}.vfd .shutter::after{background:#e9eaec}
+.vfd .btn{color:#e9eaec}
+
+/* ===== 06 Transparent ===== */
+.trn{background:radial-gradient(ellipse at 50% 80%,#141517,#060607 70%)}
+.guts{position:absolute;inset:0;width:100%;height:100%;color:rgba(200,205,215,.16);z-index:1;pointer-events:none}
+.trn .film .sig{padding:2px;border:1px solid #3a3b3e;border-radius:2px;gap:1px}
+.trn .film .sig i{width:7px;height:5px;border-radius:0;box-shadow:none}
+.trn .btn{background:rgba(0,0,0,.6)}
+.trn .shutter::before{content:'';position:absolute;inset:30px;border-radius:50%;background:var(--red);z-index:2}
+"""
+
+body = f"""<title>Film Camera UI · E Gadget</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Doto:wght@600;700;800;900&display=swap">
+<style>{CSS}</style>
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">Working title pending · Round 8 · back to <b>E</b></span>
+    <h1>E, as an old gadget from the future<i>.</i></h1>
+    <p class="lede">Back to E's world, pushed toward a device that looks old and futuristic at once. Each one is very simple from arm's length and has tiny details up close. The layout is E's: small readouts around a black-margined frame, a compact meter, the lens row, and shutter, flash, custom button and camera roll. Each film now carries its own two- or three-color signature, and every screen shows it somewhere. Texture comes in a later pass.</p>
+  </header>
+  <section class="palette" aria-labelledby="pal-h">
+    <h2 id="pal-h">Film color signatures · placeholders until the brand marks exist</h2>
+    <div class="pl">{palette}</div>
+  </section>
+  <div class="grid">
+{cards}
+  </div>
+  <footer>Round 8. References were used for attitude, not looks: Nothing for dot-matrix type and a single red signal, the PlayStation for grey plastic and color-coded shapes, and GxAce for treating red and type as a language. The round 3 E page is unchanged.</footer>
+</div>
+<script>
+(() => {{
+const scene = document.createElement('canvas'); scene.width = 600; scene.height = 800;
+{paint}
+document.documentElement.style.setProperty('--scene', 'url(' + scene.toDataURL('image/jpeg', .85) + ')');
+}})();
+</script>
+"""
+(root / 'gadget.html').write_text(body)
+head = '<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
+i = body.index('</style>') + len('</style>')
+(root / 'gadget-standalone.html').write_text(head + body[:i] + '\n</head><body>\n' + body[i:] + '</body></html>\n')
+print('ok', len(body))
